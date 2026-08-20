@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,24 +22,6 @@ jobs:
         env:
           EXPORT: "1"
           NEXT_PUBLIC_BASE_PATH: "/saadat"
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: out
-          path: out
-          retention-days: 1
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/download-artifact@v4
-        with:
-          name: out
-          path: out
       - name: Deploy to GitHub Pages
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -47,6 +29,8 @@ jobs:
           git checkout --orphan gh-pages
           git rm -r --cached .
           cp -r out/* .
+          rm -rf out .next node_modules
+          echo '!.next' >> .gitignore
           git add -A
           git commit -m "Deploy to GitHub Pages" || true
           git push -f origin gh-pages
