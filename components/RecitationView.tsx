@@ -36,6 +36,7 @@ export function RecitationView() {
   } | null>(null);
   const [errorId, setErrorId] = useState<number | null>(null);
   const activeRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const autoScrollPausedRef = useRef(false);
 
   useEffect(() => {
@@ -70,12 +71,18 @@ export function RecitationView() {
     autoScrollPausedRef.current = false;
   }, [surahId]);
 
-  /* Auto-scroll the active verse into view until the reader scrolls manually. */
+  /* Keep the currently recited verse centered inside the reading panel. */
   useEffect(() => {
-    if (activeVerse == null || !activeRef.current) return;
+    const container = scrollContainerRef.current;
+    const active = activeRef.current;
+    if (activeVerse == null || !container || !active) return;
     if (autoScrollPausedRef.current) return;
-    activeRef.current.scrollIntoView({ block: "center", behavior: "smooth" });
-  }, [activeVerse]);
+
+    const containerBox = container.getBoundingClientRect();
+    const verseBox = active.getBoundingClientRect();
+    const top = container.scrollTop + verseBox.top - containerBox.top - (container.clientHeight - verseBox.height) / 2;
+    container.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }, [activeVerse, verses, showRecitation]);
 
   const jumpToVerse = (i: number) => {
     if (!timings) return;
@@ -173,6 +180,7 @@ export function RecitationView() {
 
         {!loading && !failed && showRecitation && verses && (
           <div
+            ref={scrollContainerRef}
             className="max-h-[62vh] overflow-y-auto px-6 py-10 sm:px-12"
             onWheel={() => {
               autoScrollPausedRef.current = true;
