@@ -1,5 +1,9 @@
 import type { Reciter } from "@/lib/types";
 
+// `next/image` requires an explicit base path when the static export is
+// hosted below a repository URL (for example, GitHub Pages at `/saadat`).
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 /**
  * Reciter catalog.
  * To add a reciter: add an entry here, then add `{reciterId} × 114` entries
@@ -10,7 +14,7 @@ export const reciters: Reciter[] = [
     id: "yasir-al-dawsari",
     name: "Yasir Al-Dawsari",
     arabicName: "ياسر الدوسري",
-    image: "/images/reciters/yasir-al-dawsari.jpg",
+    image: `${basePath}/images/reciters/yasir-al-dawsari.jpg`,
     bio: "Imam of the Grand Mosque in Mecca, known for a serene, measured style beloved worldwide.",
     bioLong:
       "Yasir Al-Dawsari served as an imam of the Grand Mosque (Masjid al-Haram) in Mecca, where his calm, deliberate recitation earned him a global following. His Hafs 'an 'Asim recordings are among the most widely streamed Qur'an recitations online.",
