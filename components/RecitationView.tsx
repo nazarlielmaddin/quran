@@ -36,7 +36,7 @@ export function RecitationView() {
   } | null>(null);
   const [errorId, setErrorId] = useState<number | null>(null);
   const activeRef = useRef<HTMLDivElement | null>(null);
-  const userScrollingRef = useRef(false);
+  const autoScrollPausedRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -65,10 +65,15 @@ export function RecitationView() {
     return activeVerseIndex(timings, currentTime);
   }, [timings, currentTime, quranPlaying]);
 
-  /* Auto-scroll the active verse into view (only while playing). */
+  // A new surah begins a new reading session, so restore verse tracking.
+  useEffect(() => {
+    autoScrollPausedRef.current = false;
+  }, [surahId]);
+
+  /* Auto-scroll the active verse into view until the reader scrolls manually. */
   useEffect(() => {
     if (activeVerse == null || !activeRef.current) return;
-    if (userScrollingRef.current) return;
+    if (autoScrollPausedRef.current) return;
     activeRef.current.scrollIntoView({ block: "center", behavior: "smooth" });
   }, [activeVerse]);
 
@@ -170,12 +175,10 @@ export function RecitationView() {
           <div
             className="max-h-[62vh] overflow-y-auto px-6 py-10 sm:px-12"
             onWheel={() => {
-              userScrollingRef.current = true;
-              window.setTimeout(() => (userScrollingRef.current = false), 2500);
+              autoScrollPausedRef.current = true;
             }}
             onTouchMove={() => {
-              userScrollingRef.current = true;
-              window.setTimeout(() => (userScrollingRef.current = false), 2500);
+              autoScrollPausedRef.current = true;
             }}
           >
             <div className="mx-auto max-w-2xl space-y-2">
