@@ -28,23 +28,17 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           
-          # Create or reset gh-pages branch from out/ directory
-          git checkout --orphan gh-pages-temp
-          git rm -rf . --quiet 2>/dev/null || true
+          git checkout --orphan gh-pages
+          git rm -rf . --cached --quiet 2>/dev/null || true
           
-          # Copy static exports to root
+          # Copy only static export to git working directory
           cp -r out/* .
           
-          # Remove unwanted files
-          rm -f .env.local .gitignore .next* 2>/dev/null || true
+          # Add all files to staging
+          git add .
           
-          # Stage static files only (not node_modules or .next/)
-          git add index.html 404.html favicon.ico *.svg 2>/dev/null || true
-          git add _next/ _not-found* data/ images/ 2>/dev/null || true
+          # Create commit
+          git commit -m "Deploy: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" --allow-empty
           
-          # Create commit if there are changes
-          git commit -m "Deploy: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" || exit 0
-          
-          # Rename and push
-          git branch -M gh-pages-temp gh-pages
+          # Force push to gh-pages
           git push -f origin gh-pages
