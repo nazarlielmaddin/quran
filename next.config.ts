@@ -5,12 +5,13 @@ import type { NextConfig } from "next";
  * GitHub Pages (EXPORT=1): static export with basePath matching the repo name.
  */
 const isExport = process.env.EXPORT === "1";
+const basePath = isExport ? "/saadat" : "";
 
 const nextConfig: NextConfig = {
+  basePath,
   ...(isExport
     ? {
         output: "export",
-        basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? "/saadat",
         images: { unoptimized: true },
       }
     : {}),
