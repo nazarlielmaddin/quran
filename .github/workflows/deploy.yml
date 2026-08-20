@@ -29,6 +29,7 @@ jobs:
           echo "Tree of out (first 20 files):"
           find out -type f | head -20 || echo "no files in out"
         shell: bash
+      - name: Deploy to GitHub Pages
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
