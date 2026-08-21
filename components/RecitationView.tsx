@@ -69,22 +69,25 @@ export function RecitationView() {
 
   /* Auto-scroll — ayə dəyişdikcə transliteration qutusu proporsional izləsin, oxunan ayə mərkəzdə qalsın */
   useEffect(() => {
-    if (activeVerse == null || !activeRef.current || !scrollRef.current) return;
+    if (activeVerse == null || !scrollRef.current) return;
     if (userScrollingRef.current) return;
+    // Double rAF ensures DOM has updated with new active verse
     requestAnimationFrame(() => {
-      const container = scrollRef.current;
-      const el = activeRef.current;
-      if (!container || !el) return;
-      // Use getBoundingClientRect — works regardless of offsetParent chain
-      const cRect = container.getBoundingClientRect();
-      const eRect = el.getBoundingClientRect();
-      const offset = eRect.top - cRect.top + container.scrollTop;
-      const targetTop = offset - container.clientHeight / 2 + el.clientHeight / 2;
-      const maxTop = Math.max(0, container.scrollHeight - container.clientHeight);
-      const clamped = Math.max(0, Math.min(targetTop, maxTop));
-      // Don't scroll if already centered within 24px
-      if (Math.abs(container.scrollTop - clamped) < 24) return;
-      container.scrollTo({ top: clamped, behavior: "smooth" });
+      requestAnimationFrame(() => {
+        const container = scrollRef.current;
+        if (!container) return;
+        // Find active element reliably via data attribute (ref timing can lag)
+        const el = (container.querySelector('[data-active="true"]') as HTMLElement | null) || activeRef.current;
+        if (!el) return;
+        const cRect = container.getBoundingClientRect();
+        const eRect = el.getBoundingClientRect();
+        const offset = eRect.top - cRect.top + container.scrollTop;
+        const targetTop = offset - container.clientHeight / 2 + el.clientHeight / 2;
+        const maxTop = Math.max(0, container.scrollHeight - container.clientHeight);
+        const clamped = Math.max(0, Math.min(targetTop, maxTop));
+        if (Math.abs(container.scrollTop - clamped) < 24) return;
+        container.scrollTo({ top: clamped, behavior: "smooth" });
+      });
     });
   }, [activeVerse]);
 
@@ -202,6 +205,8 @@ export function RecitationView() {
                 return (
                   <motion.div
                     key={i}
+                    data-verse={i}
+                    data-active={active ? "true" : undefined}
                     ref={active ? activeRef : undefined}
                     initial={false}
                     animate={{ opacity: active ? 1 : 0.62 }}
