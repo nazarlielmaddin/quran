@@ -47,7 +47,7 @@ export function Hero() {
 
         <motion.blockquote
           variants={item}
-          className="mt-8 max-w-2xl text-center text-mist/80 italic text-base sm:text-lg"
+          className="mt-8 max-w-2xl text-center text-gold italic text-base sm:text-lg"
         >
           <p className="mb-2">"&nbsp;{ANFAL_AYAH}&nbsp;"</p>
           <cite className="text-xs text-mist-faint">Surah Al-Anfal, 8:2</cite>
