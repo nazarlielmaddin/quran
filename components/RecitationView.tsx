@@ -71,13 +71,24 @@ export function RecitationView() {
   useEffect(() => {
     if (activeVerse == null || !activeRef.current || !scrollRef.current) return;
     if (userScrollingRef.current) return;
-    const container = scrollRef.current;
-    const el = activeRef.current;
-    const containerRect = container.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-    const offset = elRect.top - containerRect.top + container.scrollTop;
-    const targetTop = offset - container.clientHeight / 2 + el.clientHeight / 2;
-    container.scrollTo({ top: targetTop, behavior: "smooth" });
+    // Wait for layout to settle before measuring
+    requestAnimationFrame(() => {
+      const container = scrollRef.current;
+      const el = activeRef.current;
+      if (!container || !el) return;
+      const containerRect = container.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      // el offset relative to container's scroll area
+      const offset = elRect.top - containerRect.top + container.scrollTop;
+      const targetTop = offset - container.clientHeight / 2 + el.clientHeight / 2;
+      // Clamp to valid scroll range
+      const maxTop = container.scrollHeight - container.clientHeight;
+      const clampedTop = Math.max(0, Math.min(targetTop, maxTop));
+      // Only scroll if element is not already centered (±40px tolerance)
+      if (Math.abs(container.scrollTop - clampedTop) > 40) {
+        container.scrollTo({ top: clampedTop, behavior: "smooth" });
+      }
+    });
   }, [activeVerse]);
 
   const handleUserScroll = () => {
