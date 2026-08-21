@@ -160,7 +160,9 @@ export function RecitationView() {
 
   const jumpToVerse = (i: number) => {
     if (!timings) return;
-    seek(timings[i] / 1000);
+    // 1st ayah has no timestamp — 0..timings[0] belongs to verse 1
+    const seekMs = i === 0 ? 0 : timings[i - 1];
+    seek(seekMs / 1000);
     // Jump AND continue from there — even if the Qur'an layer was OFF.
     playQuran();
   };
