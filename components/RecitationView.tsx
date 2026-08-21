@@ -67,27 +67,25 @@ export function RecitationView() {
     return activeVerseIndex(timings, currentTime);
   }, [timings, currentTime]);
 
-  /* Auto-scroll the active verse into view — follows recitation (only the box, not the page). */
+  /* Auto-scroll — ayə dəyişdikcə transliteration qutusu proporsional izləsin, oxunan ayə mərkəzdə qalsın */
   useEffect(() => {
     if (activeVerse == null || !activeRef.current || !scrollRef.current) return;
     if (userScrollingRef.current) return;
-    // Wait for layout to settle before measuring
     requestAnimationFrame(() => {
       const container = scrollRef.current;
       const el = activeRef.current;
       if (!container || !el) return;
-      const containerRect = container.getBoundingClientRect();
-      const elRect = el.getBoundingClientRect();
-      // If already fully visible, don't scroll
-      const isVisible =
-        elRect.top >= containerRect.top + 16 &&
-        elRect.bottom <= containerRect.bottom - 16;
-      if (isVisible) return;
-      const offset = elRect.top - containerRect.top + container.scrollTop;
-      const targetTop = offset - container.clientHeight / 2 + el.clientHeight / 2;
+      const offset = el.offsetTop;
+      // offsetTop-u container-a görə hesabla (aradakı wrapper-ləri keç)
+      let cur: HTMLElement | null = el.offsetParent as HTMLElement | null;
+      let totalOffset = offset;
+      while (cur && cur !== container) {
+        totalOffset += cur.offsetTop;
+        cur = cur.offsetParent as HTMLElement | null;
+      }
+      const targetTop = totalOffset - container.clientHeight / 2 + el.clientHeight / 2;
       const maxTop = container.scrollHeight - container.clientHeight;
-      const clampedTop = Math.max(0, Math.min(targetTop, maxTop));
-      container.scrollTo({ top: clampedTop, behavior: "smooth" });
+      container.scrollTo({ top: Math.max(0, Math.min(targetTop, maxTop)), behavior: "smooth" });
     });
   }, [activeVerse]);
 
