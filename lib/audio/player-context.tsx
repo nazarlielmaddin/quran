@@ -367,7 +367,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         el.src = sound.audioUrl;
         el.load();
         el.loop = ambientLoop;
-        el.volume = ambientMuted ? 0 : ambientVolume;
+        el.volume = ambientMuted ? 0 : ambientVolume * (sound.volume ?? 1);
         // Read the LIVE enabled flag (not the value captured at click time)
         // so a mid-crossfade OFF toggle is respected.
         if (ambientEnabledRef.current) {
@@ -406,7 +406,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       el.load();
     }
     el.loop = ambientLoop;
-    el.volume = ambientMuted ? 0 : ambientVolume;
+    el.volume = ambientMuted ? 0 : ambientVolume * (sound.volume ?? 1);
     setAmbientEnabled(true);
     ambientEnabledRef.current = true;
     el.play().catch(() => setAmbientPlaying(false));
@@ -416,17 +416,19 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     (v: number) => {
       setAmbientVolumeState(v);
       if (ambientRef.current && !ambientMuted) {
-        rampVolume(ambientRef.current, v, 300);
+        const cur = getAmbientSound(soundId);
+        rampVolume(ambientRef.current, v * (cur?.volume ?? 1), 300);
       }
     },
-    [ambientMuted],
+    [ambientMuted, soundId],
   );
 
   const toggleAmbientMute = useCallback(() => {
     setAmbientMuted((m) => {
       const next = !m;
       if (ambientRef.current) {
-        rampVolume(ambientRef.current, next ? 0 : ambientVolume, 250);
+        const cur = getAmbientSound(soundId);
+        rampVolume(ambientRef.current, next ? 0 : ambientVolume * (cur?.volume ?? 1), 250);
       }
       return next;
     });

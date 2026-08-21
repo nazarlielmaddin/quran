@@ -48,6 +48,8 @@ export interface AmbientSound {
   /** Two hex colors used to render the CSS-art thumbnail. */
   gradient: [string, string];
   source: string;
+  /** Per-sound default volume (0..1). If set, multiplies the global ambientVolume. */
+  volume?: number;
 }
 
 export interface MediaSource {
