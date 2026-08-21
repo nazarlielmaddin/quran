@@ -22,7 +22,7 @@ export function RecitationView() {
     reciterId, surahId, showRecitation,
     setShowRecitation, transliterationStyle, setTransliterationStyle, seek, playQuran,
   } = usePlayer();
-  const { currentTime, quranPlaying } = usePlayback();
+  const { currentTime } = usePlayback();
 
   const surah = getSurah(surahId);
   const reciter = getReciter(reciterId);
@@ -36,7 +36,9 @@ export function RecitationView() {
   } | null>(null);
   const [errorId, setErrorId] = useState<number | null>(null);
   const activeRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
   const userScrollingRef = useRef(false);
+  const scrollTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -61,16 +63,30 @@ export function RecitationView() {
   const failed = errorId === surahId;
 
   const activeVerse = useMemo(() => {
-    if (!timings || !quranPlaying) return null;
+    if (!timings) return null;
     return activeVerseIndex(timings, currentTime);
-  }, [timings, currentTime, quranPlaying]);
+  }, [timings, currentTime]);
 
-  /* Auto-scroll the active verse into view (only while playing). */
+  /* Auto-scroll the active verse into view — follows recitation. */
   useEffect(() => {
     if (activeVerse == null || !activeRef.current) return;
     if (userScrollingRef.current) return;
     activeRef.current.scrollIntoView({ block: "center", behavior: "smooth" });
   }, [activeVerse]);
+
+  const handleUserScroll = () => {
+    userScrollingRef.current = true;
+    if (scrollTimeoutRef.current) window.clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = window.setTimeout(() => {
+      userScrollingRef.current = false;
+    }, 1500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) window.clearTimeout(scrollTimeoutRef.current);
+    };
+  }, []);
 
   const jumpToVerse = (i: number) => {
     if (!timings) return;
@@ -161,15 +177,10 @@ export function RecitationView() {
 
         {!loading && !failed && showRecitation && verses && (
           <div
-            className="max-h-[62vh] overflow-y-auto px-6 py-10 sm:px-12"
-            onWheel={() => {
-              userScrollingRef.current = true;
-              window.setTimeout(() => (userScrollingRef.current = false), 2500);
-            }}
-            onTouchMove={() => {
-              userScrollingRef.current = true;
-              window.setTimeout(() => (userScrollingRef.current = false), 2500);
-            }}
+            ref={scrollRef}
+            className="max-h-[62vh] overflow-y-auto px-6 py-10 sm:px-12 scroll-smooth"
+            onWheel={handleUserScroll}
+            onTouchMove={handleUserScroll}
           >
             <div className="mx-auto max-w-2xl space-y-2">
               {verses.map((text, i) => {
