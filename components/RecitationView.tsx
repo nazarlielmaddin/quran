@@ -67,11 +67,17 @@ export function RecitationView() {
     return activeVerseIndex(timings, currentTime);
   }, [timings, currentTime]);
 
-  /* Auto-scroll the active verse into view — follows recitation. */
+  /* Auto-scroll the active verse into view — follows recitation (only the box, not the page). */
   useEffect(() => {
-    if (activeVerse == null || !activeRef.current) return;
+    if (activeVerse == null || !activeRef.current || !scrollRef.current) return;
     if (userScrollingRef.current) return;
-    activeRef.current.scrollIntoView({ block: "center", behavior: "smooth" });
+    const container = scrollRef.current;
+    const el = activeRef.current;
+    const containerRect = container.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const offset = elRect.top - containerRect.top + container.scrollTop;
+    const targetTop = offset - container.clientHeight / 2 + el.clientHeight / 2;
+    container.scrollTo({ top: targetTop, behavior: "smooth" });
   }, [activeVerse]);
 
   const handleUserScroll = () => {
