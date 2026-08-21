@@ -63,10 +63,6 @@ export const ambientSounds: AmbientSound[] = [
     source: "Pixabay — cozy room with candles" },
 
   // ── Focus ─────────────────────────────────────────────────────────────
-  { id: "whiteNoise", name: "White Noise", category: "focus", gradient: ["#3f4a5a", "#0e1218"],
-    audioUrl: "https://cdn.pixabay.com/audio/2023/10/17/audio_872293f153.mp3",
-    videoUrl: "https://cdn.pixabay.com/video/2023/06/10/166707-835224055_large.mp4",
-    source: "Pixabay — soft fog" },
   { id: "brownNoise", name: "Brown Noise", category: "focus", gradient: ["#5a4a3a", "#140f0a"],
     audioUrl: "https://cdn.pixabay.com/audio/2025/02/11/audio_076c4755e8.mp3",
     videoUrl: "https://cdn.pixabay.com/video/2020/05/05/38137-415263669_large.mp4",
