@@ -142,7 +142,7 @@ export function RecitationView() {
         container.scrollTo({ top: clamped, behavior: "smooth" });
       });
     });
-  }, [activeVerse]);
+  }, [activeVerse, displayMode]);
 
   const handleUserScroll = () => {
     userScrollingRef.current = true;
@@ -212,7 +212,13 @@ export function RecitationView() {
           {reciter?.name} · {surah?.verses} {dict.surahs.ayahs}
           {recitation?.durationSeconds ? ` · ${formatTime(recitation.durationSeconds)}` : ""}
         </p>
-
+        {/* Sync status — only shown when verse timestamps exist */}
+        {timings && (
+          <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-line px-4 py-1.5 text-xs text-mist-dim">
+            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+            {dict.recitation.synced}
+          </p>
+        )}
       </div>
 
       {/* Controls */}
