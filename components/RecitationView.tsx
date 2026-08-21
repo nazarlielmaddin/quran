@@ -18,6 +18,14 @@ const STYLES: Array<{ id: TransliterationStyle; label: string }> = [
   { id: "simple", label: "Simple" },
 ];
 
+const BISMILLAH_AR = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
+const shouldShowBismillah = (surahId: number) => surahId !== 1 && surahId !== 9;
+const stripBismillah = (text: string) => {
+  if (text.startsWith(BISMILLAH_AR)) return text.slice(BISMILLAH_AR.length).trim();
+  // Handle with space: "بِسْمِ ... يَٰٓأَيُّهَا" -> already covered, but also without diacritics fallback
+  return text;
+};
+
 type DisplayMode = "transliteration" | "arabic" | "both";
 
 const DISPLAY_MODES: Array<{ id: DisplayMode; label: string; arabic?: boolean }> = [
@@ -168,10 +176,16 @@ export function RecitationView() {
   };
 
   // Build render list that keeps 1:1 verse mapping (Arabic array aligns with transliteration)
+  // For surahs 2-114 except 9, strip Bismillah prefix from first Arabic verse (it will be shown as centered header)
   const renderList = useMemo(() => {
+    const stripFirst = shouldShowBismillah(surahId);
     if (displayMode === "arabic") {
       if (!arabicVerses) return [];
-      return arabicVerses.map((arabic, i) => ({ arabic, translit: null as string | null, index: i }));
+      return arabicVerses.map((arabic, i) => ({
+        arabic: i === 0 && stripFirst ? stripBismillah(arabic) : arabic,
+        translit: null as string | null,
+        index: i,
+      }));
     }
     if (displayMode === "transliteration") {
       if (!verses) return [];
@@ -181,14 +195,15 @@ export function RecitationView() {
     const len = Math.max(verses?.length ?? 0, arabicVerses?.length ?? 0);
     const list: Array<{ arabic: string | null; translit: string | null; index: number }> = [];
     for (let i = 0; i < len; i++) {
+      const rawArabic = arabicVerses?.[i] ?? null;
       list.push({
-        arabic: arabicVerses?.[i] ?? null,
+        arabic: i === 0 && stripFirst && rawArabic ? stripBismillah(rawArabic) : rawArabic,
         translit: verses?.[i] ?? null,
         index: i,
       });
     }
     return list;
-  }, [displayMode, verses, arabicVerses]);
+  }, [displayMode, verses, arabicVerses, surahId]);
 
   const canRender = displayMode === "arabic" ? hasArabic : displayMode === "transliteration" ? hasTrans : (hasArabic || hasTrans);
 
@@ -306,6 +321,15 @@ export function RecitationView() {
             onWheel={handleUserScroll}
             onTouchMove={handleUserScroll}
           >
+            {shouldShowBismillah(surahId) && isArabicVisible && (
+              <p
+                dir="rtl"
+                lang="ar"
+                className="font-arabic text-center text-[1.7rem] leading-[2.2] text-gold-soft sm:text-[2rem] mb-8 pb-6 border-b border-line/20"
+              >
+                {BISMILLAH_AR}
+              </p>
+            )}
             <div className="mx-auto max-w-2xl space-y-2">
               {renderList.map(({ arabic, translit, index: i }) => {
                 const active = activeVerse === i;
