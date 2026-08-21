@@ -167,10 +167,19 @@ export function RecitationView() {
 
   const jumpToVerse = (i: number) => {
     if (!timings) return;
-    // 1st ayah has no timestamp — 0..timings[0] belongs to verse 1
-    const seekMs = i === 0 ? 0 : timings[i - 1];
-    seek(seekMs / 1000);
+    // For surahs with Bismillah header, verse 1's real start is at timings[0] (after Bismillah)
+    // For surahs without Bismillah (1 and 9), verse 1 starts at 0
+    const hasBismillahHeader = shouldShowBismillah(surahId);
+    const seekMs = hasBismillahHeader ? (i === 0 ? timings[0] : timings[i]) : (i === 0 ? 0 : timings[i - 1]);
+    // Fallback: if timings[i] is undefined (e.g., last verse), seek to last timing
+    const finalMs = seekMs ?? timings[timings.length - 1] ?? 0;
+    seek(finalMs / 1000);
     // Jump AND continue from there — even if the Qur'an layer was OFF.
+    playQuran();
+  };
+
+  const jumpToBismillah = () => {
+    seek(0);
     playQuran();
   };
 
@@ -324,14 +333,22 @@ export function RecitationView() {
               <p
                 dir="rtl"
                 lang="ar"
-                className="font-arabic text-center text-[1.7rem] leading-[2.2] text-gold-soft sm:text-[2rem] mb-8 pb-6 border-b border-line/20"
+                onClick={jumpToBismillah}
+                className={cn(
+                  "font-arabic text-center text-[1.7rem] leading-[2.2] sm:text-[2rem] mb-8 pb-6 border-b border-line/20 cursor-pointer transition-colors",
+                  activeVerse === 0 && timings && currentTime * 1000 < timings[0]
+                    ? "text-gold-soft"
+                    : "text-gold-soft/80 hover:text-gold-soft"
+                )}
+                title="Bismillah — click to play from start"
               >
                 {BISMILLAH_AR}
               </p>
             )}
             <div className="mx-auto max-w-2xl space-y-2">
               {renderList.map(({ arabic, translit, index: i }) => {
-                const active = activeVerse === i;
+                const isBismillahTime = shouldShowBismillah(surahId) && timings ? currentTime * 1000 < timings[0] : false;
+                const active = isBismillahTime ? false : activeVerse === i;
                 return (
                   <motion.div
                     key={i}
