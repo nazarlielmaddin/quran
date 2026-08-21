@@ -10,7 +10,7 @@ export const reciters: Reciter[] = [
     id: "yasir-al-dawsari",
     name: "Yasir Al-Dawsari",
     arabicName: "ياسر الدوسري",
-    image: "/images/reciters/yasir-al-dawsari.jpg",
+    image: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/reciters/yasir-al-dawsari.jpg`,
     bio: "Imam of the Grand Mosque in Mecca, known for a serene, measured style beloved worldwide.",
     bioLong:
       "Yasir Al-Dawsari served as an imam of the Grand Mosque (Masjid al-Haram) in Mecca, where his calm, deliberate recitation earned him a global following. His Hafs 'an 'Asim recordings are among the most widely streamed Qur'an recitations online.",
