@@ -7,6 +7,7 @@ import { Eye, EyeOff, Loader2, MousePointerClick } from "lucide-react";
 import { getRecitation, getSurah, getTimings } from "@/data/generated";
 import { getReciter } from "@/data/reciters";
 import { getVerses } from "@/data/transliterations";
+import { getArabicVerses } from "@/data/arabic";
 import { usePlayer, usePlayback } from "@/lib/audio/player-context";
 import { dict } from "@/lib/i18n";
 import { activeVerseIndex, cn, formatTime } from "@/lib/utils";
@@ -15,6 +16,14 @@ import type { TransliterationStyle } from "@/lib/types";
 const STYLES: Array<{ id: TransliterationStyle; label: string }> = [
   { id: "accurate", label: "Accurate" },
   { id: "simple", label: "Simple" },
+];
+
+type DisplayMode = "transliteration" | "arabic" | "both";
+
+const DISPLAY_MODES: Array<{ id: DisplayMode; label: string; arabic?: boolean }> = [
+  { id: "transliteration", label: "Transliteration" },
+  { id: "arabic", label: "العربية", arabic: true },
+  { id: "both", label: "Both" },
 ];
 
 export function RecitationView() {
@@ -35,6 +44,16 @@ export function RecitationView() {
     verses: string[];
   } | null>(null);
   const [errorId, setErrorId] = useState<number | null>(null);
+
+  // Arabic state — mirrors transliteration layer (base-path aware, cache, force-cache)
+  const [arabicData, setArabicData] = useState<{ id: number; verses: string[] } | null>(null);
+  const [arabicErrorId, setArabicErrorId] = useState<number | null>(null);
+
+  // Display mode for the transliteration section (Arabic + transliteration)
+  const [displayMode, setDisplayMode] = useState<DisplayMode>("transliteration");
+  // Simple boolean derived for backwards-compat / toggle convenience
+  const showArabic = displayMode === "arabic" || displayMode === "both";
+
   const activeRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const userScrollingRef = useRef(false);
@@ -57,17 +76,51 @@ export function RecitationView() {
     };
   }, [surahId, transliterationStyle]);
 
+  useEffect(() => {
+    let cancelled = false;
+    getArabicVerses(surahId)
+      .then((v) => {
+        if (cancelled) return;
+        if (v) setArabicData({ id: surahId, verses: v });
+        else setArabicErrorId(surahId);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setArabicErrorId(surahId);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [surahId]);
+
   const verses =
     data && data.id === surahId && data.style === transliterationStyle ? data.verses : null;
-  const loading = verses === null && errorId !== surahId;
-  const failed = errorId === surahId;
+  const arabicVerses =
+    arabicData && arabicData.id === surahId ? arabicData.verses : null;
+
+  const isArabicVisible = showArabic;
+  const isTranslitVisible = displayMode === "transliteration" || displayMode === "both";
+
+  const transLoading = isTranslitVisible && verses === null && errorId !== surahId;
+  const arabicLoading = isArabicVisible && arabicVerses === null && arabicErrorId !== surahId;
+  const loading = transLoading || arabicLoading;
+
+  const transFailed = isTranslitVisible && errorId === surahId && verses === null;
+  const arabicFailed = isArabicVisible && arabicErrorId === surahId && arabicVerses === null;
+  // Failed if every visible layer failed (for "both", show partial if at least one succeeds)
+  const failed = isTranslitVisible && isArabicVisible
+    ? transFailed && arabicFailed
+    : isTranslitVisible ? transFailed : arabicFailed;
+
+  const hasTrans = verses !== null;
+  const hasArabic = arabicVerses !== null;
 
   const activeVerse = useMemo(() => {
     if (!timings) return null;
     return activeVerseIndex(timings, currentTime);
   }, [timings, currentTime]);
 
-  /* Auto-scroll — ayə dəyişdikcə transliteration qutusu proporsional izləsin, oxunan ayə mərkəzdə qalsın */
+  /* Auto-scroll — ayə dəyişdikcə transliteration / Arabic qutusu proporsional izləsin, oxunan ayə mərkəzdə qalsın */
   useEffect(() => {
     if (activeVerse == null || !scrollRef.current) return;
     if (userScrollingRef.current) return;
@@ -112,6 +165,31 @@ export function RecitationView() {
     playQuran();
   };
 
+  // Build render list that keeps 1:1 verse mapping (Arabic array aligns with transliteration)
+  const renderList = useMemo(() => {
+    if (displayMode === "arabic") {
+      if (!arabicVerses) return [];
+      return arabicVerses.map((arabic, i) => ({ arabic, translit: null as string | null, index: i }));
+    }
+    if (displayMode === "transliteration") {
+      if (!verses) return [];
+      return verses.map((translit, i) => ({ arabic: null as string | null, translit, index: i }));
+    }
+    // both — align by index, handle mismatched lengths gracefully
+    const len = Math.max(verses?.length ?? 0, arabicVerses?.length ?? 0);
+    const list: Array<{ arabic: string | null; translit: string | null; index: number }> = [];
+    for (let i = 0; i < len; i++) {
+      list.push({
+        arabic: arabicVerses?.[i] ?? null,
+        translit: verses?.[i] ?? null,
+        index: i,
+      });
+    }
+    return list;
+  }, [displayMode, verses, arabicVerses]);
+
+  const canRender = displayMode === "arabic" ? hasArabic : displayMode === "transliteration" ? hasTrans : (hasArabic || hasTrans);
+
   return (
     <section id="now-playing" className="mx-auto max-w-4xl scroll-mt-24 px-5 py-20 sm:py-28 lg:py-36">
       <div className="mb-12 text-center">
@@ -139,21 +217,42 @@ export function RecitationView() {
 
       {/* Controls */}
       <div className="mb-8 flex flex-wrap items-center justify-center gap-3">
-        <div className="glass flex rounded-full p-1" role="group" aria-label="Transliteration style">
-          {STYLES.map((s) => (
+        {/* Display mode — Arabic toggle (العربية) */}
+        <div className="glass flex rounded-full p-1" role="group" aria-label="Display mode">
+          {DISPLAY_MODES.map((m) => (
             <button
-              key={s.id}
-              onClick={() => setTransliterationStyle(s.id)}
-              aria-pressed={transliterationStyle === s.id}
+              key={m.id}
+              onClick={() => setDisplayMode(m.id)}
+              aria-pressed={displayMode === m.id}
               className={cn(
                 "rounded-full px-4 py-2 text-xs transition-all duration-300",
-                transliterationStyle === s.id ? "bg-mist text-ink" : "text-mist-dim hover:text-mist",
+                m.arabic && "font-arabic text-sm leading-none",
+                displayMode === m.id ? "bg-mist text-ink" : "text-mist-dim hover:text-mist",
               )}
             >
-              {s.label}
+              {m.label}
             </button>
           ))}
         </div>
+
+        {/* Transliteration style — only relevant when transliteration is visible */}
+        {isTranslitVisible && (
+          <div className="glass flex rounded-full p-1" role="group" aria-label="Transliteration style">
+            {STYLES.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => setTransliterationStyle(s.id)}
+                aria-pressed={transliterationStyle === s.id}
+                className={cn(
+                  "rounded-full px-4 py-2 text-xs transition-all duration-300",
+                  transliterationStyle === s.id ? "bg-mist text-ink" : "text-mist-dim hover:text-mist",
+                )}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         <button
           onClick={() => setShowRecitation(!showRecitation)}
@@ -192,7 +291,7 @@ export function RecitationView() {
           </div>
         )}
 
-        {!loading && !failed && showRecitation && verses && (
+        {!loading && !failed && showRecitation && canRender && (
           <div
             ref={scrollRef}
             className="max-h-[62vh] overflow-y-auto px-6 py-10 sm:px-12 scroll-smooth"
@@ -200,7 +299,7 @@ export function RecitationView() {
             onTouchMove={handleUserScroll}
           >
             <div className="mx-auto max-w-2xl space-y-2">
-              {verses.map((text, i) => {
+              {renderList.map(({ arabic, translit, index: i }) => {
                 const active = activeVerse === i;
                 return (
                   <motion.div
@@ -228,9 +327,33 @@ export function RecitationView() {
                     >
                       {i + 1}
                     </span>
-                    <p className="font-serif text-[1.15rem] leading-[1.85] text-mist sm:text-[1.35rem] sm:leading-[1.9]">
-                      {text}
-                    </p>
+                    <div className="min-w-0 flex-1 space-y-2">
+                      {isArabicVisible && arabic && (
+                        <p
+                          dir="rtl"
+                          lang="ar"
+                          className="font-arabic text-right text-[1.55rem] leading-[2.1] text-mist sm:text-[1.85rem] sm:leading-[2.15]"
+                        >
+                          {arabic}
+                        </p>
+                      )}
+                      {isTranslitVisible && translit && (
+                        <p
+                          className={cn(
+                            "font-serif text-mist",
+                            displayMode === "both"
+                              ? "text-[0.98rem] leading-[1.85] text-mist-dim sm:text-[1.05rem]"
+                              : "text-[1.15rem] leading-[1.85] sm:text-[1.35rem] sm:leading-[1.9]",
+                          )}
+                        >
+                          {translit}
+                        </p>
+                      )}
+                      {/* Fallback when one side missing in "both" mode */}
+                      {displayMode === "both" && !arabic && translit && isArabicVisible && !hasArabic && (
+                        <p dir="rtl" className="font-arabic text-right text-mist-faint">—</p>
+                      )}
+                    </div>
                   </motion.div>
                 );
               })}

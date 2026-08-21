@@ -98,13 +98,52 @@ const transRes = await fetchJson("https://api.alquran.cloud/v1/quran/en.translit
 const perSurah = {};
 for (const s of transRes.data.surahs) {
   const key = String(s.number);
-  perSurah[key] = s.ayahs.map((a) => a.text);
+  perSurah[key] = s.ayahs.map((a) => (a.text ?? "").replace(/^\uFEFF/, ""));
 }
 writeFileSync(
   join(ROOT, "public", "data", "transliterations.json"),
   JSON.stringify(perSurah)
 );
 log(`Transliteration: ${Object.keys(perSurah).length} surahs covered`);
+
+/* 2b ── Arabic (Uthmani, alquran.cloud quran-uthmani) */
+log("Fetching Arabic Uthmani (6236 verses)…");
+try {
+  const arabicRes = await fetchJson("https://api.alquran.cloud/v1/quran/quran-uthmani");
+  const perSurahAr = {};
+  for (const s of arabicRes.data.surahs) {
+    const key = String(s.number);
+    perSurahAr[key] = s.ayahs.map((a) => (a.text ?? "").replace(/^\uFEFF/, ""));
+  }
+  writeFileSync(
+    join(ROOT, "public", "data", "arabic.json"),
+    JSON.stringify(perSurahAr)
+  );
+  log(`Arabic: ${Object.keys(perSurahAr).length} surahs covered`);
+} catch (e) {
+  log(`Arabic fetch failed: ${e.message} — writing fallback if missing`);
+  const arabicPath = join(ROOT, "public", "data", "arabic.json");
+  if (!existsSync(arabicPath)) {
+    // Fallback: empty per-surah structure so the build still succeeds
+    // (real data will be fetched on next successful run).
+    const fallback = {};
+    for (const s of surahs) fallback[String(s.number)] = [];
+    // Try to populate with a minimal placeholder for surah 1 so UI isn't blank
+    fallback["1"] = [
+      "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+      "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+      "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+      "مَٰلِكِ يَوْمِ ٱلدِّينِ",
+      "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+      "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+      "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+    ];
+    writeFileSync(arabicPath, JSON.stringify(fallback));
+    log("Arabic fallback written (surah 1 placeholder + empty others)");
+  } else {
+    log("Arabic fallback already exists — keeping it");
+  }
+}
 
 /* 3 ── Verse timings (Dawsari, everyayah / VerseByVerseQuran.com) */
 log("Parsing verse timings…");
