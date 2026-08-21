@@ -5,6 +5,8 @@ import { ChevronDown } from "lucide-react";
 import { dict } from "@/lib/i18n";
 import { DevelopedBy } from "@/components/DevelopedBy";
 
+const ANFAL_AYAH = "The true believers are only those whose hearts tremble at the remembrance of Allah, whose faith increases when His revelations are recited to them, and who put their trust in their Lord.";
+
 const container = {
   hidden: {},
   show: { transition: { staggerChildren: 0.16, delayChildren: 0.15 } },
@@ -42,6 +44,14 @@ export function Hero() {
         <motion.p variants={item} className="mt-7 max-w-xl text-base leading-relaxed text-mist-dim sm:text-lg">
           {dict.hero.subtitle}
         </motion.p>
+
+        <motion.blockquote
+          variants={item}
+          className="mt-8 max-w-2xl text-center text-mist/80 italic text-base sm:text-lg"
+        >
+          <p className="mb-2">"&nbsp;{ANFAL_AYAH}&nbsp;"</p>
+          <cite className="text-xs text-mist-faint">Surah Al-Anfal, 8:2</cite>
+        </motion.blockquote>
 
         <motion.div variants={item} className="mt-9 flex flex-col items-center gap-4 sm:mt-11 sm:flex-row">
           <a

@@ -35,7 +35,7 @@ export const ambientSounds: AmbientSound[] = [
     audioUrl: "https://cdn.pixabay.com/audio/2025/11/30/audio_e877dc8fbf.mp3",
     videoUrl: "https://cdn.pixabay.com/video/2020/10/26/53385-474597353_small.mp4",
     source: "Pixabay — mountain stream",
-    volume: 0.35 },
+    volume: 0.1 },
   { id: "forest", name: "Forest", category: "nature", gradient: ["#2c4a2e", "#0a120b"],
     audioUrl: "https://cdn.pixabay.com/audio/2025/02/03/audio_7599bcb342.mp3",
     videoUrl: "https://cdn.pixabay.com/video/2022/07/17/124412-730817618_small.mp4",
