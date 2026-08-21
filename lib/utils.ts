@@ -36,22 +36,17 @@ export function rampVolume(el: HTMLAudioElement, target: number, durationMs = 70
   });
 }
 
-/** Determine the active verse index for a given time (binary search over ms offsets).
- *  NOTE: timings[0] is the start of verse 2 — the time before it (0..timings[0]) belongs to verse 1.
- *  So verse 1 = [0, timings[0]), verse 2 = [timings[0], timings[1]), etc.
- */
+/** Determine the active verse index for a given time (binary search over ms offsets). */
 export function activeVerseIndex(timings: number[], timeSeconds: number): number {
   const ms = timeSeconds * 1000;
-  // 1st ayah has no timestamp — time before 2nd ayah's start belongs to verse 1
-  // So timings[0] = start of verse 2, [0, timings[0]) = verse 1, [timings[0], timings[1]) = verse 2, etc.
-  if (ms < timings[0]) return 0;
-  if (ms >= timings[timings.length - 1]) return timings.length - 1;
   let lo = 0;
   let hi = timings.length - 1;
+  if (ms <= timings[0]) return 0;
+  if (ms >= timings[hi]) return hi;
   while (lo < hi) {
     const mid = (lo + hi + 1) >> 1;
     if (timings[mid] <= ms) lo = mid;
     else hi = mid - 1;
   }
-  return Math.min(lo + 1, timings.length - 1);
+  return lo;
 }
