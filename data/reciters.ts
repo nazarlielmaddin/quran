@@ -21,6 +21,7 @@ export const reciters: Reciter[] = [
     id: "haitham-al-dakhin",
     name: "Haitham Al-Dakhin",
     arabicName: "هيثم الدخين",
+    image: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/reciters/haitham-al-dakhin.jpg`,
     bio: "Saudi reciter famed for his warm, flowing Hafs 'an 'Asim recordings shared across the world.",
     bioLong:
       "Haitham Al-Dakhin is a Saudi Qur'an reciter whose Hafs 'an 'Asim recordings — hosted on the official mp3quran.net mushaf — are a favorite for daily listening, tarawih, and sleep. His pacing is gentle and deeply soothing.",
