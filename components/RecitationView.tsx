@@ -75,17 +75,16 @@ export function RecitationView() {
       const container = scrollRef.current;
       const el = activeRef.current;
       if (!container || !el) return;
-      const offset = el.offsetTop;
-      // offsetTop-u container-a görə hesabla (aradakı wrapper-ləri keç)
-      let cur: HTMLElement | null = el.offsetParent as HTMLElement | null;
-      let totalOffset = offset;
-      while (cur && cur !== container) {
-        totalOffset += cur.offsetTop;
-        cur = cur.offsetParent as HTMLElement | null;
-      }
-      const targetTop = totalOffset - container.clientHeight / 2 + el.clientHeight / 2;
-      const maxTop = container.scrollHeight - container.clientHeight;
-      container.scrollTo({ top: Math.max(0, Math.min(targetTop, maxTop)), behavior: "smooth" });
+      // Use getBoundingClientRect — works regardless of offsetParent chain
+      const cRect = container.getBoundingClientRect();
+      const eRect = el.getBoundingClientRect();
+      const offset = eRect.top - cRect.top + container.scrollTop;
+      const targetTop = offset - container.clientHeight / 2 + el.clientHeight / 2;
+      const maxTop = Math.max(0, container.scrollHeight - container.clientHeight);
+      const clamped = Math.max(0, Math.min(targetTop, maxTop));
+      // Don't scroll if already centered within 24px
+      if (Math.abs(container.scrollTop - clamped) < 24) return;
+      container.scrollTo({ top: clamped, behavior: "smooth" });
     });
   }, [activeVerse]);
 
