@@ -49,7 +49,6 @@ const en = {
     hide: "Hide recitation",
     loading: "Loading transliteration…",
     unavailable: "Transliteration is unavailable for this surah.",
-    synced: "Synchronized with recitation",
     tapVerse: "Tap a verse to jump",
   },
   player: {
