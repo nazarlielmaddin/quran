@@ -38,7 +38,7 @@ export function rampVolume(el: HTMLAudioElement, target: number, durationMs = 70
 
 /** Determine the active verse index for a given time (binary search over ms offsets). */
 export function activeVerseIndex(timings: number[], timeSeconds: number): number {
-  const ms = timeSeconds * 1000;
+  const ms = timeSeconds * 1000 + 350; // small lookahead so display stays in sync (fixes off-by-one for An-Nazi'at etc.)
   let lo = 0;
   let hi = timings.length - 1;
   if (ms <= timings[0]) return 0;
