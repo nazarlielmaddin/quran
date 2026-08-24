@@ -82,11 +82,11 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
         </button>
       </div>
 
-      <div className="mt-5 flex min-w-0 max-w-[19ch] flex-col items-center gap-1.5">
+      <div className="mt-5 flex min-w-0 max-w-[19ch] flex-col items-center gap-1">
         <div className="flex items-center justify-center gap-1.5">
           <h3
             className={cn(
-              "text-[clamp(1.7rem,0.98rem+0.6vw,2.0rem)] font-medium leading-tight tracking-tight transition-colors duration-300",
+                    "text-[clamp(1rem,0.82rem+0.18vw,1.12rem)] font-medium leading-tight tracking-tight transition-colors duration-300",
               active ? "text-gold-soft" : "text-mist",
             )}
           >
@@ -98,18 +98,18 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
             >
-              <BadgeCheck className="h-4 w-4 shrink-0 text-gold" />
+                    <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-gold" />
             </motion.span>
           )}
         </div>
         <p
           className={cn(
-            "text-[clamp(1.4rem,0.84rem+0.45vw,1.65rem)] leading-[1.32]",
+                  "text-[clamp(0.78rem,0.7rem+0.08vw,0.86rem)] leading-snug",
             active ? "text-gold/80" : "text-mist-faint",
           )}
         >
           {reciter.origin}
-          <span className="mx-1.5 opacity-40">·</span>
+                <span className="mx-1 opacity-40">·</span>
           {reciter.bio.length > 44 ? reciter.bio.slice(0, 44) + "…" : reciter.bio}
         </p>
       </div>
@@ -124,10 +124,10 @@ export function ReciterSelector() {
       className="mx-auto max-w-[1500px] scroll-mt-24 px-6 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24"
     >
       <div className="mb-14 text-center">
-        <h2 className="font-sans text-[clamp(3.2rem,2.45rem+1.25vw,4.2rem)] font-medium tracking-tight text-mist">
+              <h2 className="font-sans text-[clamp(2rem,1.55rem+0.7vw,2.6rem)] font-medium tracking-tight text-mist">
           {dict.reciters.title}
         </h2>
-        <p className="mx-auto mt-4 max-w-3xl text-[clamp(1.55rem,1.05rem+0.6vw,2.0rem)] leading-relaxed text-mist-dim">
+              <p className="mx-auto mt-3 max-w-3xl text-[clamp(0.95rem,0.78rem+0.25vw,1.1rem)] leading-relaxed text-mist-dim">
           {dict.reciters.subtitle.includes("master voices")
             ? `${reciters.length} master voices — tap to select, press play to listen`
             : dict.reciters.subtitle}
