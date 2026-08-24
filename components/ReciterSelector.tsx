@@ -31,11 +31,11 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
       onClick={choose}
-      className="group relative flex cursor-pointer flex-col items-center px-2 py-2 text-center"
+            className="group relative flex cursor-pointer flex-col items-center px-3 py-2 text-center"
     >
       <div
         className={cn(
-          "relative rounded-full p-1.5 transition-all duration-300",
+                "relative rounded-full p-1 transition-all duration-300",
           active
             ? "bg-[radial-gradient(circle,rgba(200,169,124,0.24)_0%,rgba(200,169,124,0.09)_44%,rgba(200,169,124,0)_72%)] shadow-[0_0_58px_-14px_rgba(200,169,124,0.58)]"
             : "",
@@ -43,7 +43,7 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
       >
         <div
           className={cn(
-            "relative h-40 w-40 overflow-hidden rounded-full border-[3px] transition-all duration-300",
+                  "relative h-32 w-32 overflow-hidden rounded-full border-[3px] transition-all duration-300",
             active
               ? "border-gold/65 ring-2 ring-gold/40"
               : "border-white/35 ring-1 ring-white/20 group-hover:border-white/50",
@@ -72,13 +72,13 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
             start();
           }}
           className={cn(
-            "absolute bottom-[6px] right-[6px] flex h-14 w-14 items-center justify-center rounded-full border shadow-[0_12px_30px_-18px_rgba(0,0,0,0.9)] transition-all duration-300",
+                    "absolute bottom-[6px] right-[6px] flex h-11 w-11 items-center justify-center rounded-full border shadow-[0_12px_30px_-18px_rgba(0,0,0,0.9)] transition-all duration-300",
             active
               ? "border-gold/45 bg-[radial-gradient(circle_at_30%_25%,#f7e4c7_0%,#d8b98d_44%,#9a7c52_100%)] text-[#2c2316]"
               : "border-white/45 bg-[radial-gradient(circle_at_30%_25%,#fdfdfd_0%,#cfd3d9_44%,#7d8188_100%)] text-[#23262b]",
           )}
         >
-          <Play className="h-6 w-6 fill-current" />
+                  <Play className="h-5 w-5 fill-current" />
         </button>
       </div>
 
@@ -121,7 +121,7 @@ export function ReciterSelector() {
   return (
     <section
       id="reciters"
-      className="mx-auto max-w-[1500px] scroll-mt-24 px-6 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24"
+      className="mx-auto max-w-[1100px] scroll-mt-24 px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
     >
       <div className="mb-14 text-center">
               <h2 className="font-sans text-[clamp(2rem,1.55rem+0.7vw,2.6rem)] font-medium tracking-tight text-mist">
@@ -134,7 +134,7 @@ export function ReciterSelector() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-8 lg:gap-y-12">
+      <div className="grid grid-cols-2 gap-x-4 gap-y-9 md:grid-cols-3 md:gap-x-5 lg:grid-cols-5 lg:gap-x-5 lg:gap-y-12">
         {reciters.map((r, i) => (
           <ReciterCard key={r.id} reciterId={r.id} index={i} />
         ))}
