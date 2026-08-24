@@ -347,7 +347,9 @@ export function RecitationView() {
             )}
             <div className="mx-auto max-w-2xl space-y-2">
               {renderList.map(({ arabic, translit, index: i }) => {
-                const active = isBismillahActive ? false : activeVerse === i;
+                // For Bismillah surahs, activeVerse is offset by +1 (verse 1 is at timings[0]..timings[1])
+                const verseActiveIndex = shouldShowBismillah(surahId) && activeVerse !== null ? activeVerse - 1 : activeVerse;
+                const active = isBismillahActive ? false : verseActiveIndex === i;
                 return (
                   <motion.div
                     key={i}
