@@ -127,7 +127,7 @@ export function RecitationView() {
     return activeVerseIndex(timings, currentTime);
   }, [timings, currentTime]);
 
-  const isBismillahActive = shouldShowBismillah(surahId) && timings ? currentTime * 1000 < timings[0] : false;
+  const isBismillahActive = shouldShowBismillah(surahId) && timings && timings[0] > 1000 ? currentTime * 1000 < timings[0] : false;
 
   /* Auto-scroll — ayə dəyişdikcə transliteration / Arabic qutusu proporsional izləsin, oxunan ayə mərkəzdə qalsın */
   useEffect(() => {
@@ -169,13 +169,8 @@ export function RecitationView() {
 
   const jumpToVerse = (i: number) => {
     if (!timings) return;
-    // For surahs with Bismillah header, verse 1's real start is at timings[0] (after Bismillah)
-    // For surahs without Bismillah (1 and 9), verse 1 starts at 0
-    const hasBismillahHeader = shouldShowBismillah(surahId);
-    const seekMs = hasBismillahHeader ? (i === 0 ? timings[0] : timings[i]) : (i === 0 ? 0 : timings[i - 1]);
-    // Fallback: if timings[i] is undefined (e.g., last verse), seek to last timing
-    const finalMs = seekMs ?? timings[timings.length - 1] ?? 0;
-    seek(finalMs / 1000);
+    const seekMs = timings[i] ?? 0;
+    seek(seekMs / 1000);
     // Jump AND continue from there — even if the Qur'an layer was OFF.
     playQuran();
   };
@@ -347,9 +342,7 @@ export function RecitationView() {
             )}
             <div className="mx-auto max-w-2xl space-y-2">
               {renderList.map(({ arabic, translit, index: i }) => {
-                // For Bismillah surahs, activeVerse is offset by +1 (verse 1 is at timings[0]..timings[1])
-                const verseActiveIndex = shouldShowBismillah(surahId) && activeVerse !== null ? activeVerse - 1 : activeVerse;
-                const active = isBismillahActive ? false : verseActiveIndex === i;
+                const active = isBismillahActive ? false : activeVerse === i;
                 return (
                   <motion.div
                     key={i}

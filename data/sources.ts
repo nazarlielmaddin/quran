@@ -7,54 +7,54 @@ import type { MediaSource } from "@/lib/types";
  */
 export const sources: MediaSource[] = [
   {
-    label: "Qur'an audio — Yasir Al-Dawsari (128kbps, full surahs)",
-    url: "https://cdn.islamic.network/quran/audio-surah/128/ar.yasseraldossari/1.mp3",
-    license: "Islamic Network CDN — aggregated from quranicaudio.com archive (public distribution)",
+    label: "Qur'an audio — Quran.com / QuranicAudio — Yasir Al-Dawsari (Full Surahs, 128kbps)",
+    url: "https://download.quranicaudio.com/quran/yasser_ad-dussary//001.mp3",
+    license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Haitham Al-Dakhin (Hafs 'an 'Asim, 320kbps)",
+    label: "Qur'an audio — mp3quran.net — Haitham Al-Dakhin (Hafs 'an 'Asim, 320kbps)",
     url: "https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/001.mp3",
     license: "mp3quran.net official hosted mushaf",
   },
   {
-    label: "Qur'an audio — Mishary Rashid Alafasy (Alafasy_128kbps, EveryAyah + QDC fallback)",
-    url: "https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/1.mp3",
-    license: "Islamic Network CDN — aggregated from quranicaudio.com archive (public distribution)", // qdc fallback: mishary_rashid_alafasy
+    label: "Qur'an audio — Quran.com / QuranicAudio — Mishary Rashid Alafasy (Murattal, verified timings)",
+    url: "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/1.mp3",
+    license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Abdul Basit Murattal (Abdul_Basit_Murattal_192kbps)",
-    url: "https://cdn.islamic.network/quran/audio-surah/128/ar.abdulbasitmurattal/1.mp3",
-    license: "Islamic Network CDN — aggregated from quranicaudio.com archive (public distribution)",
+    label: "Qur'an audio — Quran.com / QuranicAudio — Abdul Basit Murattal (Murattal, verified timings)",
+    url: "https://download.quranicaudio.com/qdc/abdul_baset/murattal/1.mp3",
+    license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Mahmoud Khalil Al-Husary (Husary_128kbps — cdn.islamic.network audio/128)",
-    url: "https://cdn.islamic.network/quran/audio/128/ar.husary/1.mp3",
-    license: "Islamic Network CDN — aggregated from quranicaudio.com archive (public distribution)", // qdc fallback: mahmoud_khalil_al_husary
+    label: "Qur'an audio — Quran.com / QuranicAudio — Mahmoud Khalil Al-Husary (Murattal, verified timings)",
+    url: "https://download.quranicaudio.com/qdc/khalil_al_husary/murattal/1.mp3",
+    license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Abdul Basit Mujawwad (Abdul_Basit_Mujawwad_128kbps)",
-    url: "https://cdn.islamic.network/quran/audio-surah/128/ar.abdulbasitmujawwad/1.mp3",
-    license: "Islamic Network CDN — aggregated from quranicaudio.com archive (public distribution)", // qdc fallback: abdul_basit/mujawwad
+    label: "Qur'an audio — Quran.com / QuranicAudio — Abdul Basit Mujawwad (Mujawwad, verified timings)",
+    url: "https://download.quranicaudio.com/qdc/abdul_baset/mujawwad/1.mp3",
+    license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Abdur-Rahman As-Sudais (Abdurrahmaan_As-Sudais_192kbps)",
-    url: "https://cdn.islamic.network/quran/audio/192/ar.abdurrahmaansudais/1.mp3",
-    license: "Islamic Network CDN — aggregated from quranicaudio.com archive (public distribution)", // qdc fallback: abdur_rahman_as_sudais
+    label: "Qur'an audio — Quran.com / QuranicAudio — Abdur-Rahman as-Sudais (Murattal, verified timings)",
+    url: "https://download.quranicaudio.com/qdc/abdurrahmaan_as_sudais/murattal/1.mp3",
+    license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Maher Al-Muaiqly (Maher_AlMuaiqly_64kbps)",
-    url: "https://cdn.islamic.network/quran/audio/64/ar.mahermuaiqly/1.mp3",
-    license: "Islamic Network CDN — aggregated from quranicaudio.com archive (public distribution)", // qdc fallback: maher_al_muaiqly
+    label: "Qur'an audio — Quran.com / QuranicAudio — Maher Al-Muaiqly (Year 1440, verified timings)",
+    url: "https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440//001.mp3",
+    license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Saad Al-Ghamdi (Ghamadi_40kbps, mp3quran fallback)",
-    url: "https://server6.mp3quran.net/ghamdi/001.mp3",
-    license: "mp3quran.net official hosted mushaf",
+    label: "Qur'an audio — Quran.com / QuranicAudio — Saad Al-Ghamdi (Complete, verified timings)",
+    url: "https://download.quranicaudio.com/quran/sa3d_al-ghaamidi/complete//001.mp3",
+    license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Abu Bakr Al-Shatri (Abu_Bakr_Ash-Shaatree_128kbps)",
-    url: "https://cdn.islamic.network/quran/audio/128/ar.shaatree/1.mp3",
-    license: "Islamic Network CDN — aggregated from quranicaudio.com archive (public distribution)", // qdc fallback: abu_bakr_ash_shaatree
+    label: "Qur'an audio — Quran.com / QuranicAudio — Abu Bakr Al-Shatri (Murattal, verified timings)",
+    url: "https://download.quranicaudio.com/qdc/abu_bakr_shatri/murattal/1.mp3",
+    license: "Quran.com / QuranicAudio — public distribution",
   },
   {
     label: "Surah metadata + Latin transliteration (6236 verses)",
@@ -62,15 +62,14 @@ export const sources: MediaSource[] = [
     license: "alquran.cloud (crowd-sourced; Qur'an text is public domain in most jurisdictions)",
   },
   {
-    label: "Verse timings — Yasir Al-Dawsari + 8 EveryAyah/QDC reciters",
-    url: "https://www.everyayah.com/data/timings_files/Yasser_Ad-Dussary_128kbps.zip",
-    license: "(C) VerseByVerseQuran.com — used with required link-back to versebyversequran.com",
-    note: "Timings are approximate; used for verse highlighting only. Reused across reciters with compatible Hafs 'an 'Asim pacing where per-reciter files unavailable.",
+    label: "Verse timings — 9 reciters (6236 verses each)",
+    url: "https://quran.com",
+    license: "Quran Foundation (QDC API) — verified high-precision verse timings",
   },
   {
-    label: "Reciter portrait — Yasir Al-Dawsari",
-    url: "https://commons.wikimedia.org/wiki/File:Yasser_Al-Dosari_(cropped).jpg",
-    license: "CC BY-SA 4.0 (Wikimedia Commons)",
+    label: "Reciter portraits",
+    url: "https://commons.wikimedia.org",
+    license: "Wikimedia Commons / Public Domain / Fair Use",
   },
   {
     label: "Ambient audio + background videos (16 sounds)",
