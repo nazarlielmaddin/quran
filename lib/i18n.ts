@@ -19,7 +19,7 @@ const en = {
   },
   reciters: {
     title: "Choose your reciter",
-    subtitle: "Two master voices. More arriving soon.",
+    subtitle: "Ten master voices. Echoing from the Haramayn to your heart.",
     listen: "Listen",
     select: "Choose reciter",
   },

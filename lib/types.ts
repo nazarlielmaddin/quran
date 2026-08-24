@@ -13,6 +13,12 @@ export interface Reciter {
   /** Transliteration style available for this reciter's timestamps. */
   hasTimestamps: boolean;
   origin: string;
+  /** Audio provider identifier (everyayah, qdc, mp3quran, etc.). */
+  provider?: string;
+  /** EveryAyah folder or mp3quran sub-path for building audio URLs. */
+  audioFolder?: string;
+  /** Source of verse-level timing data (everyayah, qdc, etc.). */
+  timingSource?: string | null;
 }
 
 export interface Surah {

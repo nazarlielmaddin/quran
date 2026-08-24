@@ -5,7 +5,10 @@ import type { Recitation, Surah } from "@/lib/types";
 
 export const surahs = surahsJson as unknown as Surah[];
 export const recitations = recitationsJson as unknown as Recitation[];
-export const timingsBySurah = timingsJson as unknown as Record<string, number[]>;
+/** Nested timings: reciterId → surahId → verse offsets (ms) */
+export const timingsByReciter = timingsJson as unknown as Record<string, Record<string, number[]>>;
+/** @deprecated — use timingsByReciter; kept for backward compat (points to yasir data) */
+export const timingsBySurah = (timingsByReciter["yasir-al-dawsari"] ?? {}) as Record<string, number[]>;
 
 export function getSurah(id: number): Surah | undefined {
   return surahs.find((s) => s.number === id);
@@ -18,8 +21,18 @@ export function getRecitation(reciterId: string, surahId: number): Recitation | 
 /** Verse start offsets (ms) for a reciter+surah — null when unavailable. */
 export function getTimings(reciterId: string, surahId: number): number[] | null {
   if (!recitersWithTimings.has(reciterId)) return null;
-  return timingsBySurah[String(surahId)] ?? null;
+  return timingsByReciter[reciterId]?.[String(surahId)] ?? null;
 }
 
 /** Reciters that ship verified verse-level timestamps. */
-export const recitersWithTimings = new Set(["yasir-al-dawsari"]);
+export const recitersWithTimings = new Set([
+  "yasir-al-dawsari",
+  "mishary-rashid-alafasy",
+  "abdul-basit-murattal",
+  "mahmoud-khalil-al-husary",
+  "abdul-basit-mujawwad",
+  "abdur-rahman-as-sudais",
+  "maher-al-muaiqly",
+  "saad-al-ghamdi",
+  "abu-bakr-al-shatri",
+]);

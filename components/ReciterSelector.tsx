@@ -40,19 +40,19 @@ function ReciterCard({ reciterId }: { reciterId: string }) {
             src={reciter.image}
             alt={reciter.name}
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
             priority={reciter.id === "yasir-al-dawsari"}
             className="object-cover object-top transition-transform duration-[1.4s] ease-out group-hover:scale-[1.04]"
           />
         ) : (
           <div
-            className="animate-shimmer flex h-full w-full flex-col items-center justify-center gap-6"
+            className="animate-shimmer flex h-full w-full flex-col items-center justify-center gap-6 p-6 text-center"
             style={{
               background:
                 "radial-gradient(90% 90% at 50% 20%, rgba(200,169,124,0.16) 0%, rgba(21,21,28,0.9) 55%, #0b0b0f 100%)",
             }}
           >
-            <span className="font-arabic text-6xl text-gold-soft sm:text-7xl">
+            <span className="font-arabic text-5xl leading-none text-gold-soft sm:text-6xl xl:text-7xl">
               {reciter.arabicName}
             </span>
             <span className="text-xs tracking-[0.3em] text-mist-faint uppercase">Reciter</span>
@@ -104,13 +104,17 @@ function ReciterCard({ reciterId }: { reciterId: string }) {
 
 export function ReciterSelector() {
   return (
-    <section id="reciters" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:py-28 lg:px-8 lg:py-36">
+    <section id="reciters" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:py-28 lg:px-8 lg:py-36 xl:max-w-7xl">
       <div className="mb-14 text-center">
         <h2 className="font-display text-4xl text-mist lg:text-5xl">{dict.reciters.title}</h2>
-        <p className="mt-4 text-mist-dim">{dict.reciters.subtitle}</p>
+        <p className="mt-4 text-mist-dim">
+          {dict.reciters.subtitle.includes("master voices")
+            ? `${reciters.length} master voices. Echoing from the Haramayn to your heart.`
+            : dict.reciters.subtitle}
+        </p>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-8">
         {reciters.map((r) => (
           <ReciterCard key={r.id} reciterId={r.id} />
         ))}
