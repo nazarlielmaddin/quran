@@ -19,7 +19,7 @@ const STYLES: Array<{ id: TransliterationStyle; label: string }> = [
 ];
 
 const BISMILLAH_AR = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
-const shouldShowBismillah = (surahId: number) => surahId !== 1;
+const shouldShowBismillah = (surahId: number) => surahId !== 1 && surahId !== 9;
 const stripBismillah = (text: string) => {
   if (text.startsWith(BISMILLAH_AR)) return text.slice(BISMILLAH_AR.length).trim();
   return text;
