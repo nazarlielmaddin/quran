@@ -127,6 +127,8 @@ export function RecitationView() {
     return activeVerseIndex(timings, currentTime);
   }, [timings, currentTime]);
 
+  const isBismillahActive = shouldShowBismillah(surahId) && timings ? currentTime * 1000 < timings[0] : false;
+
   /* Auto-scroll — ayə dəyişdikcə transliteration / Arabic qutusu proporsional izləsin, oxunan ayə mərkəzdə qalsın */
   useEffect(() => {
     if (activeVerse == null || !scrollRef.current) return;
@@ -336,9 +338,7 @@ export function RecitationView() {
                 onClick={jumpToBismillah}
                 className={cn(
                   "font-arabic text-center text-[1.7rem] leading-[2.2] sm:text-[2rem] mb-8 pb-6 border-b border-line/20 cursor-pointer transition-colors",
-                  activeVerse === 0 && timings && currentTime * 1000 < timings[0]
-                    ? "text-gold-soft"
-                    : "text-gold-soft/80 hover:text-gold-soft"
+                  isBismillahActive ? "text-gold-soft" : "text-gold-soft/80 hover:text-gold-soft"
                 )}
                 title="Bismillah — click to play from start"
               >
@@ -347,8 +347,7 @@ export function RecitationView() {
             )}
             <div className="mx-auto max-w-2xl space-y-2">
               {renderList.map(({ arabic, translit, index: i }) => {
-                const isBismillahTime = shouldShowBismillah(surahId) && timings ? currentTime * 1000 < timings[0] : false;
-                const active = isBismillahTime ? false : activeVerse === i;
+                const active = isBismillahActive ? false : activeVerse === i;
                 return (
                   <motion.div
                     key={i}
