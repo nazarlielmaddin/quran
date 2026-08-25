@@ -13,6 +13,12 @@ export interface Reciter {
   /** Transliteration style available for this reciter's timestamps. */
   hasTimestamps: boolean;
   origin: string;
+  /** Audio provider identifier (everyayah, qdc, mp3quran, etc.). */
+  provider?: string;
+  /** EveryAyah folder or mp3quran sub-path for building audio URLs. */
+  audioFolder?: string;
+  /** Source of verse-level timing data (everyayah, qdc, etc.). */
+  timingSource?: string | null;
 }
 
 export interface Surah {
@@ -48,6 +54,8 @@ export interface AmbientSound {
   /** Two hex colors used to render the CSS-art thumbnail. */
   gradient: [string, string];
   source: string;
+  /** Per-sound default volume (0..1). If set, multiplies the global ambientVolume. */
+  volume?: number;
 }
 
 export interface MediaSource {

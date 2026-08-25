@@ -5,9 +5,9 @@ import type { Recitation, Surah } from "@/lib/types";
 
 export const surahs = surahsJson as unknown as Surah[];
 export const recitations = recitationsJson as unknown as Recitation[];
-/** Nested timings: reciterId → surahId → verse offsets (ms) — per-reciter QDC verified */
+/** Nested timings: reciterId → surahId → verse offsets (ms) */
 export const timingsByReciter = timingsJson as unknown as Record<string, Record<string, number[]>>;
-/** @deprecated — legacy flat access; use timingsByReciter[reciterId][surahId] */
+/** @deprecated — use timingsByReciter; kept for backward compat (points to yasir data) */
 export const timingsBySurah = (timingsByReciter["yasir-al-dawsari"] ?? {}) as Record<string, number[]>;
 
 export function getSurah(id: number): Surah | undefined {
@@ -25,4 +25,14 @@ export function getTimings(reciterId: string, surahId: number): number[] | null 
 }
 
 /** Reciters that ship verified verse-level timestamps. */
-export const recitersWithTimings = new Set(["yasir-al-dawsari", "maher-al-muaiqly"]);
+export const recitersWithTimings = new Set([
+  "yasir-al-dawsari",
+  "mishary-rashid-alafasy",
+  "abdul-basit-murattal",
+  "mahmoud-khalil-al-husary",
+  "abdul-basit-mujawwad",
+  "abdur-rahman-as-sudais",
+  "maher-al-muaiqly",
+  "saad-al-ghamdi",
+  "abu-bakr-al-shatri",
+]);

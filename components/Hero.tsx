@@ -5,6 +5,8 @@ import { ChevronDown } from "lucide-react";
 import { dict } from "@/lib/i18n";
 import { DevelopedBy } from "@/components/DevelopedBy";
 
+const ANFAL_AYAH = "The true believers are only those whose hearts tremble at the remembrance of Allah, whose faith increases when His revelations are recited to them, and who put their trust in their Lord.";
+
 const container = {
   hidden: {},
   show: { transition: { staggerChildren: 0.16, delayChildren: 0.15 } },
@@ -45,15 +47,13 @@ export function Hero() {
 
         <motion.blockquote
           variants={item}
-          className="mt-8 max-w-2xl border-l border-gold/50 bg-white/[0.025] py-3 pl-5 pr-4 text-left font-serif text-sm leading-relaxed text-mist-dim sm:px-6 sm:text-base"
+          className="mt-8 max-w-2xl text-center text-gold italic text-base sm:text-lg"
         >
-          <p>
-            The ˹true˺ believers are only those whose hearts tremble at the remembrance of Allah, whose faith increases when His revelations are recited to them, and who put their trust in their Lord.
-          </p>
-          <footer className="mt-2 font-sans text-[10px] tracking-[0.22em] text-gold uppercase">Al-Anfal (8:2)</footer>
+          <p className="mb-2">"&nbsp;{ANFAL_AYAH}&nbsp;"</p>
+          <cite className="text-xs text-mist-faint">Surah Al-Anfal, 8:2</cite>
         </motion.blockquote>
 
-        <motion.div variants={item} className="mt-8 flex flex-col items-center gap-4 sm:mt-10 sm:flex-row">
+        <motion.div variants={item} className="mt-9 flex flex-col items-center gap-4 sm:mt-11 sm:flex-row">
           <a
             href="#reciters"
             className="group relative overflow-hidden rounded-full bg-mist px-9 py-4 text-sm font-medium text-ink transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_50px_-12px_rgba(200,169,124,0.45)]"

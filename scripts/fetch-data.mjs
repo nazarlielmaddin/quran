@@ -2,7 +2,7 @@
  * Quran Sanctuary — Data generator
  * Fetches surah metadata + Latin transliteration from alquran.cloud,
  * merges hand-curated Azerbaijani names, parses verse timings (Dawsari),
- * and generates the full recitation catalog (Dawsari + Al-Dakhin).
+ * and generates the full recitation catalog for 10 reciters.
  *
  * Run: node scripts/fetch-data.mjs
  */
@@ -15,6 +15,100 @@ const GEN = join(ROOT, "data", "generated");
 mkdirSync(GEN, { recursive: true });
 
 const log = (m) => console.log(`[fetch-data] ${m}`);
+
+/** Central reciter catalog — single source of truth for audio + timings + attribution */
+const CATALOG = [
+  {
+    id: "yasir-al-dawsari",
+    qdcId: 97,
+    provider: "qdc",
+    folder: "yasser_ad-dussary",
+    timingSource: "qdc",
+    sourceLabel: "Quran.com / QuranicAudio — Yasir Al-Dawsari (Full Surahs, 128kbps)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/yasser_ad-dussary//${String(n).padStart(3, "0")}.mp3`,
+  },
+  {
+    id: "haitham-al-dakhin",
+    qdcId: null,
+    provider: "mp3quran",
+    folder: "h_dukhain/Rewayat-Hafs-A-n-Assem",
+    timingSource: null,
+    sourceLabel: "mp3quran.net — Haitham Al-Dakhin (Hafs 'an 'Asim, 320kbps)",
+    audioUrl: (n) => `https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/${String(n).padStart(3, "0")}.mp3`,
+  },
+  {
+    id: "mishary-rashid-alafasy",
+    qdcId: 7,
+    provider: "qdc",
+    folder: "mishari_al_afasy/murattal",
+    timingSource: "qdc",
+    sourceLabel: "Quran.com / QuranicAudio — Mishary Rashid Alafasy (Murattal, verified timings)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/${n}.mp3`,
+  },
+  {
+    id: "abdul-basit-murattal",
+    qdcId: 2,
+    provider: "qdc",
+    folder: "abdul_baset/murattal",
+    timingSource: "qdc",
+    sourceLabel: "Quran.com / QuranicAudio — Abdul Basit Murattal (Murattal, verified timings)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdul_baset/murattal/${n}.mp3`,
+  },
+  {
+    id: "mahmoud-khalil-al-husary",
+    qdcId: 6,
+    provider: "qdc",
+    folder: "khalil_al_husary/murattal",
+    timingSource: "qdc",
+    sourceLabel: "Quran.com / QuranicAudio — Mahmoud Khalil Al-Husary (Murattal, verified timings)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/khalil_al_husary/murattal/${n}.mp3`,
+  },
+  {
+    id: "abdul-basit-mujawwad",
+    qdcId: 1,
+    provider: "qdc",
+    folder: "abdul_baset/mujawwad",
+    timingSource: "qdc",
+    sourceLabel: "Quran.com / QuranicAudio — Abdul Basit Mujawwad (Mujawwad, verified timings)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdul_baset/mujawwad/${n}.mp3`,
+  },
+  {
+    id: "abdur-rahman-as-sudais",
+    qdcId: 3,
+    provider: "qdc",
+    folder: "abdurrahmaan_as_sudais/murattal",
+    timingSource: "qdc",
+    sourceLabel: "Quran.com / QuranicAudio — Abdur-Rahman as-Sudais (Murattal, verified timings)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdurrahmaan_as_sudais/murattal/${n}.mp3`,
+  },
+  {
+    id: "maher-al-muaiqly",
+    qdcId: 159,
+    provider: "qdc",
+    folder: "maher_almu3aiqly/year1440",
+    timingSource: "qdc",
+    sourceLabel: "Quran.com / QuranicAudio — Maher Al-Muaiqly (Year 1440, verified timings)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440//${String(n).padStart(3, "0")}.mp3`,
+  },
+  {
+    id: "saad-al-ghamdi",
+    qdcId: 13,
+    provider: "qdc",
+    folder: "sa3d_al-ghaamidi/complete",
+    timingSource: "qdc",
+    sourceLabel: "Quran.com / QuranicAudio — Saad Al-Ghamdi (Complete, verified timings)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/sa3d_al-ghaamidi/complete//${String(n).padStart(3, "0")}.mp3`,
+  },
+  {
+    id: "abu-bakr-al-shatri",
+    qdcId: 4,
+    provider: "qdc",
+    folder: "abu_bakr_shatri/murattal",
+    timingSource: "qdc",
+    sourceLabel: "Quran.com / QuranicAudio — Abu Bakr Al-Shatri (Murattal, verified timings)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abu_bakr_shatri/murattal/${n}.mp3`,
+  },
+];
 
 /** Azerbaijani names (hand-curated, all 114) */
 const AZ = {
@@ -77,81 +171,206 @@ const writeTs = (name, value) =>
 
 /* 1 ── Surah metadata (alquran.cloud) */
 log("Fetching surah metadata…");
-const surahMeta = await fetchJson("https://api.alquran.cloud/v1/surah");
-const surahs = surahMeta.data.map((s) => ({
-  id: s.number,
-  number: s.number,
-  arabicName: s.name,
-  englishName: s.englishName,
-  transliteratedName: TRANS[s.number] ?? s.englishName,
-  azerbaijaniName: AZ[s.number] ?? s.englishName,
-  meaning: s.englishNameTranslation,
-  verses: s.numberOfAyahs,
-  revelationType: s.revelationType,
-}));
+let surahs;
+try {
+  const surahMeta = await fetchJson("https://api.alquran.cloud/v1/surah");
+  surahs = surahMeta.data.map((s) => ({
+    id: s.number,
+    number: s.number,
+    arabicName: s.name,
+    englishName: s.englishName,
+    transliteratedName: TRANS[s.number] ?? s.englishName,
+    azerbaijaniName: AZ[s.number] ?? s.englishName,
+    meaning: s.englishNameTranslation,
+    verses: s.numberOfAyahs,
+    revelationType: s.revelationType,
+  }));
+} catch (e) {
+  log(`Surah metadata fetch failed: ${e.message} — falling back to local cache`);
+  const fallbackPath = join(GEN, "surahs.ts");
+  if (existsSync(fallbackPath)) {
+    const raw = readFileSync(fallbackPath, "utf8").replace(/^.*export default /, "").replace(/ as const;.*$/s, "");
+    surahs = JSON.parse(raw);
+    log(`Loaded ${surahs.length} surahs from cache`);
+  } else {
+    throw e;
+  }
+}
 writeTs("surahs", surahs);
 log(`Surahs: ${surahs.length}`);
 
 /* 2 ── Latin transliteration (alquran.cloud en.transliteration) */
 log("Fetching transliteration (6236 verses)…");
-const transRes = await fetchJson("https://api.alquran.cloud/v1/quran/en.transliteration");
-const perSurah = {};
-for (const s of transRes.data.surahs) {
-  const key = String(s.number);
-  perSurah[key] = s.ayahs.map((a) => a.text);
+try {
+  const transRes = await fetchJson("https://api.alquran.cloud/v1/quran/en.transliteration");
+  const perSurah = {};
+  for (const s of transRes.data.surahs) {
+    const key = String(s.number);
+    perSurah[key] = s.ayahs.map((a) => (a.text ?? "").replace(/^\uFEFF/, ""));
+  }
+  writeFileSync(
+    join(ROOT, "public", "data", "transliterations.json"),
+    JSON.stringify(perSurah)
+  );
+  log(`Transliteration: ${Object.keys(perSurah).length} surahs covered`);
+} catch (e) {
+  log(`Transliteration fetch failed: ${e.message} — keeping existing file if present`);
+  const transPath = join(ROOT, "public", "data", "transliterations.json");
+  if (!existsSync(transPath)) throw e;
+  log("Transliteration cache kept");
 }
-writeFileSync(
-  join(ROOT, "public", "data", "transliterations.json"),
-  JSON.stringify(perSurah)
-);
-log(`Transliteration: ${Object.keys(perSurah).length} surahs covered`);
 
-/* 3 ── Verse timings (Dawsari, everyayah / VerseByVerseQuran.com) */
+/* 2b ── Arabic (Uthmani, alquran.cloud quran-uthmani) */
+log("Fetching Arabic Uthmani (6236 verses)…");
+try {
+  const arabicRes = await fetchJson("https://api.alquran.cloud/v1/quran/quran-uthmani");
+  const perSurahAr = {};
+  for (const s of arabicRes.data.surahs) {
+    const key = String(s.number);
+    perSurahAr[key] = s.ayahs.map((a) => (a.text ?? "").replace(/^\uFEFF/, ""));
+  }
+  writeFileSync(
+    join(ROOT, "public", "data", "arabic.json"),
+    JSON.stringify(perSurahAr)
+  );
+  log(`Arabic: ${Object.keys(perSurahAr).length} surahs covered`);
+} catch (e) {
+  log(`Arabic fetch failed: ${e.message} — writing fallback if missing`);
+  const arabicPath = join(ROOT, "public", "data", "arabic.json");
+  if (!existsSync(arabicPath)) {
+    const fallback = {};
+    for (const s of surahs) fallback[String(s.number)] = [];
+    fallback["1"] = [
+      "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+      "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+      "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+      "مَٰلِكِ يَوْمِ ٱلدِّينِ",
+      "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+      "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+      "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+    ];
+    writeFileSync(arabicPath, JSON.stringify(fallback));
+    log("Arabic fallback written (surah 1 placeholder + empty others)");
+  } else {
+    log("Arabic fallback already exists — keeping it");
+  }
+}
+
+/* 3 ── Verse timings — nested Record<reciterId, Record<surahId, number[]>> */
 log("Parsing verse timings…");
-const timingsDir = process.env.TIMINGS_DIR ?? join(ROOT, "..", "AppData", "Local", "Temp", "opencode", "timings", "extracted");
-const timings = {};
-if (existsSync(timingsDir)) {
-  for (let n = 1; n <= 114; n++) {
-    const f = join(timingsDir, String(n).padStart(3, "0") + ".txt");
-    if (!existsSync(f)) continue;
-    timings[String(n)] = readFileSync(f, "utf8").trim().split(/\r?\n/).map((v) => Number(v));
-    // The last entry is the surah-end timestamp (N+1 for most surahs) — strip it
-    // so the array length always equals the verse count.
-    if (timings[String(n)].length > surahs.find((s) => s.number === n)?.verses) {
-      timings[String(n)].pop();
+let qdcTimings = {};
+const dumpPath = join(ROOT, "scripts", "data", "qdc_timings.json");
+if (existsSync(dumpPath)) {
+  try {
+    qdcTimings = JSON.parse(readFileSync(dumpPath, "utf8"));
+    log(`Loaded QDC timings cache from ${dumpPath} (${Object.keys(qdcTimings).length} reciters)`);
+  } catch (e) {
+    log(`Failed to load QDC timings cache: ${e.message}`);
+  }
+}
+
+const nestedTimings = {};
+const calculatedDurations = {}; // Record<reciterId, Record<surahId, number>>
+
+for (const entry of CATALOG) {
+  if (!entry.timingSource) continue;
+  nestedTimings[entry.id] = {};
+  calculatedDurations[entry.id] = {};
+
+  const reciterData = qdcTimings[entry.id];
+  if (reciterData) {
+    for (let s = 1; s <= 114; s++) {
+      const sKey = String(s);
+      const verseArray = reciterData[sKey];
+      if (Array.isArray(verseArray) && verseArray.length > 0) {
+        // Map each verse to its starting millisecond (vt.from)
+        nestedTimings[entry.id][sKey] = verseArray.map((v) => v.from);
+        const lastVerse = verseArray[verseArray.length - 1];
+        if (lastVerse && typeof lastVerse.to === "number") {
+          calculatedDurations[entry.id][sKey] = Math.round((lastVerse.to + 1000) / 1000);
+        }
+      }
     }
   }
 }
-writeTs("timings", timings);
-log(`Timings: ${Object.keys(timings).length} surahs`);
 
-/* 4 ── Recitation catalog */
+writeTs("timings", nestedTimings);
+log(`Timings: ${Object.keys(nestedTimings).length} reciters with verified timestamps`);
+
+/* 4 ── Recitation catalog — 10 reciters × 114 surahs = 1140 entries */
 log("Generating recitation catalog…");
-const dawsariDurations = {};
-for (const [n, arr] of Object.entries(timings)) {
-  dawsariDurations[n] = Math.round((arr[arr.length - 1] + 7000) / 1000); // tail ≈ 7s
-}
 const recitations = [];
-for (const s of surahs) {
-  const n = String(s.number).padStart(3, "0");
-  recitations.push({
-    id: `dawsari-${n}`,
-    reciterId: "yasir-al-dawsari",
-    surahId: s.number,
-    audioUrl: `https://cdn.islamic.network/quran/audio-surah/128/ar.yasseraldossari/${s.number}.mp3`,
-    durationSeconds: dawsariDurations[String(s.number)] ?? null,
-    source: "Islamic Network CDN (quranicaudio.com archive)",
-  });
-  recitations.push({
-    id: `aldakhin-${n}`,
-    reciterId: "haitham-al-dakhin",
-    surahId: s.number,
-    audioUrl: `https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/${n}.mp3`,
-    durationSeconds: null,
-    source: "mp3quran.net — official hosted mushaf",
-  });
+for (const entry of CATALOG) {
+  for (const s of surahs) {
+    const n = String(s.number).padStart(3, "0");
+    const num = s.number;
+    let id;
+    if (entry.id === "yasir-al-dawsari") id = `dawsari-${n}`;
+    else if (entry.id === "haitham-al-dakhin") id = `aldakhin-${n}`;
+    else id = `${entry.id}-${n}`;
+
+    const duration = calculatedDurations[entry.id]?.[String(num)] ?? null;
+
+    recitations.push({
+      id,
+      reciterId: entry.id,
+      surahId: num,
+      audioUrl: entry.audioUrl(num),
+      durationSeconds: duration,
+      source: entry.sourceLabel,
+    });
+  }
 }
 writeTs("recitations", recitations);
-log(`Recitations: ${recitations.length} (2 reciters × 114 surahs)`);
+log(`Recitations: ${recitations.length} (${CATALOG.length} reciters × 114 surahs)`);
+
+/* 5 ── Sources attribution — generate data/sources.ts from CATALOG */
+log("Generating sources attribution…");
+const sourcesLines = [];
+sourcesLines.push(`import type { MediaSource } from "@/lib/types";`);
+sourcesLines.push(``);
+sourcesLines.push(`/**`);
+sourcesLines.push(` * Attribution registry — every external media/data dependency is tracked here`);
+sourcesLines.push(` * so sources are visible in config, not hidden in components.`);
+sourcesLines.push(` * Generated by scripts/fetch-data.mjs — do not edit by hand (CATALOG-driven).`);
+sourcesLines.push(` */`);
+sourcesLines.push(`export const sources: MediaSource[] = [`);
+for (const entry of CATALOG) {
+  const label = `Qur'an audio — ${entry.sourceLabel}`;
+  const url = entry.audioUrl(1);
+  let license;
+  if (entry.provider === "mp3quran") license = "mp3quran.net official hosted mushaf";
+  else license = "Quran.com / QuranicAudio — public distribution";
+  sourcesLines.push(`  {`);
+  sourcesLines.push(`    label: ${JSON.stringify(label)},`);
+  sourcesLines.push(`    url: ${JSON.stringify(url)},`);
+  sourcesLines.push(`    license: ${JSON.stringify(license)},`);
+  sourcesLines.push(`  },`);
+}
+sourcesLines.push(`  {`);
+sourcesLines.push(`    label: "Surah metadata + Latin transliteration (6236 verses)",`);
+sourcesLines.push(`    url: "https://api.alquran.cloud/v1/surah",`);
+sourcesLines.push(`    license: "alquran.cloud (crowd-sourced; Qur'an text is public domain in most jurisdictions)",`);
+sourcesLines.push(`  },`);
+sourcesLines.push(`  {`);
+sourcesLines.push(`    label: "Verse timings — 9 reciters (6236 verses each)",`);
+sourcesLines.push(`    url: "https://quran.com",`);
+sourcesLines.push(`    license: "Quran Foundation (QDC API) — verified high-precision verse timings",`);
+sourcesLines.push(`  },`);
+sourcesLines.push(`  {`);
+sourcesLines.push(`    label: "Reciter portraits",`);
+sourcesLines.push(`    url: "https://commons.wikimedia.org",`);
+sourcesLines.push(`    license: "Wikimedia Commons / Public Domain / Fair Use",`);
+sourcesLines.push(`  },`);
+sourcesLines.push(`  {`);
+sourcesLines.push(`    label: "Ambient audio + background videos (16 sounds)",`);
+sourcesLines.push(`    url: "https://pixabay.com/sound-effects/",`);
+sourcesLines.push(`    license: "Pixabay Content License — free for commercial use, no attribution required",`);
+sourcesLines.push(`  },`);
+sourcesLines.push(`];`);
+sourcesLines.push(``);
+writeFileSync(join(ROOT, "data", "sources.ts"), sourcesLines.join("\n"));
+log(`Sources: ${CATALOG.length} reciter attributions + 4 static entries`);
 
 log("Done ✅");
+

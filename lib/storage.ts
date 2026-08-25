@@ -1,8 +1,11 @@
 import type { RepeatMode, TransliterationStyle } from "@/lib/types";
+import { reciters } from "@/data/reciters";
 
 /** Versioned persistence — bump when the saved shape changes. */
 const KEY = "quran:prefs:v1";
 const LEGACY_KEY = "saadat:prefs:v1";
+
+const VALID_RECITER_IDS = new Set(reciters.map((r) => r.id));
 
 export interface PersistedPrefs {
   reciterId: string;
@@ -45,7 +48,17 @@ export function loadPrefs(): PersistedPrefs {
     // Migrate from legacy Saadat key if new key missing
     if (!raw) raw = window.localStorage.getItem(LEGACY_KEY);
     if (!raw) return DEFAULT_PREFS;
-    return { ...DEFAULT_PREFS, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw) as Partial<PersistedPrefs>;
+    const merged: PersistedPrefs = { ...DEFAULT_PREFS, ...parsed };
+    // Guard: if stored reciter was removed/renamed, fall back to default (yasir)
+    if (typeof merged.reciterId !== "string" || !VALID_RECITER_IDS.has(merged.reciterId)) {
+      merged.reciterId = DEFAULT_PREFS.reciterId;
+    }
+    // Clamp surahId into valid 1..114 range
+    if (typeof merged.surahId !== "number" || merged.surahId < 1 || merged.surahId > 114) {
+      merged.surahId = DEFAULT_PREFS.surahId;
+    }
+    return merged;
   } catch {
     return DEFAULT_PREFS;
   }

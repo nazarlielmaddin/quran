@@ -8,7 +8,7 @@ import { usePlayer } from "@/lib/audio/player-context";
 import { dict } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-function ReciterCard({ reciterId }: { reciterId: string }) {
+function ReciterCard({ reciterId, index }: { reciterId: string; index: number }) {
   const { reciterId: activeId, selectReciter, selectSurah } = usePlayer();
   const reciter = getReciter(reciterId)!;
   const active = activeId === reciter.id;
@@ -19,84 +19,99 @@ function ReciterCard({ reciterId }: { reciterId: string }) {
     document.getElementById("now-playing")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const choose = () => {
+    selectReciter(reciter.id);
+  };
+
   return (
     <motion.article
       layout
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(
-        "group relative flex flex-col overflow-hidden rounded-3xl border transition-all duration-500",
-        active
-          ? "border-gold/50 bg-white/[0.06] shadow-[0_0_80px_-24px_rgba(200,169,124,0.35)]"
-          : "border-line bg-white/[0.03] hover:border-line hover:bg-white/[0.05] hover:shadow-card",
-      )}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
+      onClick={choose}
+            className="group relative flex cursor-pointer flex-col items-center px-3 py-2 text-center"
     >
-      {/* Portrait / typographic card */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden sm:aspect-[4/3] lg:aspect-[3/3.2]">
-        {reciter.image ? (
-          <Image
-            src={reciter.image}
-            alt={reciter.name}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority={reciter.id === "yasir-al-dawsari"}
-            className="object-cover object-top transition-transform duration-[1.4s] ease-out group-hover:scale-[1.04]"
-          />
-        ) : (
-          <div
-            className="animate-shimmer flex h-full w-full flex-col items-center justify-center gap-6"
-            style={{
-              background:
-                "radial-gradient(90% 90% at 50% 20%, rgba(200,169,124,0.16) 0%, rgba(21,21,28,0.9) 55%, #0b0b0f 100%)",
-            }}
-          >
-            <span className="font-arabic text-6xl text-gold-soft sm:text-7xl">
-              {reciter.arabicName}
-            </span>
-            <span className="text-xs tracking-[0.3em] text-mist-faint uppercase">Reciter</span>
-          </div>
+      <div
+        className={cn(
+                "relative rounded-full p-1 transition-all duration-300",
+          active
+            ? "bg-[radial-gradient(circle,rgba(200,169,124,0.24)_0%,rgba(200,169,124,0.09)_44%,rgba(200,169,124,0)_72%)] shadow-[0_0_58px_-14px_rgba(200,169,124,0.58)]"
+            : "",
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0d] via-transparent to-transparent" />
+      >
+        <div
+          className={cn(
+                  "relative h-32 w-32 overflow-hidden rounded-full border-[3px] transition-all duration-300",
+            active
+              ? "border-gold/65 ring-2 ring-gold/40"
+              : "border-white/35 ring-1 ring-white/20 group-hover:border-white/50",
+          )}
+        >
+          {reciter.image ? (
+            <Image
+              src={reciter.image}
+              alt={reciter.name}
+              fill
+              sizes="160px"
+              className="object-cover object-top"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gold/20 to-gold/5">
+              <span className="font-arabic text-2xl text-gold-soft">
+                {reciter.arabicName.charAt(0)}
+              </span>
+            </div>
+          )}
+        </div>
 
-        {active && (
-          <motion.span
-            initial={{ scale: 0, rotate: -20 }}
-            animate={{ scale: 1, rotate: 0 }}
-            className="glass absolute top-4 right-4 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-gold-soft"
-          >
-            <BadgeCheck className="h-3.5 w-3.5" /> {dict.reciters.select}
-          </motion.span>
-        )}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            start();
+          }}
+          className={cn(
+                    "absolute bottom-[6px] right-[6px] flex h-11 w-11 items-center justify-center rounded-full border shadow-[0_12px_30px_-18px_rgba(0,0,0,0.9)] transition-all duration-300",
+            active
+              ? "border-gold/45 bg-[radial-gradient(circle_at_30%_25%,#f7e4c7_0%,#d8b98d_44%,#9a7c52_100%)] text-[#2c2316]"
+              : "border-white/45 bg-[radial-gradient(circle_at_30%_25%,#fdfdfd_0%,#cfd3d9_44%,#7d8188_100%)] text-[#23262b]",
+          )}
+        >
+                  <Play className="h-5 w-5 fill-current" />
+        </button>
       </div>
 
-      {/* Copy */}
-      <div className="flex flex-1 flex-col gap-3 p-6 lg:p-7">
-        <h3 className="font-display text-2xl text-mist">{reciter.name}</h3>
-        <p className="text-sm leading-relaxed text-mist-dim">{reciter.bio}</p>
-
-        <div className="mt-auto flex items-center gap-3 pt-4">
-          <button
-            onClick={start}
+      <div className="mt-5 flex min-w-0 max-w-[19ch] flex-col items-center gap-1">
+        <div className="flex items-center justify-center gap-1.5">
+          <h3
             className={cn(
-              "flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-all duration-300",
-              active
-                ? "bg-mist text-ink hover:scale-[1.03]"
-                : "glass text-mist hover:border-gold/40 hover:text-gold-soft",
+                    "text-[clamp(1rem,0.82rem+0.18vw,1.12rem)] font-medium leading-tight tracking-tight transition-colors duration-300",
+              active ? "text-gold-soft" : "text-mist",
             )}
           >
-            <Play className="h-4 w-4 fill-current" />
-            {dict.reciters.listen}
-          </button>
-          <button
-            onClick={() => selectReciter(reciter.id)}
-            aria-pressed={active}
-            className="rounded-full px-4 py-3 text-sm text-mist-dim transition-colors hover:text-mist"
-          >
-            {active ? dict.reciters.select : `Choose`}
-          </button>
+            {reciter.name}
+          </h3>
+          {active && (
+            <motion.span
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            >
+                    <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-gold" />
+            </motion.span>
+          )}
         </div>
+        <p
+          className={cn(
+                  "text-[clamp(0.78rem,0.7rem+0.08vw,0.86rem)] leading-snug",
+            active ? "text-gold/80" : "text-mist-faint",
+          )}
+        >
+          {reciter.origin}
+                <span className="mx-1 opacity-40">·</span>
+          {reciter.bio.length > 44 ? reciter.bio.slice(0, 44) + "…" : reciter.bio}
+        </p>
       </div>
     </motion.article>
   );
@@ -104,15 +119,24 @@ function ReciterCard({ reciterId }: { reciterId: string }) {
 
 export function ReciterSelector() {
   return (
-    <section id="reciters" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:py-28 lg:px-8 lg:py-36">
+    <section
+      id="reciters"
+      className="mx-auto max-w-[1100px] scroll-mt-24 px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
+    >
       <div className="mb-14 text-center">
-        <h2 className="font-display text-4xl text-mist lg:text-5xl">{dict.reciters.title}</h2>
-        <p className="mt-4 text-mist-dim">{dict.reciters.subtitle}</p>
+              <h2 className="font-sans text-[clamp(2rem,1.55rem+0.7vw,2.6rem)] font-medium tracking-tight text-mist">
+          {dict.reciters.title}
+        </h2>
+              <p className="mx-auto mt-3 max-w-3xl text-[clamp(0.95rem,0.78rem+0.25vw,1.1rem)] leading-relaxed text-mist-dim">
+          {dict.reciters.subtitle.includes("master voices")
+            ? `${reciters.length} master voices — tap to select, press play to listen`
+            : dict.reciters.subtitle}
+        </p>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2">
-        {reciters.map((r) => (
-          <ReciterCard key={r.id} reciterId={r.id} />
+      <div className="grid grid-cols-2 gap-x-4 gap-y-9 md:grid-cols-3 md:gap-x-5 lg:grid-cols-5 lg:gap-x-5 lg:gap-y-12">
+        {reciters.map((r, i) => (
+          <ReciterCard key={r.id} reciterId={r.id} index={i} />
         ))}
       </div>
     </section>
