@@ -1,4 +1,4 @@
-# Saadat — Qur'an. Peace. Focus.
+# Qur'an. Peace. Focus.
 
 A premium digital sanctuary for Qur'an listening, relaxation, sleep, and reflection.
 
