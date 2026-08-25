@@ -36,12 +36,7 @@ export function Header() {
       <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between px-5 pt-[env(safe-area-inset-top)] lg:px-8">
         <a href="#top" className="flex items-center gap-2.5" aria-label={dict.brand}>
           <CrescentMoon className="h-5 w-5 text-gold" />
-          <span className="font-display text-lg tracking-wide text-mist">
-            {dict.brand}
-            <span className="ml-2 hidden text-xs font-normal tracking-[0.22em] text-mist-faint uppercase sm:inline">
-              {dict.brandSub}
-            </span>
-          </span>
+          <span className="font-display text-lg tracking-wide text-mist">{dict.brand}</span>
         </a>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
