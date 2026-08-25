@@ -213,8 +213,8 @@ export function RecitationView() {
   const canRender = displayMode === "arabic" ? hasArabic : displayMode === "transliteration" ? hasTrans : (hasArabic || hasTrans);
 
   return (
-    <section id="now-playing" className="mx-auto max-w-4xl scroll-mt-24 px-5 py-20 sm:py-28 lg:py-36">
-      <div className="mb-12 text-center">
+    <section className="mx-auto max-w-4xl px-5 py-20 sm:py-28 lg:py-36">
+      <div id="now-playing" className="mb-12 scroll-mt-20 text-center">
         <h2 className="font-display text-4xl text-mist lg:text-5xl">
           {surah?.englishName}
           <span className="mt-2 block font-serif text-xl font-normal text-mist-dim">

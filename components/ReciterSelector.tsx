@@ -119,11 +119,8 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
 
 export function ReciterSelector() {
   return (
-    <section
-      id="reciters"
-      className="mx-auto max-w-[1100px] scroll-mt-24 px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
-    >
-      <div className="mb-14 text-center">
+    <section className="mx-auto max-w-[1100px] px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
+      <div id="reciters" className="mb-14 scroll-mt-20 text-center">
               <h2 className="font-sans text-[clamp(2rem,1.55rem+0.7vw,2.6rem)] font-medium tracking-tight text-mist">
           {dict.reciters.title}
         </h2>

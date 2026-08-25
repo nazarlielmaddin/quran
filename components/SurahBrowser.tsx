@@ -102,8 +102,8 @@ export function SurahBrowser() {
   const reciter = getReciter(reciterId);
 
   return (
-    <section id="surahs" className="mx-auto max-w-4xl scroll-mt-24 px-5 py-20 sm:py-28 lg:py-36">
-      <div className="mb-12 text-center">
+    <section className="mx-auto max-w-4xl px-5 py-20 sm:py-28 lg:py-36">
+      <div id="surahs" className="mb-12 scroll-mt-20 text-center">
         <h2 className="font-display text-4xl text-mist lg:text-5xl">{dict.surahs.title}</h2>
         <p className="mt-4 text-mist-dim">
           {dict.surahs.subtitle}

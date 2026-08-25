@@ -92,8 +92,8 @@ function AmbientCard({ soundId }: { soundId: string }) {
 
 export function AmbientSelector() {
   return (
-    <section id="atmosphere" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:py-28 lg:px-8 lg:py-36">
-      <div className="mb-14 text-center">
+    <section className="mx-auto max-w-6xl px-5 py-20 sm:py-28 lg:px-8 lg:py-36">
+      <div id="atmosphere" className="mb-14 scroll-mt-20 text-center">
         <h2 className="font-display text-4xl text-mist lg:text-5xl">{dict.atmosphere.title}</h2>
         <p className="mt-4 text-mist-dim">{dict.atmosphere.subtitle}</p>
       </div>
