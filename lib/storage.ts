@@ -27,11 +27,11 @@ export interface PersistedPrefs {
 export const DEFAULT_PREFS: PersistedPrefs = {
   reciterId: "yasir-al-dawsari",
   surahId: 1,
-  soundId: null,
+  soundId: "night",
   quranVolume: 0.85,
   ambientVolume: 0.25,
   quranEnabled: true,
-  ambientEnabled: false,
+  ambientEnabled: true,
   repeat: "off",
   autoNext: true,
   positionSeconds: 0,
@@ -57,6 +57,11 @@ export function loadPrefs(): PersistedPrefs {
     // Clamp surahId into valid 1..114 range
     if (typeof merged.surahId !== "number" || merged.surahId < 1 || merged.surahId > 114) {
       merged.surahId = DEFAULT_PREFS.surahId;
+    }
+    // Migrate old null/empty ambient to default night (so existing users also get night)
+    if (!merged.soundId) {
+      merged.soundId = DEFAULT_PREFS.soundId;
+      merged.ambientEnabled = true;
     }
     return merged;
   } catch {

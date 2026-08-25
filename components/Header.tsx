@@ -29,8 +29,8 @@ export function Header() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "fixed inset-x-0 top-0 z-40 transition-all duration-500",
-        scrolled ? "glass-strong shadow-card" : "bg-transparent",
+        "fixed inset-x-0 top-0 z-40 border-b transition-all duration-500",
+        scrolled ? "border-transparent bg-ink/80 backdrop-blur-xl" : "border-transparent bg-transparent",
       )}
     >
       <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between px-5 pt-[env(safe-area-inset-top)] lg:px-8">

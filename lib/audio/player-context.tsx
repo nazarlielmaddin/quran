@@ -154,6 +154,38 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  /* ── Auto-start default ambient (night) on site open — respects autoplay policy */
+  useEffect(() => {
+    if (!soundId || !ambientEnabled) return;
+    const sound = getAmbientSound(soundId);
+    const el = ambientRef.current;
+    if (!sound || !el) return;
+    const tryPlay = () => {
+      if (!ambientEnabledRef.current) return;
+      const cur = getAmbientSound(soundId);
+      if (!cur) return;
+      if (!el.src || !el.src.includes(cur.audioUrl)) {
+        el.src = cur.audioUrl;
+        el.load();
+      }
+      el.loop = ambientLoop;
+      el.volume = ambientMuted ? 0 : ambientVolume * (cur.volume ?? 1);
+      el.play().catch(() => {
+        const onFirstGesture = () => {
+          el.play().catch(() => {});
+          window.removeEventListener("pointerdown", onFirstGesture);
+          window.removeEventListener("keydown", onFirstGesture);
+          window.removeEventListener("touchstart", onFirstGesture);
+        };
+        window.addEventListener("pointerdown", onFirstGesture, { once: true });
+        window.addEventListener("keydown", onFirstGesture, { once: true });
+        window.addEventListener("touchstart", onFirstGesture, { once: true });
+      });
+    };
+    const id = window.setTimeout(tryPlay, 300);
+    return () => window.clearTimeout(id);
+  }, []); // run once with initial prefs (night)
+
   /* ── Qur'an layer listeners (fresh closures via deps) ─────────────────── */
   useEffect(() => {
     const el = quranRef.current;

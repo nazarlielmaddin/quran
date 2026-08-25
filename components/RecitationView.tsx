@@ -214,7 +214,7 @@ export function RecitationView() {
 
   return (
     <section className="mx-auto max-w-4xl px-5 py-20 sm:py-28 lg:py-36">
-      <div id="now-playing" className="mb-12 scroll-mt-20 text-center">
+      <div id="now-playing" className="mb-8 scroll-mt-20 text-center">
         <h2 className="font-display text-4xl text-mist lg:text-5xl">
           {surah?.englishName}
           <span className="mt-2 block font-serif text-xl font-normal text-mist-dim">
@@ -234,13 +234,6 @@ export function RecitationView() {
           {reciter?.name} · {surah?.verses} {dict.surahs.ayahs}
           {recitation?.durationSeconds ? ` · ${formatTime(recitation.durationSeconds)}` : ""}
         </p>
-        {/* Sync status — only shown when verse timestamps exist */}
-        {timings && (
-          <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-line px-4 py-1.5 text-xs text-mist-dim">
-            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-            {dict.recitation.synced}
-          </p>
-        )}
       </div>
 
       {/* Controls */}
