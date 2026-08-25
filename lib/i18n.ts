@@ -7,7 +7,7 @@ export const locales = ["en", "az", "tr", "ar"] as const;
 export type Locale = (typeof locales)[number];
 
 const en = {
-  brand: "Saadat",
+  brand: "Quran Sanctuary",
   brandSub: "Qur'an Sanctuary",
   nav: { reciters: "Reciters", surahs: "Surahs", atmosphere: "Atmosphere", nowPlaying: "Now Playing" },
   hero: {

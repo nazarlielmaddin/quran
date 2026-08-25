@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
   ...(isExport
     ? {
         output: "export",
-        basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? "/saadat",
+        basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? "/quran",
         images: { unoptimized: true },
       }
     : {}),

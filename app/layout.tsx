@@ -29,7 +29,7 @@ const amiri = Amiri({
 });
 
 export const metadata: Metadata = {
-  title: "Saadat — Qur'an. Peace. Focus.",
+  title: "Quran Sanctuary — Qur'an. Peace. Focus.",
   description:
     "A digital sanctuary for Qur'an listening. Choose your reciter, select your atmosphere, and listen in peace.",
 };

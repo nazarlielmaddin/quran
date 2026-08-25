@@ -1,7 +1,8 @@
 import type { RepeatMode, TransliterationStyle } from "@/lib/types";
 
 /** Versioned persistence — bump when the saved shape changes. */
-const KEY = "saadat:prefs:v1";
+const KEY = "quran:prefs:v1";
+const LEGACY_KEY = "saadat:prefs:v1";
 
 export interface PersistedPrefs {
   reciterId: string;
@@ -40,7 +41,9 @@ export const DEFAULT_PREFS: PersistedPrefs = {
 export function loadPrefs(): PersistedPrefs {
   if (typeof window === "undefined") return DEFAULT_PREFS;
   try {
-    const raw = window.localStorage.getItem(KEY);
+    let raw = window.localStorage.getItem(KEY);
+    // Migrate from legacy Saadat key if new key missing
+    if (!raw) raw = window.localStorage.getItem(LEGACY_KEY);
     if (!raw) return DEFAULT_PREFS;
     return { ...DEFAULT_PREFS, ...JSON.parse(raw) };
   } catch {

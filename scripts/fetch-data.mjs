@@ -1,5 +1,5 @@
 /**
- * Saadat — Data generator
+ * Quran Sanctuary — Data generator
  * Fetches surah metadata + Latin transliteration from alquran.cloud,
  * merges hand-curated Azerbaijani names, parses verse timings (Dawsari),
  * and generates the full recitation catalog (Dawsari + Al-Dakhin).

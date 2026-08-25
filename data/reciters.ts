@@ -1,7 +1,7 @@
 import type { Reciter } from "@/lib/types";
 
 // `next/image` requires an explicit base path when the static export is
-// hosted below a repository URL (for example, GitHub Pages at `/saadat`).
+// hosted below a repository URL (for example, GitHub Pages at `/quran`).
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 /**

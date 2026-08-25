@@ -27,7 +27,7 @@ jobs:
       - run: npm run build
         env:
           EXPORT: "1"
-          NEXT_PUBLIC_BASE_PATH: "/saadat"
+          NEXT_PUBLIC_BASE_PATH: "/quran"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -9,13 +9,13 @@ export function Footer() {
         <div className="flex flex-col items-center gap-4 text-center">
           <div className="flex items-center gap-2.5">
             <CrescentMoon className="h-5 w-5 text-gold" />
-            <span className="font-display text-lg text-mist">Saadat</span>
+            <span className="font-display text-lg text-mist">{dict.brand}</span>
           </div>
           <p className="text-sm leading-relaxed text-mist-dim">{dict.footer.madeWith}</p>
         </div>
 
         <p className="mt-12 border-t border-line-soft pt-6 text-center text-[11px] text-mist-faint">
-          © {new Date().getFullYear()} Saadat · Qur’an. Peace. Focus.
+          © {new Date().getFullYear()} {dict.brand} · Qur’an. Peace. Focus.
         </p>
 
         <DevelopedBy className="mt-4 text-center" />

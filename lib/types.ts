@@ -1,4 +1,4 @@
-/** Shared domain types for Saadat. */
+/** Shared domain types for Quran Sanctuary. */
 
 export interface Reciter {
   id: string;

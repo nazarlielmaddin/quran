@@ -37,7 +37,7 @@ export function Header() {
         <a href="#top" className="flex items-center gap-2.5" aria-label={dict.brand}>
           <CrescentMoon className="h-5 w-5 text-gold" />
           <span className="font-display text-lg tracking-wide text-mist">
-            Saadat
+            {dict.brand}
             <span className="ml-2 hidden text-xs font-normal tracking-[0.22em] text-mist-faint uppercase sm:inline">
               {dict.brandSub}
             </span>

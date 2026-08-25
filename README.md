@@ -1,4 +1,4 @@
-# Qur'an. Peace. Focus.
+# Quran Sanctuary — Qur'an. Peace. Focus.
 
 A premium digital sanctuary for Qur'an listening, relaxation, sleep, and reflection.
 
@@ -7,6 +7,8 @@ two-layer audio system, verse-synchronized Latin transliteration, cinematic ambi
 backgrounds, and a floating premium player that remembers everything.
 
 Built with **Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · Framer Motion**.
+
+Live: **https://nazarlielmaddin.github.io/quran/**
 
 ---
 
@@ -42,8 +44,8 @@ Built with **Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · Framer M
 ### Install
 
 ```bash
-git clone <your-repo> saadat
-cd saadat
+git clone https://github.com/nazarlielmaddin/quran.git
+cd quran
 npm install
 ```
 
@@ -60,6 +62,13 @@ npm run dev
 npm run build
 npm start
 # http://localhost:3000
+```
+
+### Static export for GitHub Pages
+
+```bash
+EXPORT=1 NEXT_PUBLIC_BASE_PATH=/quran npm run build
+# output in `out/` → deploy to https://nazarlielmaddin.github.io/quran/
 ```
 
 ### Regenerate data (optional)
@@ -86,7 +95,7 @@ None are required. The app is fully static and works out of the box.
 ## 📁 Folder structure
 
 ```
-saadat/
+quran/
 ├── app/
 │   ├── layout.tsx            # Root layout, fonts, PlayerProvider
 │   ├── page.tsx              # Single-page sanctuary (hero → reciters → surahs → atmosphere → recitation)
@@ -121,7 +130,7 @@ saadat/
 │   ├── audio/
 │   │   └── player-context.tsx # Dual-layer audio state machine (the heart)
 │   ├── i18n.ts               # UI string dictionary (EN default, extensible)
-│   ├── storage.ts            # Versioned localStorage persistence
+│   ├── storage.ts            # Versioned localStorage persistence (quran:prefs:v1)
 │   ├── types.ts              # Domain types
 │   └── utils.ts              # formatTime, clamp, rampVolume, activeVerseIndex
 ├── public/
@@ -168,7 +177,7 @@ The system lives in `lib/audio/player-context.tsx` and is built around **two ind
 ### Persistence
 
 Every second (and on `beforeunload`) the current state is written to
-`localStorage["saadat:prefs:v1"]`. On return, the provider restores reciter, surah,
+`localStorage["quran:prefs:v1"]` (legacy `saadat:prefs:v1` is auto-migrated). On return, the provider restores reciter, surah,
 ambient sound, volumes, toggles, speed, repeat, and playback position. A hydration
 gate (`useSyncExternalStore`) prevents SSR/client mismatches.
 
