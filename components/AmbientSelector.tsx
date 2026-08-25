@@ -5,7 +5,7 @@ import {
   Bird, Cat, CloudLightning, CloudRain, Droplets, Flame, Home, Moon,
   Mountain, Pause, Play, Trees, Waves, Wind, AudioWaveform, CloudFog,
 } from "lucide-react";
-import { ambientCategories, ambientSounds, getAmbientSound } from "@/data/ambientSounds";
+import { ambientSounds, getAmbientSound } from "@/data/ambientSounds";
 import { usePlayer, usePlayback } from "@/lib/audio/player-context";
 import { dict } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -84,7 +84,6 @@ function AmbientCard({ soundId }: { soundId: string }) {
 
       <div className="flex items-center justify-between gap-2 px-4 py-3.5">
         <span className={cn("text-sm", active ? "text-gold-soft" : "text-mist")}>{sound.name}</span>
-        <span className="text-[10px] tracking-[0.2em] text-mist-faint uppercase">{sound.category}</span>
       </div>
     </motion.button>
   );
@@ -98,24 +97,10 @@ export function AmbientSelector() {
         <p className="mt-4 text-mist-dim">{dict.atmosphere.subtitle}</p>
       </div>
 
-      <div className="space-y-14">
-        {ambientCategories.map((cat) => {
-          const items = ambientSounds.filter((s) => s.category === cat.id);
-          return (
-            <div key={cat.id}>
-              <h3 className="mb-6 flex items-center gap-4 text-sm tracking-[0.25em] text-mist-dim uppercase">
-                <span className="h-px w-8 bg-gold/50" />
-                {cat.label}
-                <span className="h-px flex-1 bg-line-soft" />
-              </h3>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
-                {items.map((s) => (
-                  <AmbientCard key={s.id} soundId={s.id} />
-                ))}
-              </div>
-            </div>
-          );
-        })}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {ambientSounds.map((s) => (
+          <AmbientCard key={s.id} soundId={s.id} />
+        ))}
       </div>
     </section>
   );
