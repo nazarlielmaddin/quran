@@ -31,6 +31,17 @@ export const reciters: Reciter[] = [
     hasTimestamps: false,
     origin: "Saudi Arabia",
   },
+  {
+    id: "maher-al-muaiqly",
+    name: "Maher Al-Muaiqly",
+    arabicName: "ماهر المعيقلي",
+    image: `${basePath}/images/reciters/maher-al-muaiqly.jpg`,
+    bio: "Imam of the Grand Mosque in Mecca, beloved for his emotionally stirring and soulful recitation.",
+    bioLong:
+      "Sheikh Maher Al-Muaiqly is an imam of the Grand Mosque in Mecca whose warm, deeply poignant voice and heart-touching tarawih recitations are cherished by millions worldwide.",
+    hasTimestamps: true,
+    origin: "Saudi Arabia",
+  },
 ];
 
 export function getReciter(id: string): Reciter | undefined {
