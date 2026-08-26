@@ -7,8 +7,9 @@ import {
 } from "lucide-react";
 import { ambientSounds, getAmbientSound } from "@/data/ambientSounds";
 import { usePlayer, usePlayback } from "@/lib/audio/player-context";
-import { dict } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
+import { useLocale } from "@/lib/i18n";
+import { dict } from "@/lib/dictionaries";
+import { cn, getLocalized } from "@/lib/utils";
 import { Waveform } from "@/components/Waveform";
 
 const ICONS: Record<string, typeof CloudRain> = {
@@ -35,8 +36,10 @@ function AmbientCard({ soundId }: { soundId: string }) {
   const Icon = ICONS[sound.id] ?? Mountain;
   const { soundId: activeId, selectAmbient, toggleAmbient } = usePlayer();
   const { ambientPlaying } = usePlayback();
+  const { locale } = useLocale();
   const active = activeId === sound.id;
   const playing = active && ambientPlaying;
+  const displayName = getLocalized(sound, "name", locale);
 
   const handleClick = () => {
     if (active) toggleAmbient();
@@ -52,7 +55,7 @@ function AmbientCard({ soundId }: { soundId: string }) {
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       aria-pressed={active}
-      aria-label={`${sound.name} — ${active ? dict.atmosphere.on : dict.atmosphere.off}`}
+      aria-label={`${displayName} — ${active ? dict.atmosphere.on : dict.atmosphere.off}`}
       className={cn(
         "group relative flex flex-col overflow-hidden rounded-2xl border text-left transition-all duration-500",
         active
@@ -83,7 +86,7 @@ function AmbientCard({ soundId }: { soundId: string }) {
       </div>
 
       <div className="flex items-center justify-between gap-2 px-4 py-3.5">
-        <span className={cn("text-sm", active ? "text-gold-soft" : "text-mist")}>{sound.name}</span>
+        <span className={cn("text-sm", active ? "text-gold-soft" : "text-mist")}>{displayName}</span>
       </div>
     </motion.button>
   );

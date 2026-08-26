@@ -4,19 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Repeat, Settings2 } from "lucide-react";
 import { usePlayer } from "@/lib/audio/player-context";
-import { dict } from "@/lib/i18n";
+import { dict } from "@/lib/dictionaries";
 import { cn } from "@/lib/utils";
 import { Toggle } from "@/components/Toggle";
 import type { RepeatMode, TransliterationStyle } from "@/lib/types";
 
 const REPEATS: Array<{ id: RepeatMode; label: string }> = [
-  { id: "off", label: "Off" },
-  { id: "one", label: "One" },
-  { id: "all", label: "All" },
+  { id: "off", label: dict.repeats.off },
+  { id: "one", label: dict.repeats.one },
+  { id: "all", label: dict.repeats.all },
 ];
 const STYLES: Array<{ id: TransliterationStyle; label: string }> = [
-  { id: "accurate", label: "Accurate" },
-  { id: "simple", label: "Simple" },
+  { id: "accurate", label: dict.recitation.styles.accurate },
+  { id: "simple", label: dict.recitation.styles.simple },
 ];
 
 function Segmented<T extends string>({
@@ -106,14 +106,14 @@ export function SettingsPopover() {
                 <span className="text-xs text-mist-dim">{dict.player.autoNext}</span>
                 <Toggle checked={autoNext} onChange={setAutoNext} label={dict.player.autoNext} />
               </div>
-              <Segmented options={STYLES} value={transliterationStyle} onChange={setTransliterationStyle} label="Transliteration" />
+              <Segmented options={STYLES} value={transliterationStyle} onChange={setTransliterationStyle} label={dict.recitation.displayModes.transliteration} />
               <div className="flex items-center justify-between">
                 <span className="text-xs text-mist-dim">{dict.recitation.show}</span>
                 <Toggle checked={showRecitation} onChange={setShowRecitation} label={dict.recitation.show} />
               </div>
               <div className="flex items-center gap-2 pt-1 text-[11px] text-mist-faint">
                 <Repeat className="h-3 w-3" />
-                {repeat === "one" ? "Repeat current surah" : repeat === "all" ? "Repeat all surahs" : "Repeat off"}
+                {repeat === "one" ? dict.repeatStatus.one : repeat === "all" ? dict.repeatStatus.all : dict.repeatStatus.off}
               </div>
             </div>
           </motion.div>

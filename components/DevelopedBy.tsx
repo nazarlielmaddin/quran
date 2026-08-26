@@ -1,10 +1,11 @@
+import { dict } from "@/lib/dictionaries";
 import { cn } from "@/lib/utils";
 
 /** "Developed by Elmaddin Nazarli" — gold name, opens LinkedIn in a new tab. */
 export function DevelopedBy({ className }: { className?: string }) {
   return (
     <p className={cn("text-xs text-mist-faint", className)}>
-      Developed by{" "}
+      {dict.developedBy}{" "}
       <a
         href="https://www.linkedin.com/in/elinzrv/"
         target="_blank"

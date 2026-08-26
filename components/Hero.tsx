@@ -2,10 +2,8 @@
 
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { dict } from "@/lib/i18n";
+import { dict } from "@/lib/dictionaries";
 import { DevelopedBy } from "@/components/DevelopedBy";
-
-const ANFAL_AYAH = "The true believers are only those whose hearts tremble at the remembrance of Allah, whose faith increases when His revelations are recited to them, and who put their trust in their Lord.";
 
 const container = {
   hidden: {},
@@ -49,8 +47,8 @@ export function Hero() {
           variants={item}
           className="mt-8 max-w-2xl text-center text-gold italic text-base sm:text-lg"
         >
-          <p className="mb-2">"&nbsp;{ANFAL_AYAH}&nbsp;"</p>
-          <cite className="text-xs text-mist-faint">Surah Al-Anfal, 8:2</cite>
+          <p className="mb-2">"&nbsp;{dict.hero.anfalAyah}&nbsp;"</p>
+          <cite className="text-xs text-mist-faint">{dict.hero.anfalCite}</cite>
         </motion.blockquote>
 
         <motion.div variants={item} className="mt-9 flex flex-col items-center gap-4 sm:mt-11 sm:flex-row">
@@ -81,7 +79,7 @@ export function Hero() {
         transition={{ delay: 1.6, duration: 1 }}
         className="absolute bottom-6 flex flex-col items-center gap-2 text-mist-faint transition-colors hover:text-mist sm:bottom-8"
       >
-        <span className="text-[10px] tracking-[0.3em] uppercase">Scroll</span>
+        <span className="text-[10px] tracking-[0.3em] uppercase">{dict.hero.scroll}</span>
         <ChevronDown className="h-4 w-4 animate-bounce" />
       </motion.a>
     </section>

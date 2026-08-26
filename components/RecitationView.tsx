@@ -9,13 +9,13 @@ import { getReciter } from "@/data/reciters";
 import { getVerses } from "@/data/transliterations";
 import { getArabicVerses } from "@/data/arabic";
 import { usePlayer, usePlayback } from "@/lib/audio/player-context";
-import { dict } from "@/lib/i18n";
+import { dict } from "@/lib/dictionaries";
 import { activeVerseIndex, cn, formatTime } from "@/lib/utils";
 import type { TransliterationStyle } from "@/lib/types";
 
 const STYLES: Array<{ id: TransliterationStyle; label: string }> = [
-  { id: "accurate", label: "Accurate" },
-  { id: "simple", label: "Simple" },
+  { id: "accurate", label: dict.recitation.styles.accurate },
+  { id: "simple", label: dict.recitation.styles.simple },
 ];
 
 const BISMILLAH_AR = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
@@ -28,9 +28,9 @@ const stripBismillah = (text: string) => {
 type DisplayMode = "transliteration" | "arabic" | "both";
 
 const DISPLAY_MODES: Array<{ id: DisplayMode; label: string; arabic?: boolean }> = [
-  { id: "transliteration", label: "Transliteration" },
-  { id: "arabic", label: "العربية", arabic: true },
-  { id: "both", label: "Both" },
+  { id: "transliteration", label: dict.recitation.displayModes.transliteration },
+  { id: "arabic", label: dict.recitation.displayModes.arabic, arabic: true },
+  { id: "both", label: dict.recitation.displayModes.both },
 ];
 
 export function RecitationView() {
@@ -328,7 +328,7 @@ export function RecitationView() {
                   "font-arabic text-center text-[1.7rem] leading-[2.2] sm:text-[2rem] mb-8 pb-6 border-b border-line/20 cursor-pointer transition-colors",
                   isBismillahActive ? "text-gold-soft" : "text-gold-soft/80 hover:text-gold-soft"
                 )}
-                title="Bismillah — click to play from start"
+                title={dict.recitation.bismillahHint}
               >
                 {BISMILLAH_AR}
               </p>

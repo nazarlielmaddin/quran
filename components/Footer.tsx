@@ -1,4 +1,4 @@
-import { dict } from "@/lib/i18n";
+import { dict } from "@/lib/dictionaries";
 import { CrescentMoon } from "@/components/icons";
 import { DevelopedBy } from "@/components/DevelopedBy";
 
@@ -15,7 +15,7 @@ export function Footer() {
         </div>
 
         <p className="mt-12 border-t border-line-soft pt-6 text-center text-[11px] text-mist-faint">
-          © {new Date().getFullYear()} {dict.brand} · Qur’an. Peace. Focus.
+          © {new Date().getFullYear()} {dict.brand} · {dict.footer.tagline}
         </p>
 
         <DevelopedBy className="mt-4 text-center" />

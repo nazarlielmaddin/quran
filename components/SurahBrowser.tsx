@@ -7,8 +7,9 @@ import { Play, Search } from "lucide-react";
 import { getRecitation, getSurah, surahs } from "@/data/generated";
 import { getReciter } from "@/data/reciters";
 import { usePlayer, usePlayback } from "@/lib/audio/player-context";
-import { dict } from "@/lib/i18n";
-import { cn, formatTime } from "@/lib/utils";
+import { useLocale } from "@/lib/i18n";
+import { dict } from "@/lib/dictionaries";
+import { cn, formatTime, getLocalized } from "@/lib/utils";
 import { Waveform } from "@/components/Waveform";
 
 function normalize(s: string) {
@@ -19,6 +20,7 @@ function SurahRow({ surahId }: { surahId: number }) {
   const surah = getSurah(surahId)!;
   const { reciterId, selectSurah, surahId: currentId } = usePlayer();
   const { quranPlaying } = usePlayback();
+  const { locale } = useLocale();
   const recitation = getRecitation(reciterId, surahId);
   const isCurrent = currentId === surahId;
   const isPlaying = isCurrent && quranPlaying;
@@ -27,6 +29,10 @@ function SurahRow({ surahId }: { surahId: number }) {
     selectSurah(surahId, true);
     document.getElementById("now-playing")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  const primary = locale === "az" ? surah.azerbaijaniName : surah.englishName;
+  const secondary = locale === "az" ? surah.englishName : surah.transliteratedName;
+  const tertiary = locale === "az" ? surah.transliteratedName : surah.azerbaijaniName;
 
   return (
     <motion.div
@@ -50,17 +56,19 @@ function SurahRow({ surahId }: { surahId: number }) {
       </span>
 
       {/* Names */}
-      <button onClick={play} className="min-w-0 flex-1 text-left" aria-label={`${dict.surahs.play} ${surah.englishName}`}>
+      <button onClick={play} className="min-w-0 flex-1 text-left" aria-label={`${dict.surahs.play} ${primary}`}>
         <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
           <span className={cn("font-display text-lg", isCurrent ? "text-gold-soft" : "text-mist")}>
-            {surah.englishName}
+            {primary}
           </span>
-          <span className="text-sm text-mist-dim">{surah.transliteratedName}</span>
-          <span className="text-xs text-mist-faint">{surah.azerbaijaniName}</span>
+          <span className="text-sm text-mist-dim">{secondary}</span>
+          {tertiary && tertiary !== primary && (
+            <span className="text-xs text-mist-faint">{tertiary}</span>
+          )}
         </span>
         <span className="mt-0.5 block text-xs text-mist-faint">
           {surah.verses} {dict.surahs.ayahs}
-          {surah.revelationType === "Meccan" ? " · Meccan" : " · Medinan"}
+          {surah.revelationType === "Meccan" ? ` · ${dict.surahs.meccan}` : ` · ${dict.surahs.medinan}`}
         </span>
       </button>
 
@@ -75,7 +83,7 @@ function SurahRow({ surahId }: { surahId: number }) {
         ) : (
           <button
             onClick={play}
-            aria-label={`${dict.surahs.play} ${surah.englishName}`}
+            aria-label={`${dict.surahs.play} ${primary}`}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-mist-dim transition-all duration-300 group-hover:border-gold/50 group-hover:text-gold-soft hover:scale-105"
           >
             <Play className="h-4 w-4 translate-x-[1px] fill-current" />
@@ -89,6 +97,7 @@ function SurahRow({ surahId }: { surahId: number }) {
 export function SurahBrowser() {
   const [query, setQuery] = useState("");
   const { reciterId } = usePlayer();
+  const { locale } = useLocale();
 
   const filtered = useMemo(() => {
     const q = normalize(query.trim());
@@ -100,6 +109,7 @@ export function SurahBrowser() {
   }, [query]);
 
   const reciter = getReciter(reciterId);
+  const reciterName = reciter ? getLocalized(reciter, "name", locale) : "";
 
   return (
     <section className="mx-auto max-w-4xl px-5 py-20 sm:py-28 lg:py-36">
@@ -121,7 +131,7 @@ export function SurahBrowser() {
             ) : (
               <span className="h-5 w-5 rounded-full bg-gold/20" />
             )}
-            {reciter.name}
+            {reciterName}
           </p>
         )}
       </div>
@@ -138,7 +148,7 @@ export function SurahBrowser() {
         />
         {query && (
           <button onClick={() => setQuery("")} className="text-xs text-mist-faint hover:text-mist">
-            Clear
+            {dict.surahs.clear}
           </button>
         )}
       </div>

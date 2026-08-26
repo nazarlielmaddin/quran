@@ -3,16 +3,24 @@
 export interface Reciter {
   id: string;
   name: string;
+  /** Azerbaijani name (falls back to `name` when missing). */
+  nameAz?: string;
   /** Arabic-script name (used for typographic cards when no photo exists). */
   arabicName: string;
   image?: string;
   /** Short biography shown on the reciter card. */
   bio: string;
+  /** Azerbaijani biography (falls back to `bio` when missing). */
+  bioAz?: string;
   /** Longer bio for the reciter experience view. */
   bioLong: string;
+  /** Azerbaijani long bio (falls back to `bioLong` when missing). */
+  bioLongAz?: string;
   /** Transliteration style available for this reciter's timestamps. */
   hasTimestamps: boolean;
   origin: string;
+  /** Azerbaijani origin (falls back to `origin` when missing). */
+  originAz?: string;
   /** Audio provider identifier (everyayah, qdc, mp3quran, etc.). */
   provider?: string;
   /** EveryAyah folder or mp3quran sub-path for building audio URLs. */
@@ -29,6 +37,8 @@ export interface Surah {
   transliteratedName: string;
   azerbaijaniName: string;
   meaning: string;
+  /** Azerbaijani meaning (falls back to `meaning` when missing). */
+  meaningAz?: string;
   verses: number;
   revelationType: "Meccan" | "Medinan";
 }
@@ -48,7 +58,11 @@ export type AmbientCategory = "nature" | "cozy" | "focus";
 export interface AmbientSound {
   id: string;
   name: string;
+  /** Azerbaijani name (falls back to `name` when missing). */
+  nameAz?: string;
   category: AmbientCategory;
+  /** Azerbaijani category label override. */
+  categoryAz?: string;
   audioUrl: string;
   videoUrl: string;
   /** Two hex colors used to render the CSS-art thumbnail. */

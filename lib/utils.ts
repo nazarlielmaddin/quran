@@ -1,4 +1,5 @@
 /** Small shared helpers. */
+import type { Locale } from "@/lib/dictionaries";
 
 export function cn(...parts: Array<string | false | null | undefined>): string {
   return parts.filter(Boolean).join(" ");
@@ -50,4 +51,25 @@ export function activeVerseIndex(timings: number[], timeSeconds: number): number
     else hi = mid - 1;
   }
   return lo;
+}
+
+/**
+ * Resolve a localized string field from an object that has an `XAz` companion
+ * property. Falls back to the canonical (English) field when the localized one
+ * is missing or the locale is not Azerbaijani.
+ *
+ *   getLocalized({ name: "Foo", nameAz: "Bar" }, "name", "az") → "Bar"
+ *   getLocalized({ name: "Foo", nameAz: "Bar" }, "name", "en") → "Foo"
+ */
+export function getLocalized<T extends object>(
+  obj: T,
+  field: string,
+  locale: Locale,
+): string {
+  if (locale === "az") {
+    const az = (obj as Record<string, unknown>)[`${field}Az`];
+    if (typeof az === "string" && az.length > 0) return az;
+  }
+  const v = (obj as Record<string, unknown>)[field];
+  return typeof v === "string" ? v : "";
 }

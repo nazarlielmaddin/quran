@@ -5,13 +5,18 @@ import Image from "next/image";
 import { BadgeCheck, Play } from "lucide-react";
 import { reciters, getReciter } from "@/data/reciters";
 import { usePlayer } from "@/lib/audio/player-context";
-import { dict } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
+import { useLocale } from "@/lib/i18n";
+import { dict, t } from "@/lib/dictionaries";
+import { cn, getLocalized } from "@/lib/utils";
 
 function ReciterCard({ reciterId, index }: { reciterId: string; index: number }) {
   const { reciterId: activeId, selectReciter, selectSurah } = usePlayer();
+  const { locale } = useLocale();
   const reciter = getReciter(reciterId)!;
   const active = activeId === reciter.id;
+  const displayName = getLocalized(reciter, "name", locale);
+  const displayOrigin = getLocalized(reciter, "origin", locale);
+  const displayBio = getLocalized(reciter, "bio", locale);
 
   const start = () => {
     if (!active) selectReciter(reciter.id);
@@ -52,7 +57,7 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
           {reciter.image ? (
             <Image
               src={reciter.image}
-              alt={reciter.name}
+              alt={displayName}
               fill
               sizes="160px"
               className="object-cover object-top"
@@ -71,6 +76,7 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
             e.stopPropagation();
             start();
           }}
+          aria-label={`${dict.reciters.listen} ${displayName}`}
           className={cn(
                     "absolute bottom-[6px] right-[6px] flex h-11 w-11 items-center justify-center rounded-full border shadow-[0_12px_30px_-18px_rgba(0,0,0,0.9)] transition-all duration-300",
             active
@@ -90,7 +96,7 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
               active ? "text-gold-soft" : "text-mist",
             )}
           >
-            {reciter.name}
+            {displayName}
           </h3>
           {active && (
             <motion.span
@@ -108,9 +114,9 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
             active ? "text-gold/80" : "text-mist-faint",
           )}
         >
-          {reciter.origin}
+          {displayOrigin}
                 <span className="mx-1 opacity-40">·</span>
-          {reciter.bio.length > 44 ? reciter.bio.slice(0, 44) + "…" : reciter.bio}
+          {displayBio.length > 60 ? displayBio.slice(0, 60) + "…" : displayBio}
         </p>
       </div>
     </motion.article>
@@ -118,6 +124,7 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
 }
 
 export function ReciterSelector() {
+  const { locale } = useLocale();
   return (
     <section className="mx-auto max-w-[1100px] px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
       <div id="reciters" className="mb-14 scroll-mt-20 text-center">
@@ -125,9 +132,7 @@ export function ReciterSelector() {
           {dict.reciters.title}
         </h2>
               <p className="mx-auto mt-3 max-w-3xl text-[clamp(0.95rem,0.78rem+0.25vw,1.1rem)] leading-relaxed text-mist-dim">
-          {dict.reciters.subtitle.includes("master voices")
-            ? `${reciters.length} master voices — tap to select, press play to listen`
-            : dict.reciters.subtitle}
+          {t("reciters.subtitleCount", locale, { count: reciters.length })}
         </p>
       </div>
 

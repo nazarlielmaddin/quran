@@ -2,22 +2,24 @@ import type { Metadata, Viewport } from "next";
 import { Amiri, Fraunces, Inter, Lora } from "next/font/google";
 import "./globals.css";
 import { PlayerProvider } from "@/lib/audio/player-context";
+import { LocaleProvider } from "@/lib/i18n";
+import { dict } from "@/lib/dictionaries";
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
 });
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
 });
 
 const lora = Lora({
   variable: "--font-lora",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
 });
 
@@ -29,9 +31,8 @@ const amiri = Amiri({
 });
 
 export const metadata: Metadata = {
-  title: "Quran Sanctuary — Qur'an. Peace. Focus.",
-  description:
-    "A digital sanctuary for Qur'an listening. Choose your reciter, select your atmosphere, and listen in peace.",
+  title: `${dict.brand} — ${dict.footer.tagline}`,
+  description: dict.hero.subtitle,
 };
 
 export const viewport: Viewport = {
@@ -41,11 +42,14 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="az"
+      dir="ltr"
       className={`${inter.variable} ${fraunces.variable} ${lora.variable} ${amiri.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-ink text-mist">
-        <PlayerProvider>{children}</PlayerProvider>
+        <LocaleProvider>
+          <PlayerProvider>{children}</PlayerProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

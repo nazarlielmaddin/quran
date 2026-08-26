@@ -9,8 +9,9 @@ import { getRecitation, getSurah } from "@/data/generated";
 import { getAmbientSound } from "@/data/ambientSounds";
 import { getReciter } from "@/data/reciters";
 import { usePlayer, usePlayback } from "@/lib/audio/player-context";
-import { dict } from "@/lib/i18n";
-import { cn, formatTime } from "@/lib/utils";
+import { useLocale } from "@/lib/i18n";
+import { dict } from "@/lib/dictionaries";
+import { cn, getLocalized, formatTime } from "@/lib/utils";
 import { Toggle } from "@/components/Toggle";
 import { VolumeControl } from "@/components/VolumeControl";
 import { Waveform } from "@/components/Waveform";
@@ -30,6 +31,11 @@ function LayerLabel({ children, tone }: { children: React.ReactNode; tone: "gold
       {children}
     </span>
   );
+}
+
+/* Helper: localized player labels */
+function playerLabel<K extends keyof typeof dict.player>(key: K, locale: string): string {
+  return dict.player[key] ?? dict.player[key];
 }
 
 export function PlayerBar() {
@@ -70,7 +76,7 @@ export function PlayerBar() {
               <div className="flex items-center gap-2 text-xs text-gold-soft">
                 <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
                 <span className="flex-1">{quranError}</span>
-                <button onClick={dismissQuranError} aria-label="Dismiss" className="text-mist-faint hover:text-mist">
+                <button onClick={dismissQuranError} aria-label={dict.player.dismiss} className="text-mist-faint hover:text-mist">
                   <X className="h-3.5 w-3.5" />
                 </button>
               </div>
@@ -79,7 +85,7 @@ export function PlayerBar() {
               <div className="flex items-center gap-2 text-xs text-mist-dim">
                 <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
                 <span className="flex-1">{ambientError}</span>
-                <button onClick={dismissAmbientError} aria-label="Dismiss" className="text-mist-faint hover:text-mist">
+                <button onClick={dismissAmbientError} aria-label={dict.player.dismiss} className="text-mist-faint hover:text-mist">
                   <X className="h-3.5 w-3.5" />
                 </button>
               </div>
@@ -171,7 +177,7 @@ export function PlayerBar() {
               step={0.1}
               value={Math.min(currentTime, duration || 0)}
               onChange={(e) => seek(Number(e.target.value))}
-              aria-label="Seek"
+              aria-label={dict.player.seek}
               className="slider flex-1"
               disabled={!duration}
             />
@@ -218,9 +224,9 @@ export function PlayerBar() {
             step={0.1}
             value={Math.min(currentTime, duration || 0)}
             onChange={(e) => seek(Number(e.target.value))}
-            aria-label="Seek"
-            className="slider flex-1"
-            disabled={!duration}
+          aria-label={dict.player.seek}
+          className="slider flex-1"
+          disabled={!duration}
           />
           <span className="font-mono text-[11px] tabular-nums text-mist-faint">{formatTime(duration)}</span>
         </div>
@@ -250,7 +256,7 @@ export function PlayerBar() {
               label={`${dict.player.ambient} ${ambientEnabled ? dict.player.on : dict.player.off}`}
             />
             <span className="hidden max-w-24 truncate text-xs sm:block">
-              {sound?.name ?? "None"}
+              {sound?.nameAz ? sound.nameAz : (sound?.name ?? dict.player.none)}
             </span>
             <VolumeControl
               value={ambientVolume}
@@ -261,7 +267,7 @@ export function PlayerBar() {
             />
             <button
               onClick={() => setAmbientLoop(!ambientLoop)}
-              aria-label="Loop ambient"
+              aria-label={dict.player.loopAmbient}
               aria-pressed={ambientLoop}
               className={cn(
                 "flex h-8 w-8 items-center justify-center rounded-full border transition-colors",

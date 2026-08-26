@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { CrescentMoon } from "@/components/icons";
-import { dict } from "@/lib/i18n";
+import { dict } from "@/lib/dictionaries";
 import { cn } from "@/lib/utils";
 
 const NAV = [

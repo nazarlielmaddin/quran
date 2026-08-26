@@ -8,7 +8,7 @@
 import { useState } from "react";
 import { getAmbientSound } from "@/data/ambientSounds";
 import { usePlayer } from "@/lib/audio/player-context";
-import { dict } from "@/lib/i18n";
+import { dict } from "@/lib/dictionaries";
 
 export function AmbientBackground() {
   const { soundId } = usePlayer();
