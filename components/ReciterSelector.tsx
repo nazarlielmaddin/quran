@@ -88,7 +88,7 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
         </button>
       </div>
 
-      <div className="mt-5 flex min-w-0 max-w-[19ch] flex-col items-center gap-1">
+      <div className="mt-5 flex min-w-0 max-w-[22ch] flex-col items-center gap-1.5">
         <div className="flex items-center justify-center gap-1.5">
           <h3
             className={cn(
@@ -110,13 +110,13 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
         </div>
         <p
           className={cn(
-                  "text-[clamp(0.78rem,0.7rem+0.08vw,0.86rem)] leading-snug",
+                  "text-[clamp(0.78rem,0.7rem+0.08vw,0.86rem)] leading-[1.55] text-center text-pretty",
             active ? "text-gold/80" : "text-mist-faint",
           )}
         >
           {displayOrigin}
-                <span className="mx-1 opacity-40">·</span>
-          {displayBio.length > 60 ? displayBio.slice(0, 60) + "…" : displayBio}
+          <span className="mx-1.5 opacity-40">·</span>
+          {displayBio}
         </p>
       </div>
     </motion.article>

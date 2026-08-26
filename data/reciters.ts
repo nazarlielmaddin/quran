@@ -17,7 +17,7 @@ export const reciters: Reciter[] = [
     arabicName: "ياسر الدوسري",
     image: `${basePath}/images/reciters/yasir-al-dawsari.jpg`,
     bio: "Imam of the Grand Mosque in Mecca, known for a serene, measured style beloved worldwide.",
-    bioAz: "Məkkədəki Böyük Məscidin imamı, sakit və ölçülü üslubu ilə dünyada sevilir.",
+    bioAz: "Məkkə Böyük Məscid imamı, sakit və ölçülü qiraəti ilə tanınır.",
     bioLong:
       "Yasir Al-Dawsari served as an imam of the Grand Mosque (Masjid al-Haram) in Mecca, where his calm, deliberate recitation earned him a global following. His Hafs 'an 'Asim recordings are among the most widely streamed Qur'an recitations online.",
     bioLongAz:
@@ -36,7 +36,7 @@ export const reciters: Reciter[] = [
     arabicName: "هيثم الدخين",
     image: `${basePath}/images/reciters/haitham-al-dakhin.jpg`,
     bio: "Saudi reciter famed for his warm, flowing Hafs 'an 'Asim recordings shared across the world.",
-    bioAz: "İsti və axıcı oxunuşu ilə tanınan səudiyyəli qari, gündəlik dinləmə üçün sevilən səs.",
+    bioAz: "İsti və axıcı səsi ilə sevilən səudiyyəli qari.",
     bioLong:
       "Haitham Al-Dakhin is a Saudi Qur'an reciter whose Hafs 'an 'Asim recordings — hosted on the official mp3quran.net mushaf — are a favorite for daily listening, tarawih, and sleep. His pacing is gentle and deeply soothing.",
     bioLongAz:
@@ -55,7 +55,7 @@ export const reciters: Reciter[] = [
     arabicName: "مشاري راشد العفاسي",
     image: `${basePath}/images/reciters/mishary-rashid-alafasy.jpg`,
     bio: "Kuwaiti imam celebrated worldwide for his emotive, melodic Hafs 'an 'Asim recitation.",
-    bioAz: "Küveyt imamı, duyğulu və melodik qiraəti ilə dünya miqyasında əfsanəvi səs.",
+    bioAz: "Küveyt imamı, duyğulu və melodik əfsanəvi səs.",
     bioLong:
       "Mishary Rashid Alafasy is the imam of Masjid Al-Kabir in Kuwait and one of the most beloved Qur'an reciters globally. His recordings are renowned for crystal-clear tajwīd, deeply moving melodic phrasing, and complete verse-level synchronization.",
     bioLongAz:
@@ -74,7 +74,7 @@ export const reciters: Reciter[] = [
     arabicName: "عبد الباسط عبد الصمد (مرتل)",
     image: `${basePath}/images/reciters/abdul-basit-murattal.jpg`,
     bio: "Egyptian legend whose measured murattal style set the gold standard for Hafs 'an 'Asim recitation.",
-    bioAz: "Ölçülü murəttəl üslubu ilə qızıl standarta çevrilmiş Misir əfsanəsi.",
+    bioAz: "Misir əfsanəsi, murəttəl üslubun qızıl standartı.",
     bioLong:
       "Sheikh Abdul Basit Abdus Samad (1927–1988) was Egypt's most iconic qari. His canonical Murattal recordings remain the universal reference for precise, unhurried Hafs 'an 'Asim recitation, studied and revered by Muslims worldwide.",
     bioLongAz:
@@ -93,7 +93,7 @@ export const reciters: Reciter[] = [
     arabicName: "محمود خليل الحصري",
     image: `${basePath}/images/reciters/mahmoud-khalil-al-husary.jpg`,
     bio: "Egyptian master renowned for flawless tajwīd and the archetypal Hafs 'an 'Asim murattal.",
-    bioAz: "Qüsursuz təcvidi ilə tanınan misirli ustad, Həfs murəttəlinin örnəyi.",
+    bioAz: "Misirli ustad, qüsursuz təcvidin örnəyi.",
     bioLong:
       "Sheikh Mahmoud Khalil Al-Husary (1917–1980) was the Shaykh al-Maqari of Egypt and is celebrated as the most precise reciter in history, revered for immaculate makhārij and a measured, contemplative pace ideal for learning.",
     bioLongAz:
@@ -112,7 +112,7 @@ export const reciters: Reciter[] = [
     arabicName: "عبد الباسط عبد الصمد (مجود)",
     image: `${basePath}/images/reciters/abdul-basit-mujawwad.jpg`,
     bio: "The golden voice of Egypt, famed for majestic, breath-taking mujawwad recitation.",
-    bioAz: "Misirin qızıl səsi, əzəmətli və nəfəskəsən mucəvvəd qiraəti ilə məşhur.",
+    bioAz: "Misirin qızıl səsi, əzəmətli mucəvvəd qiraəti.",
     bioLong:
       "Sheikh Abdul Basit's Mujawwad recitation is considered one of the greatest masterpieces of Qur'anic vocal art, featuring awe-inspiring melodic mastery, incredible breath capacity, and deep emotional resonance.",
     bioLongAz:
@@ -131,7 +131,7 @@ export const reciters: Reciter[] = [
     arabicName: "عبد الرحمن السديس",
     image: `${basePath}/images/reciters/abdur-rahman-as-sudais.jpg`,
     bio: "Chief Imam of the Grand Mosque in Mecca, renowned for his resonant, authoritative tone.",
-    bioAz: "Məkkədəki Böyük Məscidin baş imamı, gur və nüfuzlu səsi ilə tanınır.",
+    bioAz: "Məkkə Böyük Məscid baş imamı, gur və nüfuzlu səs.",
     bioLong:
       "Sheikh Abdur-Rahman as-Sudais has served for decades as the chief imam of the Grand Mosque (Masjid al-Haram) in Mecca, leading millions in prayer with his unmistakable, passionate, and commanding recitation.",
     bioLongAz:
@@ -150,7 +150,7 @@ export const reciters: Reciter[] = [
     arabicName: "ماهر المعيقلي",
     image: `${basePath}/images/reciters/maher-al-muaiqly.jpg`,
     bio: "Imam of the Grand Mosque in Mecca, beloved for his emotionally stirring and soulful recitation.",
-    bioAz: "Məkkədəki Böyük Məscidin imamı, qəlbə toxunan və ruhlandıran qiraəti ilə sevilir.",
+    bioAz: "Məkkə imamı, qəlbə toxunan ruhani qiraət.",
     bioLong:
       "Sheikh Maher Al-Muaiqly is an imam of the Grand Mosque in Mecca whose warm, deeply poignant voice and heart-touching tarawih recitations are cherished by millions worldwide.",
     bioLongAz:
@@ -169,7 +169,7 @@ export const reciters: Reciter[] = [
     arabicName: "سعد الغامدي",
     image: `${basePath}/images/reciters/saad-al-ghamdi.jpg`,
     bio: "Saudi reciter and imam famous for a calm, gentle, and deeply soothing recitation.",
-    bioAz: "Sakitliyi və sədaqəti ilə tanınan səudiyyəli qari və imam, hüzurlu qiraəti ilə məşhurdur.",
+    bioAz: "Səudiyyəli qari, hüzurlu və sakit qiraəti ilə sevilir.",
     bioLong:
       "Sheikh Saad Al-Ghamdi is an internationally celebrated Saudi qari whose gentle, tranquil pacing and consistent melodic sweetness make his recitations ideal for peaceful contemplation, rest, and memorization.",
     bioLongAz:
@@ -188,7 +188,7 @@ export const reciters: Reciter[] = [
     arabicName: "أبو بكر الشاطري",
     image: `${basePath}/images/reciters/abu-bakr-al-shatri.jpg`,
     bio: "Jeddah-born imam acclaimed for his distinct, unhurried, and exceptionally clear style.",
-    bioAz: "Ciddədə doğulmuş imam, fərqli və son dərəcə aydın üslubu ilə təriflənir.",
+    bioAz: "Ciddəli imam, aydın və fərqli üslubu ilə tanınır.",
     bioLong:
       "Sheikh Abu Bakr Al-Shatri is a prominent Saudi reciter whose measured, resonant delivery and crystal-clear pronunciation make following along and learning the Holy Qur'an an inspiring experience.",
     bioLongAz:
