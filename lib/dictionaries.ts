@@ -132,7 +132,7 @@ const az: typeof en = {
   },
   hero: {
     titleA: "Quran",
-    titleB: "Sülh və Diqqət",
+    titleB: "Hüzur və Diqqət",
     subtitle:
       "Öz oxucunuzu seçin, atmosferinizi seçin və rahatlıqla qulaq asın.",
     cta: "Dinləməyə Başlayın",
@@ -232,8 +232,8 @@ const az: typeof en = {
     video: "Arxa fon videosu əlçatmazdır — atmosfer hələ də oynadılır.",
   },
   footer: {
-    madeWith: "Sülh dolu dinləmə üçün hazırlanıb",
-    tagline: "Quran. Sülh. Diqqət.",
+    madeWith: "Hüzur içində dinləmə üçün hazırlanıb",
+    tagline: "Quran. Hüzur. Diqqət.",
   },
   developedBy: "Hazırlayan",
 };
