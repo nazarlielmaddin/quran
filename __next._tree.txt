@@ -1,7 +1,10 @@
-:HL["/saadat/_next/static/chunks/1vf63pnrxo48y.css","style"]
-:HL["/saadat/_next/static/media/03bda585a99c6450-s.p.32sris142tqlb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/saadat/_next/static/media/05d29f0ed5b0e698-s.p.1mou8v493x-u7.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/saadat/_next/static/media/291696193ea1e96b-s.p.1zf0xf1cyi65q.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/saadat/_next/static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/saadat/_next/static/media/8c2eb9ceedecfc8e-s.p.23aeddxv5enbo.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"LZ6PuIqDYo0ABoptO50OC"}
+:HL["/quran/_next/static/chunks/0ztj17uby2qlf.css","style"]
+:HL["/quran/_next/static/media/03bda585a99c6450-s.p.32sris142tqlb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/quran/_next/static/media/05d29f0ed5b0e698-s.p.1mou8v493x-u7.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/quran/_next/static/media/1bffadaabf893a1e-s.p.3-6t-g6q0vh0a.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/quran/_next/static/media/291696193ea1e96b-s.p.1zf0xf1cyi65q.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/quran/_next/static/media/507a47c1876d4ec2-s.p.2qdkzeru_ecot.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/quran/_next/static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/quran/_next/static/media/8c2eb9ceedecfc8e-s.p.23aeddxv5enbo.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/quran/_next/static/media/b35b0dbffda7f2c4-s.p.1d9rlgtqyj_-l.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"N2DC_GSHEM2o6m3FWUEZs"}
