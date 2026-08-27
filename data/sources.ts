@@ -32,8 +32,8 @@ export const sources: MediaSource[] = [
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Islamic Network / QuranicAudio — Abdul Basit Mujawwad (qdc/abdul_baset/mujawwad, 78.4s S1, QDC perfect 0.04s)",
-    url: "https://download.quranicaudio.com/qdc/abdul_baset/mujawwad/1.mp3",
+    label: "Qur'an audio — Islamic Network / QuranicAudio — Badr Al Turki (quran/badr_al_turki/mp3, 39s S1, 167)",
+    url: "https://download.quranicaudio.com/quran/badr_al_turki/mp3/001.mp3",
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {

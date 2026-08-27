@@ -69,13 +69,13 @@ const CATALOG = [
     audioUrl: (n) => `https://download.quranicaudio.com/qdc/khalil_al_husary/murattal/${n}.mp3`,
   },
   {
-    id: "abdul-basit-mujawwad",
-    qdcId: 1,
+    id: "badr-al-turki",
+    qdcId: 167,
     provider: "quranicaudio",
-    folder: "abdul_baset/mujawwad",
+    folder: "badr_al_turki/mp3",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Abdul Basit Mujawwad (qdc/abdul_baset/mujawwad, 78.4s S1, QDC perfect 0.04s)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdul_baset/mujawwad/${n}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Badr Al Turki (quran/badr_al_turki/mp3, 39s S1, 167)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/badr_al_turki/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abdur-rahman-as-sudais",
