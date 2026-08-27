@@ -16,16 +16,20 @@ mkdirSync(GEN, { recursive: true });
 
 const log = (m) => console.log(`[fetch-data] ${m}`);
 
-/** Central reciter catalog — single source of truth for audio + timings + attribution */
+/** Central reciter catalog — single source of truth for audio + timings + attribution
+ * Unified to Islamic Network CDN (download.quranicaudio.com/quran/<folder>) — Yasir model
+ * Verified via quranicaudio.com/quran/<id> + HEAD + qdc_timings.json audit (2026-08-26)
+ * See data-engineer report for page vs calc diff analysis
+ */
 const CATALOG = [
   {
     id: "yasir-al-dawsari",
     qdcId: 97,
-    provider: "qdc",
+    provider: "quranicaudio",
     folder: "yasser_ad-dussary",
     timingSource: "qdc",
-    sourceLabel: "Quran.com / QuranicAudio — Yasir Al-Dawsari (Full Surahs, 128kbps)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/yasser_ad-dussary//${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Yasir Al-Dawsari (quran/yasser_ad-dussary, 48s S1, verified)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/yasser_ad-dussary/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "haitham-al-dakhin",
@@ -33,80 +37,85 @@ const CATALOG = [
     provider: "mp3quran",
     folder: "h_dukhain/Rewayat-Hafs-A-n-Assem",
     timingSource: null,
-    sourceLabel: "mp3quran.net — Haitham Al-Dakhin (Hafs 'an 'Asim, 320kbps)",
+    sourceLabel: "mp3quran.net — Haitham Al-Dakhin (Hafs 'an 'Asim, 320kbps, no timings)",
     audioUrl: (n) => `https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "mishary-rashid-alafasy",
     qdcId: 7,
-    provider: "qdc",
-    folder: "mishari_al_afasy/murattal",
+    provider: "quranicaudio",
+    folder: "mishaari_raashid_al_3afaasee",
     timingSource: "qdc",
-    sourceLabel: "Quran.com / QuranicAudio — Mishary Rashid Alafasy (Murattal, verified timings)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/${n}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Mishary Rashid Alafasy (quran/mishaari_raashid_al_3afaasee, 52s S1)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abdul-basit-murattal",
     qdcId: 2,
-    provider: "qdc",
-    folder: "abdul_baset/murattal",
+    provider: "quranicaudio",
+    folder: "abdul_basit_murattal",
     timingSource: "qdc",
-    sourceLabel: "Quran.com / QuranicAudio — Abdul Basit Murattal (Murattal, verified timings)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdul_baset/murattal/${n}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Abdul Basit Murattal (quran/abdul_basit_murattal, 47s S1, 97% ok)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/abdul_basit_murattal/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "mahmoud-khalil-al-husary",
     qdcId: 6,
-    provider: "qdc",
-    folder: "khalil_al_husary/murattal",
+    provider: "quranicaudio",
+    folder: "mahmood_khaleel_al-husaree",
     timingSource: "qdc",
-    sourceLabel: "Quran.com / QuranicAudio — Mahmoud Khalil Al-Husary (Murattal, verified timings)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/khalil_al_husary/murattal/${n}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Mahmoud Khalil Al-Husary (quran/mahmood_khaleel_al-husaree, 57s S1, fixes 428s drift of iza3a)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abdul-basit-mujawwad",
     qdcId: 1,
-    provider: "qdc",
-    folder: "abdul_baset/mujawwad",
+    provider: "quranicaudio",
+    folder: "abdulbaset_mujawwad",
     timingSource: "qdc",
-    sourceLabel: "Quran.com / QuranicAudio — Abdul Basit Mujawwad (Mujawwad, verified timings)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdul_baset/mujawwad/${n}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Abdul Basit Mujawwad (quran/abdulbaset_mujawwad, 99s S1)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/abdulbaset_mujawwad/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abdur-rahman-as-sudais",
     qdcId: 3,
-    provider: "qdc",
-    folder: "abdurrahmaan_as_sudais/murattal",
+    provider: "quranicaudio",
+    folder: "abdurrahmaan_as-sudays",
     timingSource: "qdc",
-    sourceLabel: "Quran.com / QuranicAudio — Abdur-Rahman as-Sudais (Murattal, verified timings)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdurrahmaan_as_sudais/murattal/${n}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Abdur-Rahman as-Sudais (quran/abdurrahmaan_as-sudays, 38s S1)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/abdurrahmaan_as-sudays/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "maher-al-muaiqly",
-    qdcId: 159,
-    provider: "qdc",
-    folder: "maher_almu3aiqly/year1440",
+    qdcId: 65,
+    provider: "quranicaudio",
+    folder: "maher_256",
     timingSource: "qdc",
-    sourceLabel: "Quran.com / QuranicAudio — Maher Al-Muaiqly (Year 1440, verified timings)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440//${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Maher Al-Muaiqly (quran/maher_256, 36s S1, fixes 25.9s drift; fallback S5->year1440)",
+    audioUrl: (n) => {
+      const padded = String(n).padStart(3, "0");
+      // maher_256 missing 005.mp3 on archive (113/114) — fallback to year1440 for surah 5
+      if (n === 5) return `https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440/${padded}.mp3`;
+      return `https://download.quranicaudio.com/quran/maher_256/${padded}.mp3`;
+    },
   },
   {
     id: "saad-al-ghamdi",
     qdcId: 13,
-    provider: "qdc",
+    provider: "quranicaudio",
     folder: "sa3d_al-ghaamidi/complete",
     timingSource: "qdc",
-    sourceLabel: "Quran.com / QuranicAudio — Saad Al-Ghamdi (Complete, verified timings)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/sa3d_al-ghaamidi/complete//${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Saad Al-Ghamdi (quran/sa3d_al-ghaamidi/complete, 47s S1, perfect 0.27s avg)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/sa3d_al-ghaamidi/complete/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abu-bakr-al-shatri",
     qdcId: 4,
-    provider: "qdc",
-    folder: "abu_bakr_shatri/murattal",
+    provider: "quranicaudio",
+    folder: "abu_bakr_ash-shatri_tarawee7",
     timingSource: "qdc",
-    sourceLabel: "Quran.com / QuranicAudio — Abu Bakr Al-Shatri (Murattal, verified timings)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abu_bakr_shatri/murattal/${n}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Abu Bakr Al-Shatri (quran/abu_bakr_ash-shatri_tarawee7, 46s S1)",
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/abu_bakr_ash-shatri_tarawee7/${String(n).padStart(3, "0")}.mp3`,
   },
 ];
 

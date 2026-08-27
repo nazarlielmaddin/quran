@@ -7,53 +7,53 @@ import type { MediaSource } from "@/lib/types";
  */
 export const sources: MediaSource[] = [
   {
-    label: "Qur'an audio — Quran.com / QuranicAudio — Yasir Al-Dawsari (Full Surahs, 128kbps)",
-    url: "https://download.quranicaudio.com/quran/yasser_ad-dussary//001.mp3",
+    label: "Qur'an audio — Islamic Network / QuranicAudio — Yasir Al-Dawsari (quran/yasser_ad-dussary, 48s S1, verified)",
+    url: "https://download.quranicaudio.com/quran/yasser_ad-dussary/001.mp3",
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — mp3quran.net — Haitham Al-Dakhin (Hafs 'an 'Asim, 320kbps)",
+    label: "Qur'an audio — mp3quran.net — Haitham Al-Dakhin (Hafs 'an 'Asim, 320kbps, no timings)",
     url: "https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/001.mp3",
     license: "mp3quran.net official hosted mushaf",
   },
   {
-    label: "Qur'an audio — Quran.com / QuranicAudio — Mishary Rashid Alafasy (Murattal, verified timings)",
-    url: "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/1.mp3",
+    label: "Qur'an audio — Islamic Network / QuranicAudio — Mishary Rashid Alafasy (quran/mishaari_raashid_al_3afaasee, 52s S1)",
+    url: "https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/001.mp3",
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Quran.com / QuranicAudio — Abdul Basit Murattal (Murattal, verified timings)",
-    url: "https://download.quranicaudio.com/qdc/abdul_baset/murattal/1.mp3",
+    label: "Qur'an audio — Islamic Network / QuranicAudio — Abdul Basit Murattal (quran/abdul_basit_murattal, 47s S1, 97% ok)",
+    url: "https://download.quranicaudio.com/quran/abdul_basit_murattal/001.mp3",
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Quran.com / QuranicAudio — Mahmoud Khalil Al-Husary (Murattal, verified timings)",
-    url: "https://download.quranicaudio.com/qdc/khalil_al_husary/murattal/1.mp3",
+    label: "Qur'an audio — Islamic Network / QuranicAudio — Mahmoud Khalil Al-Husary (quran/mahmood_khaleel_al-husaree, 57s S1, fixes 428s drift of iza3a)",
+    url: "https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree/001.mp3",
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Quran.com / QuranicAudio — Abdul Basit Mujawwad (Mujawwad, verified timings)",
-    url: "https://download.quranicaudio.com/qdc/abdul_baset/mujawwad/1.mp3",
+    label: "Qur'an audio — Islamic Network / QuranicAudio — Abdul Basit Mujawwad (quran/abdulbaset_mujawwad, 99s S1)",
+    url: "https://download.quranicaudio.com/quran/abdulbaset_mujawwad/001.mp3",
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Quran.com / QuranicAudio — Abdur-Rahman as-Sudais (Murattal, verified timings)",
-    url: "https://download.quranicaudio.com/qdc/abdurrahmaan_as_sudais/murattal/1.mp3",
+    label: "Qur'an audio — Islamic Network / QuranicAudio — Abdur-Rahman as-Sudais (quran/abdurrahmaan_as-sudays, 38s S1)",
+    url: "https://download.quranicaudio.com/quran/abdurrahmaan_as-sudays/001.mp3",
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Quran.com / QuranicAudio — Maher Al-Muaiqly (Year 1440, verified timings)",
-    url: "https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440//001.mp3",
+    label: "Qur'an audio — Islamic Network / QuranicAudio — Maher Al-Muaiqly (quran/maher_256, 36s S1, fixes 25.9s drift; fallback S5->year1440)",
+    url: "https://download.quranicaudio.com/quran/maher_256/001.mp3",
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Quran.com / QuranicAudio — Saad Al-Ghamdi (Complete, verified timings)",
-    url: "https://download.quranicaudio.com/quran/sa3d_al-ghaamidi/complete//001.mp3",
+    label: "Qur'an audio — Islamic Network / QuranicAudio — Saad Al-Ghamdi (quran/sa3d_al-ghaamidi/complete, 47s S1, perfect 0.27s avg)",
+    url: "https://download.quranicaudio.com/quran/sa3d_al-ghaamidi/complete/001.mp3",
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — Quran.com / QuranicAudio — Abu Bakr Al-Shatri (Murattal, verified timings)",
-    url: "https://download.quranicaudio.com/qdc/abu_bakr_shatri/murattal/1.mp3",
+    label: "Qur'an audio — Islamic Network / QuranicAudio — Abu Bakr Al-Shatri (quran/abu_bakr_ash-shatri_tarawee7, 46s S1)",
+    url: "https://download.quranicaudio.com/quran/abu_bakr_ash-shatri_tarawee7/001.mp3",
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
