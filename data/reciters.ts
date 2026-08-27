@@ -79,12 +79,12 @@ export const reciters: Reciter[] = [
       "Sheikh Abdul Basit Abdus Samad (1927–1988) was Egypt's most iconic qari. His canonical Murattal recordings remain the universal reference for precise, unhurried Hafs 'an 'Asim recitation, studied and revered by Muslims worldwide.",
     bioLongAz:
       "Şeyx Əbdül Basit Əbdüs-Səməd (1927–1988) Misirin ən ikonik qarisi olub. Onun Murəttəl qiraətləri dəqiq və tələsməz Həfs oxunuşunun universal etalonu sayılır, bütün dünyada öyrənilir və sevilir.",
-    hasTimestamps: true,
+    hasTimestamps: false,
     origin: "Egypt",
     originAz: "Misir",
     provider: "quranicaudio",
     audioFolder: "abdul_basit_murattal",
-    timingSource: "qdc",
+    timingSource: null,
   },
   {
     id: "mahmoud-khalil-al-husary",
@@ -98,12 +98,12 @@ export const reciters: Reciter[] = [
       "Sheikh Mahmoud Khalil Al-Husary (1917–1980) was the Shaykh al-Maqari of Egypt and is celebrated as the most precise reciter in history, revered for immaculate makhārij and a measured, contemplative pace ideal for learning.",
     bioLongAz:
       "Şeyx Mahmud Xəlil Əl-Husari (1917–1980) Misirin Şeyx əl-Məqarii olub, tarixin ən dəqiq qarisi kimi tanınır. Qüsursuz məxaric və ölçülü, təfəkkürə sövq edən ahəngi öyrənmək üçün idealdır.",
-    hasTimestamps: true,
+    hasTimestamps: false,
     origin: "Egypt",
     originAz: "Misir",
     provider: "quranicaudio",
     audioFolder: "mahmood_khaleel_al-husaree",
-    timingSource: "qdc",
+    timingSource: null,
   },
   {
     id: "abdul-basit-mujawwad",
@@ -136,12 +136,12 @@ export const reciters: Reciter[] = [
       "Sheikh Abdur-Rahman as-Sudais has served for decades as the chief imam of the Grand Mosque (Masjid al-Haram) in Mecca, leading millions in prayer with his unmistakable, passionate, and commanding recitation.",
     bioLongAz:
       "Şeyx Əbdür-Rəhman əs-Sudais onilliklərdir Məkkədə Məscidül-Həramın baş imamı kimi xidmət edir, unudulmaz, ehtiraslı və əmr edici qiraəti ilə milyonlarla insana namaz qıldırır.",
-    hasTimestamps: true,
+    hasTimestamps: false,
     origin: "Saudi Arabia",
     originAz: "Səudiyyə Ərəbistanı",
     provider: "quranicaudio",
     audioFolder: "abdurrahmaan_as-sudays",
-    timingSource: "qdc",
+    timingSource: null,
   },
   {
     id: "maher-al-muaiqly",
