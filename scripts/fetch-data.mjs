@@ -17,9 +17,10 @@ mkdirSync(GEN, { recursive: true });
 const log = (m) => console.log(`[fetch-data] ${m}`);
 
 /** Central reciter catalog — single source of truth for audio + timings + attribution
- * Unified to Islamic Network CDN (download.quranicaudio.com/quran/<folder>) — Yasir model
- * Verified via quranicaudio.com/quran/<id> + HEAD + qdc_timings.json audit (2026-08-26)
- * See data-engineer report for page vs calc diff analysis
+ * Unified to Islamic Network CDN — quran/<folder> for Yasir/Maher/Saad (quran bucket),
+ * qdc/<folder>/<n>.mp3 for Mishary/Basit/Husary/Mujawwad/Sudais/Shatri (QDC bucket) to match QDC timings
+ * Verified via music-metadata parsing + HEAD (2026-08-27): QDC audio dur matches QDC timings within 0.05s (quran bucket drifts 3-20s)
+ * Yasir (48.0s), Maher (36.5s), Saad (46.9s) already correct; 6 QDC reciters now switched to qdc bucket for perfect sync
  */
 const CATALOG = [
   {
@@ -44,46 +45,46 @@ const CATALOG = [
     id: "mishary-rashid-alafasy",
     qdcId: 7,
     provider: "quranicaudio",
-    folder: "mishaari_raashid_al_3afaasee",
+    folder: "mishari_al_afasy/murattal",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Mishary Rashid Alafasy (quran/mishaari_raashid_al_3afaasee, 52s S1)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Mishary Rashid Alafasy (qdc/mishari_al_afasy/murattal, 46.5s S1, QDC perfect 0.01s)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/${n}.mp3`,
   },
   {
     id: "abdul-basit-murattal",
     qdcId: 2,
     provider: "quranicaudio",
-    folder: "abdul_basit_murattal",
+    folder: "abdul_baset/murattal",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Abdul Basit Murattal (quran/abdul_basit_murattal, 47s S1, 97% ok)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/abdul_basit_murattal/${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Abdul Basit Murattal (qdc/abdul_baset/murattal, 41.8s S1, QDC perfect 0.03s)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdul_baset/murattal/${n}.mp3`,
   },
   {
     id: "mahmoud-khalil-al-husary",
     qdcId: 6,
     provider: "quranicaudio",
-    folder: "mahmood_khaleel_al-husaree",
+    folder: "khalil_al_husary/murattal",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Mahmoud Khalil Al-Husary (quran/mahmood_khaleel_al-husaree, 57s S1, fixes 428s drift of iza3a)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree/${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Mahmoud Khalil Al-Husary (qdc/khalil_al_husary/murattal, 48.2s S1, QDC perfect 0.01s)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/khalil_al_husary/murattal/${n}.mp3`,
   },
   {
     id: "abdul-basit-mujawwad",
     qdcId: 1,
     provider: "quranicaudio",
-    folder: "abdulbaset_mujawwad",
+    folder: "abdul_baset/mujawwad",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Abdul Basit Mujawwad (quran/abdulbaset_mujawwad, 99s S1)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/abdulbaset_mujawwad/${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Abdul Basit Mujawwad (qdc/abdul_baset/mujawwad, 78.4s S1, QDC perfect 0.04s)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdul_baset/mujawwad/${n}.mp3`,
   },
   {
     id: "abdur-rahman-as-sudais",
     qdcId: 3,
     provider: "quranicaudio",
-    folder: "abdurrahmaan_as-sudays",
+    folder: "abdurrahmaan_as_sudais/murattal",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Abdur-Rahman as-Sudais (quran/abdurrahmaan_as-sudays, 38s S1)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/abdurrahmaan_as-sudays/${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Abdur-Rahman as-Sudais (qdc/abdurrahmaan_as_sudais/murattal, 34.9s S1, QDC perfect 0.00s)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdurrahmaan_as_sudais/murattal/${n}.mp3`,
   },
   {
     id: "maher-al-muaiqly",
@@ -112,10 +113,10 @@ const CATALOG = [
     id: "abu-bakr-al-shatri",
     qdcId: 4,
     provider: "quranicaudio",
-    folder: "abu_bakr_ash-shatri_tarawee7",
+    folder: "abu_bakr_shatri/murattal",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Abu Bakr Al-Shatri (quran/abu_bakr_ash-shatri_tarawee7, 46s S1)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/abu_bakr_ash-shatri_tarawee7/${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "Islamic Network / QuranicAudio — Abu Bakr Al-Shatri (qdc/abu_bakr_shatri/murattal, 53.1s S1, QDC perfect 0.04s)",
+    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abu_bakr_shatri/murattal/${n}.mp3`,
   },
 ];
 

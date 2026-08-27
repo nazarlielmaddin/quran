@@ -60,11 +60,11 @@ export const reciters: Reciter[] = [
       "Mishary Rashid Alafasy is the imam of Masjid Al-Kabir in Kuwait and one of the most beloved Qur'an reciters globally. His recordings are renowned for crystal-clear tajwīd, deeply moving melodic phrasing, and complete verse-level synchronization.",
     bioLongAz:
       "Mişari Rəşid Alafasy Küveytdə Məscid əl-Kəbirdə imamdır və dünyada ən sevilən qarilərdəndir. Kristal təcvidi, dərin duyğulu melodik ifadəsi və tam ayə səviyyəsində sinxronizasiyası ilə tanınır.",
-    hasTimestamps: false,
+    hasTimestamps: true,
     origin: "Kuwait",
     originAz: "Küveyt",
     provider: "quranicaudio",
-    audioFolder: "mishaari_raashid_al_3afaasee",
+    audioFolder: "mishari_al_afasy/murattal",
     timingSource: "qdc",
   },
   {
@@ -79,12 +79,12 @@ export const reciters: Reciter[] = [
       "Sheikh Abdul Basit Abdus Samad (1927–1988) was Egypt's most iconic qari. His canonical Murattal recordings remain the universal reference for precise, unhurried Hafs 'an 'Asim recitation, studied and revered by Muslims worldwide.",
     bioLongAz:
       "Şeyx Əbdül Basit Əbdüs-Səməd (1927–1988) Misirin ən ikonik qarisi olub. Onun Murəttəl qiraətləri dəqiq və tələsməz Həfs oxunuşunun universal etalonu sayılır, bütün dünyada öyrənilir və sevilir.",
-    hasTimestamps: false,
+    hasTimestamps: true,
     origin: "Egypt",
     originAz: "Misir",
     provider: "quranicaudio",
-    audioFolder: "abdul_basit_murattal",
-    timingSource: null,
+    audioFolder: "abdul_baset/murattal",
+    timingSource: "qdc",
   },
   {
     id: "mahmoud-khalil-al-husary",
@@ -98,12 +98,12 @@ export const reciters: Reciter[] = [
       "Sheikh Mahmoud Khalil Al-Husary (1917–1980) was the Shaykh al-Maqari of Egypt and is celebrated as the most precise reciter in history, revered for immaculate makhārij and a measured, contemplative pace ideal for learning.",
     bioLongAz:
       "Şeyx Mahmud Xəlil Əl-Husari (1917–1980) Misirin Şeyx əl-Məqarii olub, tarixin ən dəqiq qarisi kimi tanınır. Qüsursuz məxaric və ölçülü, təfəkkürə sövq edən ahəngi öyrənmək üçün idealdır.",
-    hasTimestamps: false,
+    hasTimestamps: true,
     origin: "Egypt",
     originAz: "Misir",
     provider: "quranicaudio",
-    audioFolder: "mahmood_khaleel_al-husaree",
-    timingSource: null,
+    audioFolder: "khalil_al_husary/murattal",
+    timingSource: "qdc",
   },
   {
     id: "abdul-basit-mujawwad",
@@ -117,11 +117,11 @@ export const reciters: Reciter[] = [
       "Sheikh Abdul Basit's Mujawwad recitation is considered one of the greatest masterpieces of Qur'anic vocal art, featuring awe-inspiring melodic mastery, incredible breath capacity, and deep emotional resonance.",
     bioLongAz:
       "Şeyx Əbdül Basitin Mucəvvəd qiraəti Quran səs sənətinin ən böyük şah əsərlərindən sayılır — heyrətamiz melodik ustalıq, inanılmaz nəfəs gücü və dərin emosional təsir ilə seçilir.",
-    hasTimestamps: false,
+    hasTimestamps: true,
     origin: "Egypt",
     originAz: "Misir",
     provider: "quranicaudio",
-    audioFolder: "abdulbaset_mujawwad",
+    audioFolder: "abdul_baset/mujawwad",
     timingSource: "qdc",
   },
   {
@@ -136,12 +136,12 @@ export const reciters: Reciter[] = [
       "Sheikh Abdur-Rahman as-Sudais has served for decades as the chief imam of the Grand Mosque (Masjid al-Haram) in Mecca, leading millions in prayer with his unmistakable, passionate, and commanding recitation.",
     bioLongAz:
       "Şeyx Əbdür-Rəhman əs-Sudais onilliklərdir Məkkədə Məscidül-Həramın baş imamı kimi xidmət edir, unudulmaz, ehtiraslı və əmr edici qiraəti ilə milyonlarla insana namaz qıldırır.",
-    hasTimestamps: false,
+    hasTimestamps: true,
     origin: "Saudi Arabia",
     originAz: "Səudiyyə Ərəbistanı",
     provider: "quranicaudio",
-    audioFolder: "abdurrahmaan_as-sudays",
-    timingSource: null,
+    audioFolder: "abdurrahmaan_as_sudais/murattal",
+    timingSource: "qdc",
   },
   {
     id: "maher-al-muaiqly",
@@ -193,11 +193,11 @@ export const reciters: Reciter[] = [
       "Sheikh Abu Bakr Al-Shatri is a prominent Saudi reciter whose measured, resonant delivery and crystal-clear pronunciation make following along and learning the Holy Qur'an an inspiring experience.",
     bioLongAz:
       "Şeyx Əbu Bəkr Əl-Şatri tanınmış səudiyyəli qaridir, ölçülü və gur tələffüzü, kristal kimi aydın oxunuşu Quranı izləməyi və öyrənməyi ilhamverici edir.",
-    hasTimestamps: false,
+    hasTimestamps: true,
     origin: "Saudi Arabia",
     originAz: "Səudiyyə Ərəbistanı",
     provider: "quranicaudio",
-    audioFolder: "abu_bakr_ash-shatri_tarawee7",
+    audioFolder: "abu_bakr_shatri/murattal",
     timingSource: "qdc",
   },
 ];
