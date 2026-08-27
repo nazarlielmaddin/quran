@@ -59,7 +59,7 @@ interface PlayerContextValue {
   showRecitation: boolean;
   transliterationStyle: TransliterationStyle;
   // Actions — Qur'an
-  selectReciter: (id: string) => void;
+  selectReciter: (id: string, autoplay?: boolean) => void;
   selectSurah: (id: number, autoplay?: boolean) => void;
   toggleQuran: () => void;
   playQuran: () => void;
@@ -301,7 +301,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   }, [quranEnabled, playQuran]);
 
   const selectReciter = useCallback(
-    (id: string) => {
+    (id: string, autoplay = false) => {
       setReciterId(id);
       positionRef.current = 0;
       setSurahId(1);
@@ -309,7 +309,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       const el = quranRef.current;
       if (!el) return;
       loadQuranSource(id, 1, 0);
-      if (quranEnabled) {
+      if (autoplay || quranEnabled) {
+        if (autoplay) setQuranEnabled(true);
         el.play().catch(() => setQuranPlaying(false));
       }
     },

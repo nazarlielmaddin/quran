@@ -10,7 +10,7 @@ import { dict, t } from "@/lib/dictionaries";
 import { cn, getLocalized } from "@/lib/utils";
 
 function ReciterCard({ reciterId, index }: { reciterId: string; index: number }) {
-  const { reciterId: activeId, selectReciter, selectSurah } = usePlayer();
+  const { reciterId: activeId, selectReciter } = usePlayer();
   const { locale } = useLocale();
   const reciter = getReciter(reciterId)!;
   const active = activeId === reciter.id;
@@ -19,8 +19,7 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
   const displayBio = getLocalized(reciter, "bio", locale);
 
   const start = () => {
-    if (!active) selectReciter(reciter.id);
-    selectSurah(1, true);
+    selectReciter(reciter.id, true);
     document.getElementById("now-playing")?.scrollIntoView({ behavior: "smooth" });
   };
 
