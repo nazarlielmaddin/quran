@@ -76,6 +76,7 @@ const CATALOG = [
     timingSource: "qdc",
     sourceLabel: "Islamic Network / QuranicAudio — Badr Al Turki (quran/badr_al_turki/mp3, 39s S1, 167)",
     audioUrl: (n) => `https://download.quranicaudio.com/quran/badr_al_turki/mp3/${String(n).padStart(3, "0")}.mp3`,
+    audioUrl: (n) => `https://download.quranicaudio.com/quran/badr_al_turki/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abdur-rahman-as-sudais",
