@@ -30,6 +30,7 @@ export const recitersWithTimings = new Set([
   "mishary-rashid-alafasy",
   "abdul-basit-murattal",
   "mahmoud-khalil-al-husary",
+  "badr-al-turki",
   "abdul-basit-mujawwad",
   "abdur-rahman-as-sudais",
   "maher-al-muaiqly",
