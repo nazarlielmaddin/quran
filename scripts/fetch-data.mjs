@@ -70,12 +70,11 @@ const CATALOG = [
   },
   {
     id: "badr-al-turki",
-    qdcId: 167,
+    qdcId: null,
     provider: "quranicaudio",
     folder: "badr_al_turki/mp3",
-    timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Badr Al Turki (quran/badr_al_turki/mp3, 39s S1, 167)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/badr_al_turki/mp3/${String(n).padStart(3, "0")}.mp3`,
+    timingSource: "alignment",
+    sourceLabel: "Quranic Recitation Data — Badr Al Turki (word-level protobuf alignment matched to the Badr Al Turki murattal recording)",
     audioUrl: (n) => `https://download.quranicaudio.com/quran/badr_al_turki/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
