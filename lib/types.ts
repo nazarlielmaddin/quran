@@ -68,6 +68,10 @@ export interface AmbientSound {
   /** Two hex colors used to render the CSS-art thumbnail. */
   gradient: [string, string];
   source: string;
+  /** Thumbnail photo shown on the sound card (the icon stays as fallback). */
+  imageUrl?: string;
+  /** Photo credit (visible in the sources registry). */
+  imageSource?: string;
   /** Per-sound default volume (0..1). If set, multiplies the global ambientVolume. */
   volume?: number;
 }

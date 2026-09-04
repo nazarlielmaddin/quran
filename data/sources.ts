@@ -81,4 +81,9 @@ export const sources: MediaSource[] = [
     url: "https://pixabay.com/sound-effects/",
     license: "Pixabay Content License — free for commercial use, no attribution required",
   },
+  {
+    label: "Ambient card photos (15 thumbnails)",
+    url: "https://commons.wikimedia.org",
+    license: "Wikimedia Commons contributors — mostly CC BY-SA, see file pages",
+  },
 ];

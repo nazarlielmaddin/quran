@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Bird, Cat, CloudLightning, CloudRain, Droplets, Flame, Home, Moon,
@@ -40,6 +41,9 @@ function AmbientCard({ soundId }: { soundId: string }) {
   const active = activeId === sound.id;
   const playing = active && ambientPlaying;
   const displayName = getLocalized(sound, "name", locale);
+  // Photo thumbnail — falls back to the gradient + icon if it fails to load
+  const [imgOk, setImgOk] = useState(true);
+  const showPhoto = !!sound.imageUrl && imgOk;
 
   const handleClick = () => {
     if (active) toggleAmbient();
@@ -63,14 +67,26 @@ function AmbientCard({ soundId }: { soundId: string }) {
           : "border-line bg-white/[0.03] hover:border-line hover:bg-white/[0.05]",
       )}
     >
-      {/* CSS-art thumbnail */}
+      {/* Photo thumbnail (gradient + icon stay behind as loading/fallback layer) */}
       <div
         className="animate-shimmer relative flex aspect-[16/9] items-center justify-center overflow-hidden"
         style={{
           background: `radial-gradient(110% 110% at 30% 15%, ${sound.gradient[0]}55 0%, ${sound.gradient[1]} 75%)`,
         }}
       >
-        <Icon className="h-8 w-8 text-mist/70 transition-transform duration-700 group-hover:scale-110" strokeWidth={1.2} />
+        {showPhoto ? (
+          <img
+            src={sound.imageUrl}
+            alt=""
+            loading="lazy"
+            onError={() => setImgOk(false)}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <Icon className="h-8 w-8 text-mist/70 transition-transform duration-700 group-hover:scale-110" strokeWidth={1.2} />
+        )}
+        {/* Readability shade over the photo for the play chip */}
+        {showPhoto && <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />}
 
         {/* Play/pause chip */}
         <span
