@@ -78,6 +78,59 @@ export function toAzerbaijani(text: string): string {
     [/\bayyuhal/g, "əyyuhəl"],
     [/\bYaw\b/g, "Ya"],
     [/\byaw\b/g, "ya"],
+    // More common Quranic terms with ayn (ə) instead of a
+    [/\bMaal/g, "Məal"],
+    [/\bmaal/g, "məal"],
+    [/\bFalaq/g, "Fələq"],
+    [/\bfalaq/g, "fələq"],
+    [/\bNas\b/g, "Nəs"],
+    [/\bnas\b/g, "nəs"],
+    [/\bAalim/g, "Alim"],
+    [/\baalim/g, "alim"],
+    [/\bAalimin/g, "Alimin"],
+    [/\baalimin/g, "alimin"],
+    [/\bMalik/g, "Malik"],
+    [/\bmalik/g, "malik"],
+    [/\bMaliki/g, "Maliki"],
+    [/\bmaliki/g, "maliki"],
+    [/\bTaw\b/g, "Tov"],
+    [/\btaw\b/g, "tov"],
+    [/\bLaw\b/g, "Lo"],
+    [/\blaw\b/g, "lo"],
+    [/\bAman\b/g, "Əman"],
+    [/\baman\b/g, "əman"],
+    [/\bAmani/g, "Əmani"],
+    [/\bamani/g, "əmani"],
+    [/\bSaadiq/g, "Sadiq"],
+    [/\bsaadiq/g, "sadiq"],
+    [/\bSadiqin/g, "Sadiqin"],
+    [/\bsadiqin/g, "sadiqin"],
+    [/\bKaafir/g, "Kafir"],
+    [/\bkaafir/g, "kafir"],
+    [/\bKaafirun/g, "Kafirun"],
+    [/\bkaafirun/g, "kafirun"],
+    [/\bMufsid/g, "Müfsid"],
+    [/\bmufsid/g, "müfsid"],
+    [/\bMufsidoon/g, "Müfsidun"],
+    [/\bmufsidoon/g, "müfsidun"],
+    [/\bMuta/g, "Müta"],
+    [/\bmuta/g, "müta"],
+    [/\bMutaa/g, "Müta"],
+    [/\bmutaa/g, "müta"],
+    [/\bSaaghar/g, "Səqər"],
+    [/\bsaaghar/g, "səqər"],
+    [/\bWaswas/g, "Vəsvəs"],
+    [/\bwaswas/g, "vəsvəs"],
+    [/\bWaswasa/g, "Vəsvəsə"],
+    [/\bwaswasa/g, "vəsvəsə"],
+    [/\bAasif/g, "Əsif"],
+    [/\baasif/g, "əsif"],
+    [/\bAasifa/g, "Əsifə"],
+    [/\baasifa/g, "əsifə"],
+    [/\bAakif/g, "Əkif"],
+    [/\baakif/g, "əkif"],
+    [/\bAakifin/g, "Əkifin"],
+    [/\baakifin/g, "əkifin"],
   ];
   for (const [re, rep] of wordFixes) {
     t = t.replace(re, rep);
@@ -99,17 +152,17 @@ export function toAzerbaijani(text: string): string {
   t = t.replace(/dh/g, "z");
   t = t.replace(/Dh/g, "Z");
   t = t.replace(/DH/g, "Z");
-  // Long vowels
-  t = t.replace(/aa/g, "a");
-  t = t.replace(/AA/g, "A");
-  t = t.replace(/ee/g, "i");
-  t = t.replace(/EE/g, "İ");
-  t = t.replace(/ii/g, "i");
-  t = t.replace(/II/g, "İ");
-  t = t.replace(/oo/g, "u");
-  t = t.replace(/OO/g, "U");
-  t = t.replace(/uu/g, "u");
-  t = t.replace(/UU/g, "U");
+  // Long vowels - keep circumflex to indicate elongation (â, î, û)
+  t = t.replace(/aa/g, "â");
+  t = t.replace(/AA/g, "Â");
+  t = t.replace(/ee/g, "î");
+  t = t.replace(/EE/g, "Î");
+  t = t.replace(/ii/g, "î");
+  t = t.replace(/II/g, "Î");
+  t = t.replace(/oo/g, "û");
+  t = t.replace(/OO/g, "Û");
+  t = t.replace(/uu/g, "û");
+  t = t.replace(/UU/g, "Û");
 
   // 3. Definite article Al- -> Əl- (word boundary)
   t = t.replace(/\bAl-/g, "Əl-");
@@ -131,8 +184,9 @@ export function toAzerbaijani(text: string): string {
   // Remaining standalone ' (for ayn) -> ə
   // Keep ' as is if not followed by vowel to avoid breaking
 
-  // 6. w -> v in some contexts, but keep as is for now (Yaw -> Ya is handled via word fixes if needed)
-  // For now, keep w as is to avoid breaking
+  // 6. w -> v (Azerbaijani uses v, not w)
+  t = t.replace(/w/g, "v");
+  t = t.replace(/W/g, "V");
 
   return t;
 }
