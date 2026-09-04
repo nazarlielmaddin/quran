@@ -62,6 +62,11 @@ export const sources: MediaSource[] = [
     license: "alquran.cloud (crowd-sourced; Qur'an text is public domain in most jurisdictions)",
   },
   {
+    label: "Azerbaijani translation — Məmmədəliyev & Bünyadov (6236 verses)",
+    url: "https://api.alquran.cloud/v1/quran/az.mammadaliyev",
+    license: "alquran.cloud (translation © respective authors; shown for study)",
+  },
+  {
     label: "Verse timings — 9 reciters (6236 verses each)",
     url: "https://quran.com",
     license: "Quran Foundation (QDC API) — verified high-precision verse timings",

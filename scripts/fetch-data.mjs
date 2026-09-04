@@ -266,6 +266,27 @@ try {
   }
 }
 
+/* 2c ── Azerbaijani translation (alquran.cloud az.mammadaliyev — Məmmədəliyev & Bünyadov) */
+log("Fetching Azerbaijani translation (6236 verses)…");
+try {
+  const azRes = await fetchJson("https://api.alquran.cloud/v1/quran/az.mammadaliyev");
+  const perSurahAz = {};
+  for (const s of azRes.data.surahs) {
+    const key = String(s.number);
+    perSurahAz[key] = s.ayahs.map((a) => (a.text ?? "").replace(/^\uFEFF/, "").trim());
+  }
+  writeFileSync(
+    join(ROOT, "public", "data", "translations-az.json"),
+    JSON.stringify(perSurahAz)
+  );
+  log(`Azerbaijani translation: ${Object.keys(perSurahAz).length} surahs covered`);
+} catch (e) {
+  log(`Azerbaijani translation fetch failed: ${e.message} — keeping existing file if present`);
+  const azPath = join(ROOT, "public", "data", "translations-az.json");
+  if (!existsSync(azPath)) throw e;
+  log("Azerbaijani translation cache kept");
+}
+
 /* 3 ── Verse timings — nested Record<reciterId, Record<surahId, number[]>> */
 log("Parsing verse timings…");
 let qdcTimings = {};

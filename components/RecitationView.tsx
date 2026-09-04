@@ -107,6 +107,8 @@ export function RecitationView() {
 
   const isArabicVisible = showArabic;
   const isTranslitVisible = displayMode === "transliteration" || displayMode === "both";
+  // "accurate" (Dəqiq) shows the Azerbaijani translation instead of transliteration
+  const isTranslation = isTranslitVisible && transliterationStyle === "accurate";
 
   const transLoading = isTranslitVisible && verses === null && errorId !== surahId;
   const arabicLoading = isArabicVisible && arabicVerses === null && arabicErrorId !== surahId;
@@ -289,13 +291,13 @@ export function RecitationView() {
       <div className="glass relative overflow-hidden rounded-3xl">
         {loading && (
           <div className="flex items-center justify-center gap-3 py-24 text-sm text-mist-faint">
-            <Loader2 className="h-4 w-4 animate-spin" /> {dict.recitation.loading}
+            <Loader2 className="h-4 w-4 animate-spin" /> {isTranslation ? dict.recitation.translationLoading : dict.recitation.loading}
           </div>
         )}
 
         {!loading && failed && (
           <div className="px-8 py-24 text-center text-sm text-mist-dim">
-            {dict.recitation.unavailable}
+            {isTranslation ? dict.recitation.translationUnavailable : dict.recitation.unavailable}
           </div>
         )}
 
