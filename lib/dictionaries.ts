@@ -73,8 +73,8 @@ const en = {
       both: "Both",
     },
     styles: {
-      accurate: "Accurate",
-      simple: "Simple",
+      accurate: "Az",
+      simple: "Oxunuş",
     },
   },
   player: {
@@ -193,8 +193,8 @@ const az: typeof en = {
       both: "Hər ikisi",
     },
     styles: {
-      accurate: "Dəqiq",
-      simple: "Sadə",
+      accurate: "Az",
+      simple: "Oxunuş",
     },
   },
   player: {
