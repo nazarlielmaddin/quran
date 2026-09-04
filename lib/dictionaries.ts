@@ -130,7 +130,7 @@ const az: typeof en = {
     reciters: "Qiraətçilər",
     surahs: "Surələr",
     atmosphere: "Atmosfer",
-    nowPlaying: "İndi Oynadılır",
+    nowPlaying: "İndi Oxunur",
   },
   hero: {
     titleA: "Quran",
