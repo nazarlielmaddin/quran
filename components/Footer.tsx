@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { dict } from "@/lib/dictionaries";
-import { CrescentMoon } from "@/components/icons";
 import { DevelopedBy } from "@/components/DevelopedBy";
+
+const LOGO_SRC = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/logo.png`;
 
 export function Footer() {
   return (
@@ -8,7 +10,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col items-center gap-4 text-center">
           <div className="flex items-center gap-2.5">
-            <CrescentMoon className="h-5 w-5 text-gold" />
+            <Image src={LOGO_SRC} alt={dict.brand} width={32} height={32} className="h-8 w-8 object-contain" />
             <span className="font-display text-lg text-mist">{dict.brand}</span>
           </div>
           <p className="text-sm leading-relaxed text-mist-dim">{dict.footer.madeWith}</p>

@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { CrescentMoon } from "@/components/icons";
+import Image from "next/image";
 import { dict } from "@/lib/dictionaries";
 import { cn } from "@/lib/utils";
+
+const LOGO_SRC = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/logo.png`;
 
 const NAV = [
   { href: "#reciters", label: dict.nav.reciters },
@@ -35,7 +37,7 @@ export function Header() {
     >
       <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between px-5 pt-[env(safe-area-inset-top)] lg:px-8">
         <a href="#top" className="flex items-center gap-2.5" aria-label={dict.brand}>
-          <CrescentMoon className="h-5 w-5 text-gold" />
+          <Image src={LOGO_SRC} alt={dict.brand} width={32} height={32} className="h-8 w-8 object-contain" />
           <span className="font-display text-lg tracking-wide text-mist">{dict.brand}</span>
         </a>
 
