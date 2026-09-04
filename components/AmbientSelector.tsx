@@ -80,7 +80,7 @@ function AmbientCard({ soundId }: { soundId: string }) {
             alt=""
             loading="lazy"
             onError={() => setImgOk(false)}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="absolute inset-0 h-full w-full object-cover brightness-[.68] transition-all duration-700 group-hover:scale-105 group-hover:brightness-[.85]"
           />
         ) : (
           <Icon className="h-8 w-8 text-mist/70 transition-transform duration-700 group-hover:scale-110" strokeWidth={1.2} />
