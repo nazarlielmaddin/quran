@@ -24,8 +24,10 @@ function SurahRow({ surahId }: { surahId: number }) {
   const recitation = getRecitation(reciterId, surahId);
   const isCurrent = currentId === surahId;
   const isPlaying = isCurrent && quranPlaying;
+  const available = !!recitation;
 
   const play = () => {
+    if (!available) return;
     selectSurah(surahId, true);
     document.getElementById("now-playing")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -43,6 +45,7 @@ function SurahRow({ surahId }: { surahId: number }) {
       className={cn(
         "group flex items-center gap-4 border-b border-line-soft px-4 py-4 transition-colors duration-300 sm:gap-6 sm:px-6",
         isCurrent ? "bg-white/[0.045]" : "hover:bg-white/[0.03]",
+        !available && "opacity-55",
       )}
     >
       {/* Number */}
@@ -56,7 +59,12 @@ function SurahRow({ surahId }: { surahId: number }) {
       </span>
 
       {/* Names */}
-      <button onClick={play} className="min-w-0 flex-1 text-left" aria-label={`${dict.surahs.play} ${primary}`}>
+      <button
+        onClick={play}
+        disabled={!available}
+        className="min-w-0 flex-1 text-left disabled:cursor-default"
+        aria-label={`${dict.surahs.play} ${primary}`}
+      >
         <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
           <span className={cn("font-display text-lg", isCurrent ? "text-gold-soft" : "text-mist")}>
             {primary}
@@ -64,6 +72,11 @@ function SurahRow({ surahId }: { surahId: number }) {
           <span className="text-sm text-mist-dim">{secondary}</span>
           {tertiary && tertiary !== primary && (
             <span className="text-xs text-mist-faint">{tertiary}</span>
+          )}
+          {!available && (
+            <span className="rounded-full border border-gold/40 px-2 py-0.5 text-[10px] uppercase tracking-wider text-gold-soft">
+              {dict.surahs.comingSoon}
+            </span>
           )}
         </span>
         <span className="mt-0.5 block text-xs text-mist-faint">
@@ -80,7 +93,7 @@ function SurahRow({ surahId }: { surahId: number }) {
       <div className="flex w-16 shrink-0 items-center justify-end gap-3">
         {isPlaying ? (
           <Waveform bars={4} playing className="h-4" />
-        ) : (
+        ) : available ? (
           <button
             onClick={play}
             aria-label={`${dict.surahs.play} ${primary}`}
@@ -88,7 +101,7 @@ function SurahRow({ surahId }: { surahId: number }) {
           >
             <Play className="h-4 w-4 translate-x-[1px] fill-current" />
           </button>
-        )}
+        ) : null}
       </div>
     </motion.div>
   );

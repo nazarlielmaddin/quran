@@ -56,7 +56,10 @@ const CATALOG = [
     provider: "mp3quran",
     folder: "waleed-shamsan",
     timingSource: "qdc",
-    sourceLabel: "mp3quran.net — Alwaleed Alshamsan (Hafs 'an 'Asim murattal, 114/114 surah, cdn.mp3quran.net/audio/waleed-shamsan/r1, silence-detected ayah boundaries)",
+    // ID3-verified genuine Waleed voice only (56/114) — the upstream mushaf mixes
+    // other reciters in the remaining slots, so those surahs stay unavailable.
+    availableSurahs: [1, 8, 17, 19, 20, 24, 25, 29, 30, 31, 32, 33, 36, 37, 41, 42, 43, 45, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 63, 64, 65, 66, 93, 94, 95, 97, 98, 99, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114],
+    sourceLabel: "mp3quran.net — Alwaleed Alshamsan (Hafs 'an 'Asim murattal, ID3-verified 56/114 surahs, cdn.mp3quran.net/audio/waleed-shamsan/r1, energy-valley ayah boundaries)",
     audioUrl: (n) => `https://cdn.mp3quran.net/audio/waleed-shamsan/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
@@ -311,6 +314,7 @@ for (const entry of CATALOG) {
   const reciterData = qdcTimings[entry.id];
   if (reciterData) {
     for (let s = 1; s <= 114; s++) {
+      if (entry.availableSurahs && !entry.availableSurahs.includes(s)) continue;
       const sKey = String(s);
       const verseArray = reciterData[sKey];
       if (Array.isArray(verseArray) && verseArray.length > 0) {
@@ -333,6 +337,7 @@ log("Generating recitation catalog…");
 const recitations = [];
 for (const entry of CATALOG) {
   for (const s of surahs) {
+    if (entry.availableSurahs && !entry.availableSurahs.includes(s.number)) continue;
     const n = String(s.number).padStart(3, "0");
     const num = s.number;
     let id;

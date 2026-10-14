@@ -22,7 +22,7 @@ export const sources: MediaSource[] = [
     license: "Quran.com / QuranicAudio — public distribution",
   },
   {
-    label: "Qur'an audio — mp3quran.net — Alwaleed Alshamsan (Hafs 'an 'Asim murattal, 114/114 surah, cdn.mp3quran.net/audio/waleed-shamsan/r1, silence-detected ayah boundaries)",
+    label: "Qur'an audio — mp3quran.net — Alwaleed Alshamsan (Hafs 'an 'Asim murattal, ID3-verified 56/114 surahs, cdn.mp3quran.net/audio/waleed-shamsan/r1, energy-valley ayah boundaries)",
     url: "https://cdn.mp3quran.net/audio/waleed-shamsan/r1/001.mp3",
     license: "mp3quran.net official hosted mushaf",
   },

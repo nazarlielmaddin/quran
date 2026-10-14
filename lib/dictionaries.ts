@@ -32,6 +32,7 @@ const en = {
     subtitleCount: "{count} master voices — tap to select, press play to listen",
     listen: "Listen",
     select: "Choose reciter",
+    surahCount: "{count}/114 surahs",
   },
   surahs: {
     title: "Choose a surah",
@@ -40,6 +41,7 @@ const en = {
     ayahs: "Ayahs",
     duration: "Duration",
     play: "Play",
+    comingSoon: "Coming soon",
     noneFound: "No surahs match your search.",
     clear: "Clear",
     meccan: "Meccan",
@@ -150,6 +152,7 @@ const az: typeof en = {
     subtitleCount: "{count} usta səs — seçmək üçün toxunun, dinləmək üçün oxut düyməsini basın",
     listen: "Dinlə",
     select: "Oxucu seç",
+    surahCount: "{count}/114 surə",
   },
   surahs: {
     title: "Bir surə seçin",
@@ -159,6 +162,7 @@ const az: typeof en = {
     ayahs: "ayə",
     duration: "Müddət",
     play: "Oynat",
+    comingSoon: "Tezliklə",
     noneFound: "Axtarışınıza uyğun surə tapılmadı.",
     clear: "Təmizlə",
     meccan: "Məkkə",

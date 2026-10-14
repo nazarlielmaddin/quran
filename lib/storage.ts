@@ -1,5 +1,6 @@
 import type { RepeatMode, TransliterationStyle } from "@/lib/types";
 import { reciters } from "@/data/reciters";
+import { getRecitation } from "@/data/generated";
 
 /** Versioned persistence — bump when the saved shape changes. */
 const KEY = "quran:prefs:v1";
@@ -65,6 +66,10 @@ export function loadPrefs(): PersistedPrefs {
     }
     // Clamp surahId into valid 1..114 range
     if (typeof merged.surahId !== "number" || merged.surahId < 1 || merged.surahId > 114) {
+      merged.surahId = DEFAULT_PREFS.surahId;
+    }
+    // Guard: stored surah may lack audio for the stored reciter (partial catalogs)
+    if (!getRecitation(merged.reciterId, merged.surahId)) {
       merged.surahId = DEFAULT_PREFS.surahId;
     }
     // Migrate old null/empty ambient to default night (so existing users also get night)

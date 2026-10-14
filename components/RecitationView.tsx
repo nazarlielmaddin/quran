@@ -236,6 +236,11 @@ export function RecitationView() {
           {reciter?.name} · {surah?.verses} {dict.surahs.ayahs}
           {recitation?.durationSeconds ? ` · ${formatTime(recitation.durationSeconds)}` : ""}
         </p>
+        {!recitation && (
+          <p className="mx-auto mt-3 max-w-xl rounded-full border border-gold/40 px-4 py-1.5 text-xs text-gold-soft">
+            {dict.surahs.comingSoon} — {reciter?.name}
+          </p>
+        )}
       </div>
 
       {/* Controls */}
