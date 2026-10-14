@@ -1,17 +1,11 @@
 import type { RepeatMode, TransliterationStyle } from "@/lib/types";
 import { reciters } from "@/data/reciters";
-import { getRecitation } from "@/data/generated";
 
 /** Versioned persistence — bump when the saved shape changes. */
 const KEY = "quran:prefs:v1";
 const LEGACY_KEY = "saadat:prefs:v1";
 
 const VALID_RECITER_IDS = new Set(reciters.map((r) => r.id));
-
-/** Renamed/removed reciter slots — migrate stored prefs to the replacement. */
-const RECITER_RENAMES: Record<string, string> = {
-  "abdul-basit-murattal": "waleed-al-shamsan",
-};
 
 export interface PersistedPrefs {
   reciterId: string;
@@ -56,20 +50,12 @@ export function loadPrefs(): PersistedPrefs {
     if (!raw) return DEFAULT_PREFS;
     const parsed = JSON.parse(raw) as Partial<PersistedPrefs>;
     const merged: PersistedPrefs = { ...DEFAULT_PREFS, ...parsed };
-    // Migrate renamed slots first (Abdul Basit Murattal → Waleed Al Shamsan)
-    if (typeof merged.reciterId === "string" && RECITER_RENAMES[merged.reciterId]) {
-      merged.reciterId = RECITER_RENAMES[merged.reciterId];
-    }
     // Guard: if stored reciter was removed/renamed, fall back to default (yasir)
     if (typeof merged.reciterId !== "string" || !VALID_RECITER_IDS.has(merged.reciterId)) {
       merged.reciterId = DEFAULT_PREFS.reciterId;
     }
     // Clamp surahId into valid 1..114 range
     if (typeof merged.surahId !== "number" || merged.surahId < 1 || merged.surahId > 114) {
-      merged.surahId = DEFAULT_PREFS.surahId;
-    }
-    // Guard: stored surah may lack audio for the stored reciter (partial catalogs)
-    if (!getRecitation(merged.reciterId, merged.surahId)) {
       merged.surahId = DEFAULT_PREFS.surahId;
     }
     // Migrate old null/empty ambient to default night (so existing users also get night)

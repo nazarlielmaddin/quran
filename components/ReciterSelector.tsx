@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { BadgeCheck, Play } from "lucide-react";
 import { reciters, getReciter } from "@/data/reciters";
-import { recitations } from "@/data/generated";
 import { usePlayer } from "@/lib/audio/player-context";
 import { useLocale } from "@/lib/i18n";
 import { dict, t } from "@/lib/dictionaries";
@@ -18,7 +17,6 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
   const displayName = getLocalized(reciter, "name", locale);
   const displayOrigin = getLocalized(reciter, "origin", locale);
   const displayBio = getLocalized(reciter, "bio", locale);
-  const surahCount = recitations.filter((r) => r.reciterId === reciter.id).length;
 
   const start = () => {
     selectReciter(reciter.id, true);
@@ -119,11 +117,6 @@ function ReciterCard({ reciterId, index }: { reciterId: string; index: number })
           <span className="mx-1.5 opacity-40">·</span>
           {displayBio}
         </p>
-        {surahCount < 114 && (
-          <p className="text-[clamp(0.72rem,0.65rem+0.08vw,0.8rem)] text-gold/70">
-            {t("reciters.surahCount", locale, { count: surahCount })}
-          </p>
-        )}
       </div>
     </motion.article>
   );

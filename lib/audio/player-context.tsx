@@ -336,18 +336,11 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
 
   const goSurah = useCallback(
     (delta: number) => {
-      // Skip surahs without audio for the active reciter (partial catalogs)
-      let next = surahId;
-      for (let i = 0; i < 114; i++) {
-        next += delta;
-        if (next < 1 || next > 114) return;
-        if (getRecitation(reciterId, next)) {
-          selectSurah(next, true);
-          return;
-        }
-      }
+      const next = clamp(surahId + delta, 1, 114);
+      if (next === surahId) return;
+      selectSurah(next, true);
     },
-    [reciterId, surahId, selectSurah],
+    [surahId, selectSurah],
   );
 
   const nextSurah = useCallback(() => goSurah(1), [goSurah]);
@@ -364,22 +357,15 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         return;
       }
       if (repeat === "all" || autoNext) {
-        // Next *available* surah for the active reciter (wraps around)
-        for (let i = 1; i <= 114; i++) {
-          const next = ((surahId - 1 + i) % 114) + 1;
-          if (getRecitation(reciterId, next)) {
-            selectSurah(next, true);
-            return;
-          }
-        }
-        setQuranPlaying(false);
+        const next = surahId >= 114 ? 1 : surahId + 1;
+        selectSurah(next, true);
         return;
       }
       setQuranPlaying(false);
     };
     el.addEventListener("ended", onEnded);
     return () => el.removeEventListener("ended", onEnded);
-  }, [repeat, autoNext, surahId, reciterId, selectSurah]);
+  }, [repeat, autoNext, surahId, selectSurah]);
 
   const seek = useCallback((t: number) => {
     const el = quranRef.current;
