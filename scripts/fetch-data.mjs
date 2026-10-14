@@ -51,13 +51,13 @@ const CATALOG = [
     audioUrl: (n) => `https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/${n}.mp3`,
   },
   {
-    id: "abdul-basit-murattal",
-    qdcId: 2,
-    provider: "quranicaudio",
-    folder: "abdul_baset/murattal",
+    id: "waleed-al-shamsan",
+    qdcId: null,
+    provider: "mp3quran",
+    folder: "waleed-shamsan",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Abdul Basit Murattal (qdc/abdul_baset/murattal, 41.8s S1, QDC perfect 0.03s)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdul_baset/murattal/${n}.mp3`,
+    sourceLabel: "mp3quran.net — Alwaleed Alshamsan (Hafs 'an 'Asim murattal, 114/114 surah, cdn.mp3quran.net/audio/waleed-shamsan/r1, silence-detected ayah boundaries)",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/waleed-shamsan/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "mahmoud-khalil-al-husary",
@@ -74,7 +74,7 @@ const CATALOG = [
     provider: "quranicaudio",
     folder: "badr_al_turki/mp3",
     timingSource: "alignment",
-    sourceLabel: "Quranic Recitation Data — Badr Al Turki (word-level protobuf alignment matched to the Badr Al Turki murattal recording)",
+    sourceLabel: "Islamic Network / QuranicAudio — Badr Al Turki (quran/badr_al_turki/mp3, 39s S1, 167)",
     audioUrl: (n) => `https://download.quranicaudio.com/quran/badr_al_turki/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
@@ -384,6 +384,11 @@ sourcesLines.push(`    url: "https://api.alquran.cloud/v1/surah",`);
 sourcesLines.push(`    license: "alquran.cloud (crowd-sourced; Qur'an text is public domain in most jurisdictions)",`);
 sourcesLines.push(`  },`);
 sourcesLines.push(`  {`);
+sourcesLines.push(`    label: "Azerbaijani translation — Məmmədəliyev & Bünyadov (6236 verses)",`);
+sourcesLines.push(`    url: "https://api.alquran.cloud/v1/quran/az.mammadaliyev",`);
+sourcesLines.push(`    license: "alquran.cloud (translation © respective authors; shown for study)",`);
+sourcesLines.push(`  },`);
+sourcesLines.push(`  {`);
 sourcesLines.push(`    label: "Verse timings — 9 reciters (6236 verses each)",`);
 sourcesLines.push(`    url: "https://quran.com",`);
 sourcesLines.push(`    license: "Quran Foundation (QDC API) — verified high-precision verse timings",`);
@@ -397,6 +402,11 @@ sourcesLines.push(`  {`);
 sourcesLines.push(`    label: "Ambient audio + background videos (16 sounds)",`);
 sourcesLines.push(`    url: "https://pixabay.com/sound-effects/",`);
 sourcesLines.push(`    license: "Pixabay Content License — free for commercial use, no attribution required",`);
+sourcesLines.push(`  },`);
+sourcesLines.push(`  {`);
+sourcesLines.push(`    label: "Ambient card photos (15 thumbnails)",`);
+sourcesLines.push(`    url: "https://commons.wikimedia.org",`);
+sourcesLines.push(`    license: "Wikimedia Commons contributors — mostly CC BY-SA, see file pages",`);
 sourcesLines.push(`  },`);
 sourcesLines.push(`];`);
 sourcesLines.push(``);

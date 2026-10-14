@@ -28,10 +28,9 @@ export function getTimings(reciterId: string, surahId: number): number[] | null 
 export const recitersWithTimings = new Set([
   "yasir-al-dawsari",
   "mishary-rashid-alafasy",
-  "abdul-basit-murattal",
+  "waleed-al-shamsan",
   "mahmoud-khalil-al-husary",
   "badr-al-turki",
-  "abdul-basit-mujawwad",
   "abdur-rahman-as-sudais",
   "maher-al-muaiqly",
   "saad-al-ghamdi",

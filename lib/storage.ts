@@ -7,6 +7,11 @@ const LEGACY_KEY = "saadat:prefs:v1";
 
 const VALID_RECITER_IDS = new Set(reciters.map((r) => r.id));
 
+/** Renamed/removed reciter slots — migrate stored prefs to the replacement. */
+const RECITER_RENAMES: Record<string, string> = {
+  "abdul-basit-murattal": "waleed-al-shamsan",
+};
+
 export interface PersistedPrefs {
   reciterId: string;
   surahId: number;
@@ -50,6 +55,10 @@ export function loadPrefs(): PersistedPrefs {
     if (!raw) return DEFAULT_PREFS;
     const parsed = JSON.parse(raw) as Partial<PersistedPrefs>;
     const merged: PersistedPrefs = { ...DEFAULT_PREFS, ...parsed };
+    // Migrate renamed slots first (Abdul Basit Murattal → Waleed Al Shamsan)
+    if (typeof merged.reciterId === "string" && RECITER_RENAMES[merged.reciterId]) {
+      merged.reciterId = RECITER_RENAMES[merged.reciterId];
+    }
     // Guard: if stored reciter was removed/renamed, fall back to default (yasir)
     if (typeof merged.reciterId !== "string" || !VALID_RECITER_IDS.has(merged.reciterId)) {
       merged.reciterId = DEFAULT_PREFS.reciterId;
