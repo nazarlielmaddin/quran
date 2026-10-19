@@ -14,14 +14,14 @@ Live: **https://nazarlielmaddin.github.io/quran/**
 
 ## ✨ Features
 
-- **Two reciters** — Yasir Al-Dawsari & Haitham Al-Dakhin (114 surahs each, 228 recitations)
+- **10 reciters** — 1,140 surah recitations; 8 with sample-accurate QUL verse timings
 - **Dual-layer audio** — Qur'an and ambient sound play simultaneously but are fully
   independent: QURAN OFF pauses only the Qur'an (position preserved) while the rain
   keeps falling; QURAN ON resumes exactly where you left off. The same logic works in
   reverse for the ambient layer.
 - **Verse-synchronized transliteration** — Latin-script reading (never Arabic) with
-  automatic verse highlighting for Yasir Al-Dawsari (real timestamps), tap-to-jump,
-  and an Accurate ⇄ Simple transliteration toggle.
+  automatic verse highlighting for 9 timestamped reciters, tap-to-jump, and an
+  Accurate ⇄ Simple transliteration toggle.
 - **16 ambient atmospheres** — Nature, Cozy, and Focus categories with matching
   cinematic background videos (only the selected video is ever loaded).
 - **Premium floating player** — track info, transport, progress, independent volume
@@ -124,8 +124,8 @@ quran/
 │   ├── generated.ts          # Typed wrappers over generated data
 │   └── generated/            # Generated at build time (do not edit by hand)
 │       ├── surahs.ts         # 114 surahs (EN/AZ/transliterated names, verses)
-│       ├── recitations.ts    # 228 reciter×surah entries with CDN audio URLs
-│       └── timings.ts        # Verse start offsets (ms) for Dawsari
+│       ├── recitations.ts    # 1140 reciter×surah entries with CDN audio URLs
+│       └── timings.ts        # Verse start offsets (ms) per reciter
 ├── lib/
 │   ├── audio/
 │   │   └── player-context.tsx # Dual-layer audio state machine (the heart)
@@ -262,10 +262,11 @@ The full 114-surah canon is already included. If you ever need to extend the dat
 
 | Asset | Source | License |
 | --- | --- | --- |
-| Qur'an audio — all 10 reciters (Hafs 'an 'Asim) | `cdn.mp3quran.net/audio/<reciter>/r1/{001-114}.mp3` | mp3quran.net official hosted mushaf |
-| Audio fallback (if the mp3quran CDN is unreachable) | `download.quranicaudio.com` (QDC) | Quran.com / QuranicAudio — public distribution |
+| Qur'an audio — 8 reciters with exact per-ayah segments (Hafs 'an 'Asim) | `audio-cdn.tarteel.ai/quran/surah/<reciter>/murattal/mp3/{001-114}.mp3` | Quranic Universal Library (QUL) / Tarteel — open recitation dataset |
+| Qur'an audio — Badr Al-Turki, Haitham Al-Dakhin | `cdn.mp3quran.net/audio/<reciter>/r1/{001-114}.mp3` | mp3quran.net official hosted mushaf |
+| Audio fallback | mp3quran.net mirrors (QUL reciters) · QDC (Badr) | mp3quran.net · Quran.com / QuranicAudio |
 | Surah metadata + transliteration | `api.alquran.cloud/v1/surah` · `api.alquran.cloud/v1/quran/en.transliteration` | alquran.cloud (Qur'an text is public domain in most jurisdictions) |
-| Verse timings (Dawsari) | `everyayah.com/data/timings_files/Yasser_Ad-Dussary_128kbps.zip` | © VerseByVerseQuran.com — link-back required (included in footer) |
+| Verse timings | QUL `surah_segments` (8 reciters) · QDC alignment (Badr) | QUL / Tarteel (open data) · Quran Foundation QDC API |
 | Reciter portrait (Dawsari) | Wikimedia Commons (`Yasser_Al-Dosari (cropped).jpg`) | CC BY-SA 4.0 |
 | Ambient audio + background videos (16) | Pixabay CDN | Pixabay Content License (free, no attribution required) |
 
@@ -277,8 +278,9 @@ All sources are tracked in `data/sources.ts` and shown in the footer.
 
 - **Calm over loud** — muted gold accents, deep charcoal surfaces, generous whitespace.
 - **One video at a time** — only the selected atmosphere's video is mounted.
-- **Honest sync** — verse highlighting only where real timestamps exist (Dawsari);
-  Al-Dakhin falls back to scrollable text, ready for timestamps later.
+- **Honest sync** — verse highlighting only where real timestamps exist (9 reciters);
+  Al-Dakhin falls back to scrollable text. If a CDN mirror is playing, highlighting is
+  hidden rather than showing a wrong verse.
 - **Extensible** — data is separated from UI; reciters, sounds, translations, and
   languages can be added without touching components.
 

@@ -1,8 +1,8 @@
 /**
  * Quran Sanctuary — Data generator
  * Fetches surah metadata + Latin transliteration from alquran.cloud,
- * merges hand-curated Azerbaijani names, parses verse timings (Dawsari),
- * and generates the full recitation catalog for 10 reciters.
+ * merges hand-curated Azerbaijani names, loads QUL per-ayah segments plus the
+ * QDC alignment timings, and generates the full catalog for 10 reciters.
  *
  * Run: node scripts/fetch-data.mjs
  */
@@ -17,23 +17,29 @@ mkdirSync(GEN, { recursive: true });
 const log = (m) => console.log(`[fetch-data] ${m}`);
 
 /** Central reciter catalog — single source of truth for audio + timings + attribution
- * Audio is served from mp3quran.net's CDN: the QuranicAudio/BunnyCDN host
- * (`download.quranicaudio.com`) resets TLS connections on some networks and
- * made every QDC-hosted reciter fail with "Unable to load this recitation".
- * Verified 2026-10-19: all 1140 mp3quran URLs return 206 audio/mpeg.
- * Verse timings still come from the QDC/alignment datasets; the player scales
- * them to the duration of the playing file, and `data/audioFallbacks.ts` keeps
- * the legacy QDC mirror as a runtime fallback.
+ *
+ * Audio strategy (verified 2026-10-19):
+ *  - Eight reciters stream from Tarteel's QUL CDN (`audio-cdn.tarteel.ai`).
+ *    QUL publishes per-ayah `time_from`/`time_to` segments for exactly these
+ *    files, so verse highlighting is sample-accurate — no duration scaling.
+ *  - Badr Al-Turki and Haitham Al-Dakhin are not in QUL and stay on
+ *    mp3quran.net. Badr's timings come from the QDC forced-alignment dataset.
+ *  - `data/audioFallbacks.ts` keeps a second mirror per reciter so a blocked
+ *    CDN degrades gracefully instead of showing the "Unable to load" banner.
+ *
+ * The old QuranicAudio/BunnyCDN host (`download.quranicaudio.com`) resets TLS
+ * on some networks; it is no longer a primary source.
  */
 const CATALOG = [
   {
     id: "yasir-al-dawsari",
     qdcId: 97,
-    provider: "mp3quran",
-    folder: "yasser-dosari/r1",
-    timingSource: "qdc",
-    sourceLabel: "mp3quran.net — Yasir Al-Dawsari (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
-    audioUrl: (n) => `https://cdn.mp3quran.net/audio/yasser-dosari/r1/${String(n).padStart(3, "0")}.mp3`,
+    qulId: 174,
+    provider: "qul",
+    folder: "yasserAlDosari/murattal",
+    timingSource: "qul",
+    sourceLabel: "Tarteel QUL — Yasir Al-Dawsari (Rewayat Hafs 'an 'Asim, murattal); mirror: mp3quran.net",
+    audioUrl: (n) => `https://audio-cdn.tarteel.ai/quran/surah/yasserAlDosari/murattal/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "haitham-al-dakhin",
@@ -47,29 +53,32 @@ const CATALOG = [
   {
     id: "mishary-rashid-alafasy",
     qdcId: 7,
-    provider: "mp3quran",
-    folder: "mishary-alafasy/r1",
-    timingSource: "qdc",
-    sourceLabel: "mp3quran.net — Mishary Rashid Alafasy (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
-    audioUrl: (n) => `https://cdn.mp3quran.net/audio/mishary-alafasy/r1/${String(n).padStart(3, "0")}.mp3`,
+    qulId: 7,
+    provider: "qul",
+    folder: "alafasy/murattal",
+    timingSource: "qul",
+    sourceLabel: "Tarteel QUL — Mishary Rashid Alafasy (Rewayat Hafs 'an 'Asim, murattal); mirror: mp3quran.net",
+    audioUrl: (n) => `https://audio-cdn.tarteel.ai/quran/surah/alafasy/murattal/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abdul-basit-murattal",
     qdcId: 2,
-    provider: "mp3quran",
-    folder: "abdulbasit-abdulsamad/r3",
-    timingSource: "qdc",
-    sourceLabel: "mp3quran.net — Abdul Basit Murattal (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
-    audioUrl: (n) => `https://cdn.mp3quran.net/audio/abdulbasit-abdulsamad/r3/${String(n).padStart(3, "0")}.mp3`,
+    qulId: 2,
+    provider: "qul",
+    folder: "abdulBasit/murattal",
+    timingSource: "qul",
+    sourceLabel: "Tarteel QUL — Abdul Basit Murattal (Rewayat Hafs 'an 'Asim, murattal); mirror: mp3quran.net",
+    audioUrl: (n) => `https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/murattal/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "mahmoud-khalil-al-husary",
     qdcId: 6,
-    provider: "mp3quran",
-    folder: "mahmoud-husary/r1",
-    timingSource: "qdc",
-    sourceLabel: "mp3quran.net — Mahmoud Khalil Al-Husary (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
-    audioUrl: (n) => `https://cdn.mp3quran.net/audio/mahmoud-husary/r1/${String(n).padStart(3, "0")}.mp3`,
+    qulId: 6,
+    provider: "qul",
+    folder: "husary/murattal",
+    timingSource: "qul",
+    sourceLabel: "Tarteel QUL — Mahmoud Khalil Al-Husary (Rewayat Hafs 'an 'Asim, murattal); mirror: mp3quran.net",
+    audioUrl: (n) => `https://audio-cdn.tarteel.ai/quran/surah/husary/murattal/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "badr-al-turki",
@@ -77,44 +86,48 @@ const CATALOG = [
     provider: "mp3quran",
     folder: "badr-turki/r1",
     timingSource: "alignment",
-    sourceLabel: "mp3quran.net — Badr Al-Turki (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
+    sourceLabel: "mp3quran.net — Badr Al-Turki (Rewayat Hafs 'an 'Asim, murattal); QDC alignment timings; mirror: quranicaudio.com",
     audioUrl: (n) => `https://cdn.mp3quran.net/audio/badr-turki/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abdur-rahman-as-sudais",
     qdcId: 3,
-    provider: "mp3quran",
-    folder: "abdulrahman-sudais/r1",
-    timingSource: "qdc",
-    sourceLabel: "mp3quran.net — Abdur-Rahman as-Sudais (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
-    audioUrl: (n) => `https://cdn.mp3quran.net/audio/abdulrahman-sudais/r1/${String(n).padStart(3, "0")}.mp3`,
+    qulId: 3,
+    provider: "qul",
+    folder: "abdulrahmanAlSudais/murattal",
+    timingSource: "qul",
+    sourceLabel: "Tarteel QUL — Abdur-Rahman as-Sudais (Rewayat Hafs 'an 'Asim, murattal); mirror: mp3quran.net",
+    audioUrl: (n) => `https://audio-cdn.tarteel.ai/quran/surah/abdulrahmanAlSudais/murattal/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "maher-al-muaiqly",
     qdcId: 65,
-    provider: "mp3quran",
-    folder: "maher-muaiqly/r1",
-    timingSource: "qdc",
-    sourceLabel: "mp3quran.net — Maher Al-Muaiqly (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
-    audioUrl: (n) => `https://cdn.mp3quran.net/audio/maher-muaiqly/r1/${String(n).padStart(3, "0")}.mp3`,
+    qulId: 65,
+    provider: "qul",
+    folder: "maherAlMuaiqly/murattal",
+    timingSource: "qul",
+    sourceLabel: "Tarteel QUL — Maher Al-Muaiqly (Rewayat Hafs 'an 'Asim, murattal); mirror: mp3quran.net",
+    audioUrl: (n) => `https://audio-cdn.tarteel.ai/quran/surah/maherAlMuaiqly/murattal/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "saad-al-ghamdi",
     qdcId: 13,
-    provider: "mp3quran",
-    folder: "saad-ghamdi/r1",
-    timingSource: "qdc",
-    sourceLabel: "mp3quran.net — Saad Al-Ghamdi (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
-    audioUrl: (n) => `https://cdn.mp3quran.net/audio/saad-ghamdi/r1/${String(n).padStart(3, "0")}.mp3`,
+    qulId: 13,
+    provider: "qul",
+    folder: "ghamadi/murattal",
+    timingSource: "qul",
+    sourceLabel: "Tarteel QUL — Saad Al-Ghamdi (Rewayat Hafs 'an 'Asim, murattal); mirror: mp3quran.net",
+    audioUrl: (n) => `https://audio-cdn.tarteel.ai/quran/surah/ghamadi/murattal/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abu-bakr-al-shatri",
     qdcId: 4,
-    provider: "mp3quran",
-    folder: "abubakr-shatri/r1",
-    timingSource: "qdc",
-    sourceLabel: "mp3quran.net — Abu Bakr Al-Shatri (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
-    audioUrl: (n) => `https://cdn.mp3quran.net/audio/abubakr-shatri/r1/${String(n).padStart(3, "0")}.mp3`,
+    qulId: 4,
+    provider: "qul",
+    folder: "abuBakrAlShatri/murattal",
+    timingSource: "qul",
+    sourceLabel: "Tarteel QUL — Abu Bakr Al-Shatri (Rewayat Hafs 'an 'Asim, murattal); mirror: mp3quran.net",
+    audioUrl: (n) => `https://audio-cdn.tarteel.ai/quran/surah/abuBakrAlShatri/murattal/mp3/${String(n).padStart(3, "0")}.mp3`,
   },
 ];
 
@@ -298,6 +311,21 @@ if (existsSync(dumpPath)) {
   }
 }
 
+/* QUL per-ayah segments for the Tarteel-hosted files. Structure:
+ *   { [reciterId]: { [surahId]: { from: number[], duration: number } } }
+ * These timestamps belong to the exact audio URL in CATALOG, so they are used
+ * verbatim (no duration scaling). */
+let qulTimings = {};
+const qulPath = join(ROOT, "scripts", "data", "qul_timings.json");
+if (existsSync(qulPath)) {
+  try {
+    qulTimings = JSON.parse(readFileSync(qulPath, "utf8"));
+    log(`Loaded QUL timings from ${qulPath} (${Object.keys(qulTimings).length} reciters)`);
+  } catch (e) {
+    log(`Failed to load QUL timings cache: ${e.message}`);
+  }
+}
+
 const nestedTimings = {};
 const calculatedDurations = {}; // Record<reciterId, Record<surahId, number>>
 
@@ -305,6 +333,23 @@ for (const entry of CATALOG) {
   if (!entry.timingSource) continue;
   nestedTimings[entry.id] = {};
   calculatedDurations[entry.id] = {};
+
+  if (entry.timingSource === "qul") {
+    const reciterData = qulTimings[entry.id];
+    if (reciterData) {
+      for (let s = 1; s <= 114; s++) {
+        const sKey = String(s);
+        const item = reciterData[sKey];
+        if (item && Array.isArray(item.from) && item.from.length > 0) {
+          nestedTimings[entry.id][sKey] = item.from;
+          if (typeof item.duration === "number") {
+            calculatedDurations[entry.id][sKey] = item.duration;
+          }
+        }
+      }
+    }
+    continue;
+  }
 
   const reciterData = qdcTimings[entry.id];
   if (reciterData) {
@@ -368,8 +413,13 @@ for (const entry of CATALOG) {
   const label = `Qur'an audio — ${entry.sourceLabel}`;
   const url = entry.audioUrl(1);
   let license;
-  if (entry.provider === "mp3quran") license = "mp3quran.net official hosted mushaf";
-  else license = "Quran.com / QuranicAudio — public distribution";
+  if (entry.provider === "qul") {
+    license = "Quranic Universal Library (QUL) / Tarteel — open recitation dataset; audio hosted on audio-cdn.tarteel.ai";
+  } else if (entry.provider === "mp3quran") {
+    license = "mp3quran.net official hosted mushaf";
+  } else {
+    license = "Quran.com / QuranicAudio — public distribution";
+  }
   sourcesLines.push(`  {`);
   sourcesLines.push(`    label: ${JSON.stringify(label)},`);
   sourcesLines.push(`    url: ${JSON.stringify(url)},`);
@@ -382,9 +432,9 @@ sourcesLines.push(`    url: "https://api.alquran.cloud/v1/surah",`);
 sourcesLines.push(`    license: "alquran.cloud (crowd-sourced; Qur'an text is public domain in most jurisdictions)",`);
 sourcesLines.push(`  },`);
 sourcesLines.push(`  {`);
-sourcesLines.push(`    label: "Verse timings — 9 reciters (6236 verses each)",`);
-sourcesLines.push(`    url: "https://quran.com",`);
-sourcesLines.push(`    license: "Quran Foundation (QDC API) — verified high-precision verse timings",`);
+sourcesLines.push(`    label: "Verse timings — QUL segments (8 reciters) + QDC alignment (Badr Al-Turki)",`);
+sourcesLines.push(`    url: "https://qul.tarteel.ai",`);
+sourcesLines.push(`    license: "QUL / Tarteel (open data) + Quran Foundation QDC API — high-precision per-ayah segments",`);
 sourcesLines.push(`  },`);
 sourcesLines.push(`  {`);
 sourcesLines.push(`    label: "Reciter portraits",`);

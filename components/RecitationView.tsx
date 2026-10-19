@@ -38,24 +38,21 @@ export function RecitationView() {
     reciterId, surahId, showRecitation,
     setShowRecitation, transliterationStyle, setTransliterationStyle, seek, playQuran,
   } = usePlayer();
-  const { currentTime, duration } = usePlayback();
+  const { currentTime, duration, usingFallbackAudio } = usePlayback();
 
   const surah = getSurah(surahId);
   const reciter = getReciter(reciterId);
   const recitation = getRecitation(reciterId, surahId);
 
-  // Timings were captured against the original QDC files. The primary mirror
-  // may be a slightly different edit, so stretch the offsets to the duration
-  // of the audio that is actually playing (no-op when they match).
-  const timings = useMemo(() => {
-    const raw = getTimings(reciterId, surahId);
-    if (!raw) return null;
-    const reference = recitation?.durationSeconds;
-    if (!reference || !duration || duration <= 0) return raw;
-    const scale = duration / reference;
-    if (scale > 0.98 && scale < 1.02) return raw;
-    return raw.map((t) => Math.round(t * scale));
-  }, [reciterId, surahId, recitation?.durationSeconds, duration]);
+  // Timings are exact for the primary audio:
+  //  - QUL segments (8 reciters) belong to the Tarteel-hosted file itself.
+  //  - Badr's QDC forced-alignment timings match his mp3quran recording.
+  // When the one-shot mirror is playing (different edit), hide the highlight
+  // rather than show a wrong verse. Never scale timings by total duration.
+  const timings = useMemo(
+    () => (usingFallbackAudio ? null : getTimings(reciterId, surahId) ?? null),
+    [reciterId, surahId, usingFallbackAudio],
+  );
 
   const [data, setData] = useState<{
     id: number;

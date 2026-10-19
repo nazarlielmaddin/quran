@@ -90,6 +90,8 @@ interface PlaybackContextValue {
   quranPlaying: boolean;
   quranLoading: boolean;
   ambientPlaying: boolean;
+  /** True while the one-shot mirror is playing instead of the timed source. */
+  usingFallbackAudio: boolean;
 }
 
 const PlayerContext = createContext<PlayerContextValue | null>(null);
@@ -117,6 +119,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const [quranPlaying, setQuranPlaying] = useState(false);
   const [quranLoading, setQuranLoading] = useState(false);
   const [quranError, setQuranError] = useState<string | null>(null);
+  const [usingFallbackAudio, setUsingFallbackAudio] = useState(false);
   const [currentTime, setCurrentTime] = useState(prefs.positionSeconds);
   const [duration, setDuration] = useState(0);
   const [quranVolume, setQuranVolumeState] = useState(prefs.quranVolume);
@@ -222,8 +225,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       if (el.src !== primarySrcRef.current && el.src !== fallbackSrcRef.current) return;
       setQuranLoading(false);
       setQuranPlaying(false);
-      // Some networks/ISPs reset connections to the primary CDN. Retry once
-      // with the legacy mirror before showing the error banner.
+      // Some networks/ISPs block or reset connections to the primary CDN.
+      // Retry once with the secondary mirror before showing the error banner.
       if (!fallbackTriedRef.current && el.src === primarySrcRef.current) {
         const { reciterId: rid, surahId: sid } = sourceMetaRef.current;
         const mirror = getFallbackAudioUrl(rid, sid);
@@ -232,6 +235,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
           fallbackSrcRef.current = mirror;
           setQuranError(null);
           setQuranLoading(true);
+          setUsingFallbackAudio(true);
           el.src = mirror;
           el.load();
           if (quranEnabledRef.current) el.play().catch(() => setQuranPlaying(false));
@@ -287,7 +291,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       setQuranError(null);
       setQuranLoading(true);
       setQuranPlaying(false); // el.load() stops playback without a pause event
-      setDuration(0); // stale duration must not scale the new surah's timings
+      setDuration(0); // never display the previous surah's duration
+      setUsingFallbackAudio(false);
       primarySrcRef.current = rec.audioUrl;
       fallbackSrcRef.current = null;
       fallbackTriedRef.current = false;
@@ -610,8 +615,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   );
 
   const playbackValue = useMemo<PlaybackContextValue>(
-    () => ({ currentTime, duration, quranPlaying, quranLoading, ambientPlaying }),
-    [currentTime, duration, quranPlaying, quranLoading, ambientPlaying],
+    () => ({ currentTime, duration, quranPlaying, quranLoading, ambientPlaying, usingFallbackAudio }),
+    [currentTime, duration, quranPlaying, quranLoading, ambientPlaying, usingFallbackAudio],
   );
 
   if (!mounted) return null;
