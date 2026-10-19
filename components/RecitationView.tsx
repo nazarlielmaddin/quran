@@ -38,12 +38,24 @@ export function RecitationView() {
     reciterId, surahId, showRecitation,
     setShowRecitation, transliterationStyle, setTransliterationStyle, seek, playQuran,
   } = usePlayer();
-  const { currentTime } = usePlayback();
+  const { currentTime, duration } = usePlayback();
 
   const surah = getSurah(surahId);
   const reciter = getReciter(reciterId);
   const recitation = getRecitation(reciterId, surahId);
-  const timings = useMemo(() => getTimings(reciterId, surahId), [reciterId, surahId]);
+
+  // Timings were captured against the original QDC files. The primary mirror
+  // may be a slightly different edit, so stretch the offsets to the duration
+  // of the audio that is actually playing (no-op when they match).
+  const timings = useMemo(() => {
+    const raw = getTimings(reciterId, surahId);
+    if (!raw) return null;
+    const reference = recitation?.durationSeconds;
+    if (!reference || !duration || duration <= 0) return raw;
+    const scale = duration / reference;
+    if (scale > 0.98 && scale < 1.02) return raw;
+    return raw.map((t) => Math.round(t * scale));
+  }, [reciterId, surahId, recitation?.durationSeconds, duration]);
 
   const [data, setData] = useState<{
     id: number;
@@ -234,7 +246,9 @@ export function RecitationView() {
             />
           )}
           {reciter?.name} · {surah?.verses} {dict.surahs.ayahs}
-          {recitation?.durationSeconds ? ` · ${formatTime(recitation.durationSeconds)}` : ""}
+          {(duration || recitation?.durationSeconds)
+            ? ` · ${formatTime(duration || recitation?.durationSeconds || 0)}`
+            : ""}
         </p>
       </div>
 

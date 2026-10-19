@@ -262,8 +262,8 @@ The full 114-surah canon is already included. If you ever need to extend the dat
 
 | Asset | Source | License |
 | --- | --- | --- |
-| Dawsari audio (128 kbps, full surahs) | `cdn.islamic.network/quran/audio-surah/128/ar.yasseraldossari/{1-114}.mp3` | Islamic Network CDN (quranicaudio.com archive) |
-| Al-Dakhin audio (Hafs, 320 kbps) | `server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/{001-114}.mp3` | mp3quran.net official mushaf |
+| Qur'an audio — all 10 reciters (Hafs 'an 'Asim) | `cdn.mp3quran.net/audio/<reciter>/r1/{001-114}.mp3` | mp3quran.net official hosted mushaf |
+| Audio fallback (if the mp3quran CDN is unreachable) | `download.quranicaudio.com` (QDC) | Quran.com / QuranicAudio — public distribution |
 | Surah metadata + transliteration | `api.alquran.cloud/v1/surah` · `api.alquran.cloud/v1/quran/en.transliteration` | alquran.cloud (Qur'an text is public domain in most jurisdictions) |
 | Verse timings (Dawsari) | `everyayah.com/data/timings_files/Yasser_Ad-Dussary_128kbps.zip` | © VerseByVerseQuran.com — link-back required (included in footer) |
 | Reciter portrait (Dawsari) | Wikimedia Commons (`Yasser_Al-Dosari (cropped).jpg`) | CC BY-SA 4.0 |

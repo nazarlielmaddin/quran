@@ -17,106 +17,104 @@ mkdirSync(GEN, { recursive: true });
 const log = (m) => console.log(`[fetch-data] ${m}`);
 
 /** Central reciter catalog — single source of truth for audio + timings + attribution
- * Unified to Islamic Network CDN — quran/<folder> for Yasir/Maher/Saad (quran bucket),
- * qdc/<folder>/<n>.mp3 for Mishary/Basit/Husary/Mujawwad/Sudais/Shatri (QDC bucket) to match QDC timings
- * Verified via music-metadata parsing + HEAD (2026-08-27): QDC audio dur matches QDC timings within 0.05s (quran bucket drifts 3-20s)
- * Yasir (48.0s), Maher (36.5s), Saad (46.9s) already correct; 6 QDC reciters now switched to qdc bucket for perfect sync
+ * Audio is served from mp3quran.net's CDN: the QuranicAudio/BunnyCDN host
+ * (`download.quranicaudio.com`) resets TLS connections on some networks and
+ * made every QDC-hosted reciter fail with "Unable to load this recitation".
+ * Verified 2026-10-19: all 1140 mp3quran URLs return 206 audio/mpeg.
+ * Verse timings still come from the QDC/alignment datasets; the player scales
+ * them to the duration of the playing file, and `data/audioFallbacks.ts` keeps
+ * the legacy QDC mirror as a runtime fallback.
  */
 const CATALOG = [
   {
     id: "yasir-al-dawsari",
     qdcId: 97,
-    provider: "quranicaudio",
-    folder: "yasser_ad-dussary",
+    provider: "mp3quran",
+    folder: "yasser-dosari/r1",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Yasir Al-Dawsari (quran/yasser_ad-dussary, 48s S1, verified)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/yasser_ad-dussary/${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "mp3quran.net — Yasir Al-Dawsari (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/yasser-dosari/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "haitham-al-dakhin",
     qdcId: null,
     provider: "mp3quran",
-    folder: "h_dukhain/Rewayat-Hafs-A-n-Assem",
+    folder: "haitham-dukhain/r1",
     timingSource: null,
-    sourceLabel: "mp3quran.net — Haitham Al-Dakhin (Hafs 'an 'Asim, 320kbps, no timings)",
-    audioUrl: (n) => `https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "mp3quran.net — Haitham Al-Dakhin (Rewayat Hafs 'an 'Asim, no timings); legacy QDC mirror fallback",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/haitham-dukhain/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "mishary-rashid-alafasy",
     qdcId: 7,
-    provider: "quranicaudio",
-    folder: "mishari_al_afasy/murattal",
+    provider: "mp3quran",
+    folder: "mishary-alafasy/r1",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Mishary Rashid Alafasy (qdc/mishari_al_afasy/murattal, 46.5s S1, QDC perfect 0.01s)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/${n}.mp3`,
+    sourceLabel: "mp3quran.net — Mishary Rashid Alafasy (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/mishary-alafasy/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abdul-basit-murattal",
     qdcId: 2,
-    provider: "quranicaudio",
-    folder: "abdul_baset/murattal",
+    provider: "mp3quran",
+    folder: "abdulbasit-abdulsamad/r3",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Abdul Basit Murattal (qdc/abdul_baset/murattal, 41.8s S1, QDC perfect 0.03s)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdul_baset/murattal/${n}.mp3`,
+    sourceLabel: "mp3quran.net — Abdul Basit Murattal (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/abdulbasit-abdulsamad/r3/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "mahmoud-khalil-al-husary",
     qdcId: 6,
-    provider: "quranicaudio",
-    folder: "khalil_al_husary/murattal",
+    provider: "mp3quran",
+    folder: "mahmoud-husary/r1",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Mahmoud Khalil Al-Husary (qdc/khalil_al_husary/murattal, 48.2s S1, QDC perfect 0.01s)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/khalil_al_husary/murattal/${n}.mp3`,
+    sourceLabel: "mp3quran.net — Mahmoud Khalil Al-Husary (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/mahmoud-husary/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "badr-al-turki",
     qdcId: null,
-    provider: "quranicaudio",
-    folder: "badr_al_turki/mp3",
+    provider: "mp3quran",
+    folder: "badr-turki/r1",
     timingSource: "alignment",
-    sourceLabel: "Quranic Recitation Data — Badr Al Turki (word-level protobuf alignment matched to the Badr Al Turki murattal recording)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/badr_al_turki/mp3/${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "mp3quran.net — Badr Al-Turki (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/badr-turki/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abdur-rahman-as-sudais",
     qdcId: 3,
-    provider: "quranicaudio",
-    folder: "abdurrahmaan_as_sudais/murattal",
+    provider: "mp3quran",
+    folder: "abdulrahman-sudais/r1",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Abdur-Rahman as-Sudais (qdc/abdurrahmaan_as_sudais/murattal, 34.9s S1, QDC perfect 0.00s)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abdurrahmaan_as_sudais/murattal/${n}.mp3`,
+    sourceLabel: "mp3quran.net — Abdur-Rahman as-Sudais (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/abdulrahman-sudais/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "maher-al-muaiqly",
     qdcId: 65,
-    provider: "quranicaudio",
-    folder: "maher_256",
+    provider: "mp3quran",
+    folder: "maher-muaiqly/r1",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Maher Al-Muaiqly (quran/maher_256, 36s S1, fixes 25.9s drift; fallback S5->year1440)",
-    audioUrl: (n) => {
-      const padded = String(n).padStart(3, "0");
-      // maher_256 missing 005.mp3 on archive (113/114) — fallback to year1440 for surah 5
-      if (n === 5) return `https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440/${padded}.mp3`;
-      return `https://download.quranicaudio.com/quran/maher_256/${padded}.mp3`;
-    },
+    sourceLabel: "mp3quran.net — Maher Al-Muaiqly (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/maher-muaiqly/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "saad-al-ghamdi",
     qdcId: 13,
-    provider: "quranicaudio",
-    folder: "sa3d_al-ghaamidi/complete",
+    provider: "mp3quran",
+    folder: "saad-ghamdi/r1",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Saad Al-Ghamdi (quran/sa3d_al-ghaamidi/complete, 47s S1, perfect 0.27s avg)",
-    audioUrl: (n) => `https://download.quranicaudio.com/quran/sa3d_al-ghaamidi/complete/${String(n).padStart(3, "0")}.mp3`,
+    sourceLabel: "mp3quran.net — Saad Al-Ghamdi (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/saad-ghamdi/r1/${String(n).padStart(3, "0")}.mp3`,
   },
   {
     id: "abu-bakr-al-shatri",
     qdcId: 4,
-    provider: "quranicaudio",
-    folder: "abu_bakr_shatri/murattal",
+    provider: "mp3quran",
+    folder: "abubakr-shatri/r1",
     timingSource: "qdc",
-    sourceLabel: "Islamic Network / QuranicAudio — Abu Bakr Al-Shatri (qdc/abu_bakr_shatri/murattal, 53.1s S1, QDC perfect 0.04s)",
-    audioUrl: (n) => `https://download.quranicaudio.com/qdc/abu_bakr_shatri/murattal/${n}.mp3`,
+    sourceLabel: "mp3quran.net — Abu Bakr Al-Shatri (Rewayat Hafs 'an 'Asim, murattal); legacy QDC mirror fallback",
+    audioUrl: (n) => `https://cdn.mp3quran.net/audio/abubakr-shatri/r1/${String(n).padStart(3, "0")}.mp3`,
   },
 ];
 

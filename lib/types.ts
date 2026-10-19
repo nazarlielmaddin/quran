@@ -48,7 +48,11 @@ export interface Recitation {
   reciterId: string;
   surahId: number;
   audioUrl: string;
-  /** Known duration in seconds (null when unknown — filled at runtime). */
+  /**
+   * Duration in seconds of the recording the verse timings were captured
+   * against. The player scales the offsets to the actual file duration, so
+   * this can differ slightly from the audio served by the current CDN.
+   */
   durationSeconds: number | null;
   source: string;
 }

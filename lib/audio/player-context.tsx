@@ -34,6 +34,7 @@ import {
   type ReactNode,
 } from "react";
 import { getRecitation } from "@/data/generated";
+import { getFallbackAudioUrl } from "@/data/audioFallbacks";
 import { getAmbientSound } from "@/data/ambientSounds";
 import { DEFAULT_PREFS, loadPrefs, savePrefs, type PersistedPrefs } from "@/lib/storage";
 import { clamp, rampVolume } from "@/lib/utils";
@@ -139,6 +140,15 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const pendingSeekRef = useRef<number | null>(null); // seek once metadata loads
   const switchTokenRef = useRef(0); // guards ambient cross-fade races
   const ambientEnabledRef = useRef(prefs.ambientEnabled); // read inside async swap
+  const quranEnabledRef = useRef(prefs.quranEnabled); // read inside async error recovery
+  const primarySrcRef = useRef<string | null>(null); // current primary audio URL
+  const fallbackTriedRef = useRef(false); // one mirror retry per load
+  const fallbackSrcRef = useRef<string | null>(null);
+  const sourceMetaRef = useRef({ reciterId, surahId }); // source behind the loaded URL
+
+  useEffect(() => {
+    quranEnabledRef.current = quranEnabled;
+  }, [quranEnabled]);
 
   useEffect(() => {
     quranRef.current = new Audio();
@@ -208,8 +218,26 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     const onWaiting = () => setQuranLoading(true);
     const onCanplay = () => setQuranLoading(false);
     const onError = () => {
+      // Ignore errors from a source that is no longer active.
+      if (el.src !== primarySrcRef.current && el.src !== fallbackSrcRef.current) return;
       setQuranLoading(false);
       setQuranPlaying(false);
+      // Some networks/ISPs reset connections to the primary CDN. Retry once
+      // with the legacy mirror before showing the error banner.
+      if (!fallbackTriedRef.current && el.src === primarySrcRef.current) {
+        const { reciterId: rid, surahId: sid } = sourceMetaRef.current;
+        const mirror = getFallbackAudioUrl(rid, sid);
+        if (mirror) {
+          fallbackTriedRef.current = true;
+          fallbackSrcRef.current = mirror;
+          setQuranError(null);
+          setQuranLoading(true);
+          el.src = mirror;
+          el.load();
+          if (quranEnabledRef.current) el.play().catch(() => setQuranPlaying(false));
+          return;
+        }
+      }
       setQuranError("Unable to load this recitation. Please try again or choose another source.");
     };
     el.addEventListener("timeupdate", onTime);
@@ -259,6 +287,11 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       setQuranError(null);
       setQuranLoading(true);
       setQuranPlaying(false); // el.load() stops playback without a pause event
+      setDuration(0); // stale duration must not scale the new surah's timings
+      primarySrcRef.current = rec.audioUrl;
+      fallbackSrcRef.current = null;
+      fallbackTriedRef.current = false;
+      sourceMetaRef.current = { reciterId: reciter, surahId: surah };
       el.src = rec.audioUrl;
       el.load();
       pendingSeekRef.current = seekTo > 0 ? seekTo : null;
@@ -273,6 +306,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     if (!el) return;
     if (!el.src) loadQuranSource(reciterId, surahId, positionRef.current);
     el.volume = quranVolume;
+    quranEnabledRef.current = true;
     setQuranEnabled(true);
     setQuranError(null);
     el.play().catch(() => {
@@ -293,8 +327,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         positionRef.current = el.currentTime;
         el.pause();
       }
+      quranEnabledRef.current = false;
       setQuranEnabled(false);
     } else {
+      quranEnabledRef.current = true;
       setQuranEnabled(true);
       playQuran();
     }
@@ -310,7 +346,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       if (!el) return;
       loadQuranSource(id, 1, 0);
       if (autoplay || quranEnabled) {
-        if (autoplay) setQuranEnabled(true);
+        if (autoplay) {
+          quranEnabledRef.current = true;
+          setQuranEnabled(true);
+        }
         el.play().catch(() => setQuranPlaying(false));
       }
     },
@@ -327,6 +366,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       loadQuranSource(reciterId, id, 0);
       if (autoplay) {
         // Explicit user intent — play regardless of the ON/OFF toggle.
+        quranEnabledRef.current = true;
         setQuranEnabled(true);
         el.play().catch(() => setQuranPlaying(false));
       }
