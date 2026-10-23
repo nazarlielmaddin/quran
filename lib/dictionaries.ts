@@ -138,7 +138,7 @@ const az: typeof en = {
     subtitle:
       "Öz oxucunuzu seçin, atmosferinizi seçin və rahatlıqla qulaq asın.",
     cta: "Dinləməyə Başlayın",
-    secondary: "Surələri araşdırın",
+    secondary: "Azanify endir",
     anfalAyah:
       "Həqiqi möminlər yalnız Allahı zikr etməklə qəlbləri titrəyən, ayələri onlara oxunduqda imanları artan və yalnız Rəbbinə təvəkkül edənlərdir.",
     anfalCite: "Ənfal surəsi, 8:2",

@@ -59,7 +59,8 @@ export function Hero() {
             {dict.hero.cta}
           </a>
           <a
-            href="#surahs"
+            href="https://github.com/nazarlielmaddin/quran/releases/latest/download/Azanify-latest.apk"
+            download
             className="glass rounded-full px-9 py-4 text-sm text-mist transition-all duration-300 hover:border-gold/40 hover:text-gold-soft"
           >
             {dict.hero.secondary}
