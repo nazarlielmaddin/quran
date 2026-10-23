@@ -1,4 +1,4 @@
-:HL["/quran/_next/static/chunks/0ztj17uby2qlf.css","style"]
+:HL["/quran/_next/static/chunks/2g-f2-8y6pil6.css","style"]
 :HL["/quran/_next/static/media/03bda585a99c6450-s.p.32sris142tqlb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/quran/_next/static/media/05d29f0ed5b0e698-s.p.1mou8v493x-u7.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/quran/_next/static/media/1bffadaabf893a1e-s.p.3-6t-g6q0vh0a.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
@@ -7,4 +7,4 @@
 :HL["/quran/_next/static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/quran/_next/static/media/8c2eb9ceedecfc8e-s.p.23aeddxv5enbo.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/quran/_next/static/media/b35b0dbffda7f2c4-s.p.1d9rlgtqyj_-l.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"cr33N2dkWf76vPBtk5VGi"}
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"L6nC4moXihPVCf4iV9wUX"}
