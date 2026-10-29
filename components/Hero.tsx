@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { dict } from "@/lib/dictionaries";
+import { DownloadAzanify } from "@/components/DownloadAzanify";
 import { DevelopedBy } from "@/components/DevelopedBy";
 
 const container = {
@@ -58,13 +59,7 @@ export function Hero() {
           >
             {dict.hero.cta}
           </a>
-          <a
-            href="https://github.com/nazarlielmaddin/quran/releases/latest/download/Azanify-latest.apk"
-            download
-            className="glass rounded-full px-9 py-4 text-sm text-mist transition-all duration-300 hover:border-gold/40 hover:text-gold-soft"
-          >
-            {dict.hero.secondary}
-          </a>
+          <DownloadAzanify />
         </motion.div>
 
         <motion.div variants={item} className="mt-10">
