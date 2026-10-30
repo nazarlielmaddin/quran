@@ -28,12 +28,15 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   // Hydrate from storage after mount
   useEffect(() => {
     if (typeof window === "undefined") return;
-    try {
-      const raw = window.localStorage.getItem(LOCALE_KEY);
-      if (isLocale(raw)) setLocaleState(raw);
-    } catch {
-      /* ignore */
-    }
+    const timer = window.setTimeout(() => {
+      try {
+        const raw = window.localStorage.getItem(LOCALE_KEY);
+        if (isLocale(raw)) setLocaleState(raw);
+      } catch {
+        /* ignore */
+      }
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   const setLocale = useCallback((l: Locale) => {

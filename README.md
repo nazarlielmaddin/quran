@@ -71,6 +71,18 @@ EXPORT=1 NEXT_PUBLIC_BASE_PATH=/quran npm run build
 # output in `out/` → deploy to https://nazarlielmaddin.github.io/quran/
 ```
 
+### Free iPhone installation
+
+The deployed GitHub Pages site is also a PWA, so iPhone users can install it
+without an App Store listing or an Apple Developer subscription:
+
+1. Open `https://nazarlielmaddin.github.io/quran/` in **Safari**.
+2. Tap **Share** → **Add to Home Screen** → **Add**.
+3. Open **Quran** from the Home Screen for the standalone app experience.
+
+The PWA manifest, icon, service worker, and iOS install guide are included in
+`app/manifest.ts`, `public/sw.js`, and `components/DownloadAzanify.tsx`.
+
 ### Regenerate data (optional)
 
 The data layer is generated from live public APIs. To refresh it:
