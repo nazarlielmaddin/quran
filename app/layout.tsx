@@ -4,6 +4,7 @@ import "./globals.css";
 import { PlayerProvider } from "@/lib/audio/player-context";
 import { LocaleProvider } from "@/lib/i18n";
 import { dict } from "@/lib/dictionaries";
+import { PwaRegister } from "@/components/PwaRegister";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -33,6 +34,11 @@ const amiri = Amiri({
 export const metadata: Metadata = {
   title: `${dict.brand} — ${dict.footer.tagline}`,
   description: dict.hero.subtitle,
+  manifest: "./manifest.webmanifest",
+  icons: {
+    icon: "./icons/icon-192.png",
+    apple: "./icons/apple-touch-icon.png",
+  },
 };
 
 export const viewport: Viewport = {
@@ -47,6 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${fraunces.variable} ${lora.variable} ${amiri.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-ink text-mist">
+        <PwaRegister />
         <LocaleProvider>
           <PlayerProvider>{children}</PlayerProvider>
         </LocaleProvider>

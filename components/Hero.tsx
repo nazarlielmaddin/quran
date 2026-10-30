@@ -48,7 +48,7 @@ export function Hero() {
           variants={item}
           className="mt-8 max-w-2xl text-center text-gold italic text-base sm:text-lg"
         >
-          <p className="mb-2">"&nbsp;{dict.hero.anfalAyah}&nbsp;"</p>
+          <p className="mb-2">&quot;&nbsp;{dict.hero.anfalAyah}&nbsp;&quot;</p>
           <cite className="text-xs text-mist-faint">{dict.hero.anfalCite}</cite>
         </motion.blockquote>
 
